@@ -33,7 +33,7 @@ servers:
   - url: https://api.dexbuilder.com/api/v1
     description: DexBuilder PerpDEX REST API
 tags:
-  - name: 行情
+  - name: 行情1
     description: 永续合约公开行情与市场数据
   - name: 风险数据
     description: 风险限额与市场强平数据
