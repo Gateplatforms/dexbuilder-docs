@@ -33,7 +33,7 @@ servers:
   - url: https://api.dexbuilder.com/api/v1
     description: DexBuilder PerpDEX REST API
 tags:
-  - name: 行情1
+  - name: 行情
     description: 永续合约公开行情与市场数据
   - name: 风险数据
     description: 风险限额与市场强平数据
@@ -52,7 +52,7 @@ paths:
   /dex_futures/{settle}/contracts:
     get:
       tags: [行情]
-      summary: 查询全部永续合约
+      summary: 查询全部永续合约1
       description: 查询当前结算币种下的全部永续合约信息。
       operationId: listPerpContracts
       security: []
@@ -62,7 +62,7 @@ paths:
         - $ref: '#/components/parameters/Offset'
       responses:
         '200':
-          description: 查询成功
+          description: 查询成功1
           content:
             application/json:
               schema:
