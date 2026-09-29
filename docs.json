@@ -93,9 +93,7 @@
                       "zh/event-markets/discover-markets",
                       "zh/event-markets/market-details",
                       "zh/event-markets/market-prices-orderbooks",
-                      "zh/event-markets/analytics",
-                      "zh/event-markets/realtime-data",
-                      "zh/event-markets/chainlink-twap"
+                      "zh/event-markets/realtime-data"
                     ]
                   },
                   {
@@ -146,9 +144,7 @@
                       "zh/event-contracts/discover-markets",
                       "zh/event-contracts/market-details",
                       "zh/event-contracts/market-prices-orderbooks",
-                      "zh/event-contracts/analytics",
-                      "zh/event-contracts/realtime-data",
-                      "zh/event-contracts/chainlink-twap"
+                      "zh/event-contracts/realtime-data"
                     ]
                   },
                   {
@@ -506,9 +502,7 @@
                       "en/event-markets/discover-markets",
                       "en/event-markets/market-details",
                       "en/event-markets/market-prices-orderbooks",
-                      "en/event-markets/analytics",
-                      "en/event-markets/realtime-data",
-                      "en/event-markets/chainlink-twap"
+                      "en/event-markets/realtime-data"
                     ]
                   },
                   {
@@ -559,9 +553,7 @@
                       "en/event-contracts/discover-markets",
                       "en/event-contracts/market-details",
                       "en/event-contracts/market-prices-orderbooks",
-                      "en/event-contracts/analytics",
-                      "en/event-contracts/realtime-data",
-                      "en/event-contracts/chainlink-twap"
+                      "en/event-contracts/realtime-data"
                     ]
                   },
                   {
@@ -919,9 +911,7 @@
                       "zh-TW/event-markets/discover-markets",
                       "zh-TW/event-markets/market-details",
                       "zh-TW/event-markets/market-prices-orderbooks",
-                      "zh-TW/event-markets/analytics",
-                      "zh-TW/event-markets/realtime-data",
-                      "zh-TW/event-markets/chainlink-twap"
+                      "zh-TW/event-markets/realtime-data"
                     ]
                   },
                   {
@@ -972,9 +962,7 @@
                       "zh-TW/event-contracts/discover-markets",
                       "zh-TW/event-contracts/market-details",
                       "zh-TW/event-contracts/market-prices-orderbooks",
-                      "zh-TW/event-contracts/analytics",
-                      "zh-TW/event-contracts/realtime-data",
-                      "zh-TW/event-contracts/chainlink-twap"
+                      "zh-TW/event-contracts/realtime-data"
                     ]
                   },
                   {
