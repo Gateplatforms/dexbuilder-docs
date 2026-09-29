@@ -1,234 +1,130 @@
 ---
 title: "Real-Time Data"
 sidebarTitle: "Real-Time Data"
-description: "Subscribe to real-time Market, sports, crypto, equity, and related data streams to reduce polling and keep Prediction Markets data synchronized."
+description: "Subscribe to DexBuilder Prediction Markets real-time data streams."
 ---
 
-Prediction Markets provide multiple real-time data streams so applications can update promptly when Market status, prices, or related data changes. For private order and trade updates, see Real-Time Order Updates.
+DexBuilder provides real-time Prediction Markets data through the WebSocket Broker. Public market-data channels do not require authentication.
 
-## Market Stream
+## Connection
 
-The Market Stream synchronizes order-book and trading-state changes.
+Prediction Markets:
 
-```text API
-wss://ws-subscriptions-clob.polymarket.com/ws/market
+```text
+wss://broker.dexbuilder.com/ws/dex-builder/prediction
 ```
 
-<Note>
-The Market WebSocket uses an application-level heartbeat. Send a text-frame `PING` every 10 seconds; the server returns `PONG`.
-</Note>
+For Event Contracts, use the separate product connection:
 
-After connecting, send a `market` subscription message:
+```text
+wss://broker.dexbuilder.com/ws/dex-builder/event-contracts
+```
+
+The examples below use the Prediction Markets channel prefix `pred`. Event Contracts uses the corresponding `ec` prefix.
+
+## Subscribe to a Public Channel
+
+A subscription request contains a request timestamp `t`, a client `id`, an operation, a channel, and channel-specific items.
 
 ```json
 {
-  "assets_ids": ["<token_id>"],
-  "type": "market"
-}
-```
-
-### Standard Market Events
-
-Main events include:
-
-| `event_type` | Description |
-| --- | --- |
-| `book` | Full order-book snapshot |
-| `price_change` | Price and best bid/ask changes |
-| `last_trade_price` | Latest trade price |
-| `tick_size_change` | Minimum price-increment change |
-
-Order-book example:
-
-```json
-{
-  "event_type": "book",
-  "market": "0x747dc809...",
-  "asset_id": "1075058827...",
-  "timestamp": "1782753357257",
-  "hash": "0xabc123…",
-  "bids": [
-    { "price": "0.08", "size": "33343.4" }
-  ],
-  "asks": [
-    { "price": "0.09", "size": "163939.58" }
-  ]
-}
-```
-
-When `custom_feature_enabled` is enabled, additional events can be received, including best bid/ask, new Markets, and Market resolution:
-
-```json
-{
-  "assets_ids": ["<token_id>"],
-  "type": "market",
-  "custom_feature_enabled": true
-}
-```
-
-Tokens can be added or removed dynamically without rebuilding the connection:
-
-<Tabs>
-  <Tab title="Subscribe">
-    ```json
-    {
-      "assets_ids": ["<new_token_id>"],
-      "operation": "subscribe"
-    }
-    ```
-  </Tab>
-  <Tab title="Unsubscribe">
-    ```json
-    {
-      "assets_ids": ["<token_id>"],
-      "operation": "unsubscribe"
-    }
-    ```
-  </Tab>
-</Tabs>
-
-## Sports Stream
-
-The sports real-time stream synchronizes game state, scores, periods, and completion status.
-
-```text API
-wss://sports-api.polymarket.com/ws
-```
-
-<Note>
-The server sends text `ping` messages every 5 seconds. The client should reply with `pong` within 10 seconds.
-</Note>
-
-No subscription message is required after the connection succeeds; the server directly pushes game updates.
-
-```json
-{
-  "gameId": "5127839",
-  "leagueAbbreviation": "NBA",
-  "homeTeam": "Los Angeles Lakers",
-  "awayTeam": "Boston Celtics",
-  "status": "InProgress",
-  "live": true,
-  "ended": false,
-  "score": "98-94",
-  "period": "Q4",
-  "elapsed": "05:12"
-}
-```
-
-<Warning>
-Sports data is for informational display only. It may be delayed, missing, or incorrect and should not be used as the sole basis for trading decisions.
-</Warning>
-
-### Common Game Phases
-
-| Value | Meaning |
-| --- | --- |
-| `1H`, `2H` | First half / second half |
-| `1Q`–`4Q` | Quarters 1–4 |
-| `HT` | Halftime |
-| `FT` | End of regulation |
-| `FT OT` | End after overtime |
-| `FT NR` | Ended with no result |
-
-`status` values vary by sport and should be handled according to the server response, for example `Scheduled`, `InProgress`, `Final`, `Postponed`, and `Canceled`.
-
-## RTDS Real-Time Data Service
-
-RTDS (Real-Time Data Service) provides reference prices and other data through a unified real-time connection.
-
-```text API
-wss://ws-live-data.polymarket.com
-```
-
-RTDS uses an application-level heartbeat. Send `PING` every 5 seconds to keep the connection alive.
-
-### Crypto Prices
-
-Different data sources use different symbol formats:
-
-| Source | Example |
-| --- | --- |
-| Binance | `btcusdt`, `ethusdt`, `solusdt`, `xrpusdt` |
-| Chainlink | `btc/usd`, `eth/usd`, `sol/usd`, `xrp/usd` |
-
-Subscription example:
-
-```json
-{
-  "action": "subscribe",
-  "subscriptions": [
-    {
-      "topic": "crypto_prices",
-      "type": "update",
-      "filters": "btcusdt,ethusdt"
-    },
-    {
-      "topic": "crypto_prices_chainlink",
-      "type": "*",
-      "filters": "[{\"symbol\":\"eth/usd\"}]"
-    }
-  ]
-}
-```
-
-Example response:
-
-```json
-{
-  "topic": "crypto_prices",
-  "type": "update",
-  "timestamp": 1782753357257,
+  "t": 1720000000123,
+  "id": "sub-1",
+  "op": "subscribe",
+  "ch": "pred.bbo",
   "payload": {
+    "items": [
+      {
+        "token_id": "ge_token-yes"
+      }
+    ]
+  }
+}
+```
+
+The server acknowledges the request and then sends channel data. Public channels require `items`; `all: true` is reserved for private channels.
+
+## Public Channels
+
+| Channel | Subscription item | Use |
+| --- | --- | --- |
+| `pred.trades` | `condition_id` | Matched trades |
+| `pred.depth` | `token_id`, `level` | Full order-book snapshots |
+| `pred.bbo` | `token_id` | Best bid/ask and last price |
+| `pred.status` | `market_id` | Market status and outcome prices |
+| `pred.cpi` | `symbol`, `interval` | Reference price updates |
+| `pred.candlestick` | `symbol`, `interval` | Candlestick updates |
+| `pred.oc_price` | `slug` or `market_id` | Price-to-beat and final-price updates |
+
+## Response Envelope
+
+```json
+{
+  "t": 1720000000124,
+  "trace_id": "trace-1",
+  "type": "update",
+  "ch": "pred.bbo",
+  "err": null,
+  "result": {
+    "condition_id": "ge_condition-1",
+    "token_id": "ge_token-yes",
+    "bid_px": "0.4400",
+    "ask_px": "0.4600",
+    "last_px": "0.4500",
+    "ts": 1720000000123
+  }
+}
+```
+
+Channels with cached state can send `type: "snapshot"` before subsequent `update` messages. Order-book snapshots contain full `bids` and `asks` arrays; they are not deltas.
+
+## CPI Example
+
+Subscribe to a crypto reference price:
+
+```json
+{
+  "t": 1720000000123,
+  "id": "cpi-1",
+  "op": "subscribe",
+  "ch": "pred.cpi",
+  "payload": {
+    "items": [
+      {
+        "symbol": "btcusdt",
+        "interval": "1m"
+      }
+    ]
+  }
+}
+```
+
+Example update:
+
+```json
+{
+  "t": 1720000000124,
+  "trace_id": "trace-1",
+  "type": "update",
+  "ch": "pred.cpi",
+  "err": null,
+  "result": {
     "symbol": "btcusdt",
-    "timestamp": 1782753357213,
-    "value": 67334.5
+    "interval": "1m",
+    "price": "100000.10",
+    "price_timestamp": "1720000000123",
+    "ts": 1720000000123
   }
 }
 ```
 
-### Equities and Other Asset Prices
+## Connection Recovery
 
-`equity_prices` can provide reference prices for equities, ETFs, FX, precious metals, and commodities based on Pyth Network.
+When a connection is interrupted:
 
-```json
-{
-  "action": "subscribe",
-  "subscriptions": [
-    {
-      "topic": "equity_prices",
-      "type": "*",
-      "filters": "[{\"symbol\":\"AAPL\"}]"
-    }
-  ]
-}
-```
+1. reconnect with backoff;
+2. restore public subscriptions;
+3. use REST endpoints such as `/api/v4/prediction/markets` and `/api/v4/prediction/tokens/{token_id}/ticker` to refresh authoritative state;
+4. deduplicate repeated updates using the channel key and timestamp.
 
-Price events may provide both `value` and `full_accuracy_value`. When `full_accuracy_value` is present, prefer that string to avoid precision loss.
-
-```json
-{
-  "topic": "equity_prices",
-  "type": "update",
-  "timestamp": 1782753357257,
-  "payload": {
-    "symbol": "aapl",
-    "timestamp": 1782753357213,
-    "value": 189.42,
-    "full_accuracy_value": "189.4217",
-    "received_at": 1782753357220,
-    "is_earliest_forward": false
-  }
-}
-```
-
-After subscribing to a symbol, the service may first send a historical Snapshot and then continue with real-time updates. Integrations can use the Snapshot to initialize local state.
-
-## Connection Recovery Recommendations
-
-After a real-time connection is interrupted:
-
-1. reconnect with a backoff strategy;
-2. restore all subscriptions;
-3. refresh a complete snapshot through REST API for workflows that require authoritative state;
-4. deduplicate replayed or duplicate messages using business IDs and timestamps.
+See [WebSocket Protocol](./websocket/protocol), [Public Channels](./websocket/public-channels), and [WebSocket Authentication](./websocket/authentication) for the complete protocol.
