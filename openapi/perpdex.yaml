@@ -52,7 +52,7 @@ paths:
   /dex_futures/{settle}/contracts:
     get:
       tags: [行情]
-      summary: 查询全部永续合约1
+      summary: 查询全部永续合约
       description: 查询当前结算币种下的全部永续合约信息。
       operationId: listPerpContracts
       security: []
@@ -62,7 +62,7 @@ paths:
         - $ref: '#/components/parameters/Offset'
       responses:
         '200':
-          description: 查询成功1
+          description: 查询成功
           content:
             application/json:
               schema:
@@ -1269,7 +1269,7 @@ components:
   schemas:
     Contract:
       type: object
-      description: 永续合约信息
+      description: 永续合约信息1
       properties:
         name: { type: string, description: 合约名称, example: BTC_USDT }
         type: { type: string, description: 合约类型, enum: [inverse, direct] }
