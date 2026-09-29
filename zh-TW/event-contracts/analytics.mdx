@@ -1,111 +1,134 @@
 ---
 title: "資料分析"
 sidebarTitle: "資料分析"
-description: "透過成交、Open Interest、持有人與 Event 即時成交量等資料分析事件合約活動。"
+description: "使用 DexBuilder REST API 與 WebSocket 資料分析預測市場活動。"
 ---
 
-本頁介紹如何觀察事件合約的交易活躍度、資金分布和持倉情況。開始前，先透過「發現市場」取得 Market 的 `condition_id` 與 `event_id`。
+本頁介紹如何使用 DexBuilder Event Contracts API 建立市場活動分析。以下示例使用生產環境 API：
+
+```text
+https://api.dexbuilder.com
+```
+
+公開行情介面不需要認證。開始查詢前，可先透過「發現市場」取得 `market_id`、`event_id`、`condition_id` 和 `token_id`。
 
 ```bash
-CONDITION_ID="<condition_id>"
-EVENT_ID="<event_id>"
+BASE_URL="https://api.dexbuilder.com"
+MARKET_ID="<market_id>"
+TOKEN_ID="<token_id>"
 ```
 
 ## 最近成交
 
-用於檢視最近撮合的交易，包括方向、價格、數量、結果、錢包和時間戳等資訊。
+使用市場成交介面檢視指定市場的撮合成交。返回值是陣列，`price` 和 `size` 以字串返回。
 
 ```bash API
-curl "https://data-api.polymarket.com/trades?market=$CONDITION_ID&limit=1"
+curl -G "$BASE_URL/api/v4/event_contracts/markets/$MARKET_ID/trades" \
+  --data-urlencode "limit=100"
 ```
 
-<Accordion title="響應示例">
+<Accordion title="回應示例">
   ```json
   [
     {
-      "proxyWallet": "0x50A0cebecFb81DbCbFA6d38F82040343F1E3D95F",
-      "side": "SELL",
-      "asset": "73056302498040856354963998699057693722943027161590344473262285090686949523925",
-      "conditionId": "0x747dc809fb79e1b05be09c42d6179459a58de2ef3e40f02484a4e1260f741f7",
-      "size": 42.62,
-      "price": 0.91,
-      "timestamp": 1782752879,
-      "title": "Will the US confirm that aliens exist before 2027?",
-      "outcome": "No"
+      "id": "trade-123",
+      "market_id": "ge_market-1",
+      "condition_id": "ge_condition-1",
+      "token_id": "ge_token-yes",
+      "outcome": "Yes",
+      "side": "BUY",
+      "price": "0.4500",
+      "size": "10.0000",
+      "created_at": 1720000000123
     }
   ]
   ```
 </Accordion>
 
-## Open Interest
+請求下一頁時，使用介面返回的 `cursor` 查詢參數。
 
-用於檢視一個或多個 Market 目前未平倉持倉的價值。
+## Token 價格與 Ticker
+
+使用最新價格介面取得市場某一方的目前價格：
 
 ```bash API
-curl "https://data-api.polymarket.com/oi?market=$CONDITION_ID"
+curl "$BASE_URL/api/v4/event_contracts/tokens/$TOKEN_ID/price"
 ```
 
-<Accordion title="響應示例">
+需要最佳買價、最佳賣價和最近成交價時，使用 Ticker 介面：
+
+```bash API
+curl "$BASE_URL/api/v4/event_contracts/tokens/$TOKEN_ID/ticker"
+```
+
+<Accordion title="Ticker 回應">
   ```json
-  [
-    {
-      "market": "0x747dc809fb79e1b05be09c42d6179459a58de2ef3e40f02484a4e1260f741f7",
-      "value": 7484304.679057
-    }
-  ]
+  {
+    "token_id": "ge_token-yes",
+    "best_bid": "0.4400",
+    "best_ask": "0.4600",
+    "last_price": "0.4500",
+    "timestamp": 1720000000123
+  }
   ```
 </Accordion>
 
-## Market 持有人
+## 價格歷史
 
-檢視不同 Outcome Token 的主要公開持有人。
+使用價格歷史介面繪製 Token 歷史價格。 `from` 和 `to` 是毫秒級 Unix 時間戳。
 
 ```bash API
-curl "https://data-api.polymarket.com/holders?market=$CONDITION_ID&limit=1"
+curl -G "$BASE_URL/api/v4/event_contracts/tokens/$TOKEN_ID/price_history" \
+  --data-urlencode "interval=1h" \
+  --data-urlencode "from=1720000000000" \
+  --data-urlencode "to=1720036000000"
 ```
 
-<Accordion title="響應示例">
+<Accordion title="回應示例">
   ```json
-  [
-    {
-      "token": "107505882767731489358349912513945399560393482969656700824895970500",
-      "holders": [
-        {
-          "proxyWallet": "0xaf23273e03A924A257e0D6bEae7133CF9D32377f",
-          "amount": 894254.445452,
-          "outcomeIndex": 0,
-          "name": "5Cssss"
-        }
-      ]
-    }
-  ]
+  {
+    "history": [
+      {
+        "p": "0.4500",
+        "t": 1720000000000
+      },
+      {
+        "p": "0.4700",
+        "t": 1720003600000
+      }
+    ]
+  }
   ```
 </Accordion>
 
-## Event 即時成交量
+## K 線
 
-按 Event 匯總成交量，並檢視各 Market 的成交量拆分。
+使用 K 線介面取得受支援幣種的分時價格和成交量資料。
 
 ```bash API
-curl "https://data-api.polymarket.com/live-volume?id=$EVENT_ID"
+curl -G "$BASE_URL/api/v4/event_contracts/tokens/BTC/candlesticks" \
+  --data-urlencode "interval=1m" \
+  --data-urlencode "limit=100"
 ```
 
-<Accordion title="響應示例">
-  ```json
-  [
-    {
-      "total": 60773073.437817,
-      "markets": [
-        {
-          "market": "0x747dc809fb79e1b05be09c42d6179459a58de2ef3e40f02484a4e1260f7",
-          "value": 34909514.911729
-        }
-      ]
-    }
-  ]
-  ```
-</Accordion>
+可用週期和返回欄位以 OpenAPI 參考為準。對於介面聲明為字串的數值欄位，應按字串處理，避免精度損失。
 
-<Note>
-部分分析介面來自外部資料服務。正式集成時應區分 DexBuilder Event Contracts API 與外部資料源，避免將外部介面當作 DexBuilder API 合同的一部分。
-</Note>
+## 市場與事件聚合
+
+可使用 Event 和 Market 介面建立市場列表，並在應用層計算分析指標：
+
+- `GET /api/v4/event_contracts/events` 取得事件列表，支援 cursor 分頁。
+- `GET /api/v4/event_contracts/markets` 取得市場列表，支援按 `event_id`、`slug`、`condition_id` 和 `tag_slug` 等條件篩選。
+- `GET /api/v4/event_contracts/markets/{market_id}/trades` 提供用於計算成交量和活動指標的成交明細。
+
+DexBuilder 不提供 Polymarket `data-api` 中的 `/oi`、`/holders` 或 `/live-volume` 介面。DexBuilder 集成中不要使用這些外部地址。
+
+## 即時分析
+
+即時看板可以訂閱 Prediction Markets WebSocket，並結合 REST 快照：
+
+```text
+wss://broker.dexbuilder.com/ws/dex-builder/event-contracts
+```
+
+公開頻道包括 `ec.trades`、`ec.depth`、`ec.bbo`、`ec.status`、`ec.cpi`、`ec.candlestick` 和 `ec.oc_price`。訂閱參數和返回消息格式請參閱「即時資料」與「公共頻道」。

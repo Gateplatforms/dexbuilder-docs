@@ -1,111 +1,134 @@
 ---
 title: "Analytics"
 sidebarTitle: "Analytics"
-description: "Analyze Event Contracts activity through trades, Open Interest, holders, and real-time Event volume."
+description: "Analyze Event Contracts activity using DexBuilder REST and WebSocket data."
 ---
 
-This page explains how to observe trading activity, capital distribution, and position data in Event Contracts. Before starting, use Discover Markets to obtain the Market's `condition_id` and `event_id`.
+This page shows how to build market activity views with the DexBuilder Event Contracts API. The examples use the production API:
+
+```text
+https://api.dexbuilder.com
+```
+
+Public market-data endpoints do not require authentication. Before querying activity, use [Discover Markets](./discover-markets) to obtain a `market_id`, `event_id`, `condition_id`, and `token_id`.
 
 ```bash
-CONDITION_ID="<condition_id>"
-EVENT_ID="<event_id>"
+BASE_URL="https://api.dexbuilder.com"
+MARKET_ID="<market_id>"
+TOKEN_ID="<token_id>"
 ```
 
 ## Recent Trades
 
-Use this endpoint to inspect recently matched trades, including side, price, quantity, outcome, wallet, and timestamp.
+Use the market trades endpoint to inspect matched trades for a market. The response is an array; `price` and `size` are returned as strings.
 
 ```bash API
-curl "https://data-api.polymarket.com/trades?market=$CONDITION_ID&limit=1"
+curl -G "$BASE_URL/api/v4/event_contracts/markets/$MARKET_ID/trades" \
+  --data-urlencode "limit=100"
 ```
 
 <Accordion title="Example Response">
   ```json
   [
     {
-      "proxyWallet": "0x50A0cebecFb81DbCbFA6d38F82040343F1E3D95F",
-      "side": "SELL",
-      "asset": "73056302498040856354963998699057693722943027161590344473262285090686949523925",
-      "conditionId": "0x747dc809fb79e1b05be09c42d6179459a58de2ef3e40f02484a4e1260f741f7",
-      "size": 42.62,
-      "price": 0.91,
-      "timestamp": 1782752879,
-      "title": "Will the US confirm that aliens exist before 2027?",
-      "outcome": "No"
+      "id": "trade-123",
+      "market_id": "ge_market-1",
+      "condition_id": "ge_condition-1",
+      "token_id": "ge_token-yes",
+      "outcome": "Yes",
+      "side": "BUY",
+      "price": "0.4500",
+      "size": "10.0000",
+      "created_at": 1720000000123
     }
   ]
   ```
 </Accordion>
 
-## Open Interest
+Use the `cursor` query parameter returned by the API when requesting the next page.
 
-Use this endpoint to inspect the current value of open positions for one or more Markets.
+## Token Price and Ticker
+
+Use the latest-price endpoint for the current price on one side of a market:
 
 ```bash API
-curl "https://data-api.polymarket.com/oi?market=$CONDITION_ID"
+curl "$BASE_URL/api/v4/event_contracts/tokens/$TOKEN_ID/price"
+```
+
+Use the ticker endpoint when you need the best bid, best ask, and last traded price:
+
+```bash API
+curl "$BASE_URL/api/v4/event_contracts/tokens/$TOKEN_ID/ticker"
+```
+
+<Accordion title="Ticker Response">
+  ```json
+  {
+    "token_id": "ge_token-yes",
+    "best_bid": "0.4400",
+    "best_ask": "0.4600",
+    "last_price": "0.4500",
+    "timestamp": 1720000000123
+  }
+  ```
+</Accordion>
+
+## Price History
+
+Use price history to plot historical token prices. `from` and `to` are Unix timestamps in milliseconds.
+
+```bash API
+curl -G "$BASE_URL/api/v4/event_contracts/tokens/$TOKEN_ID/price_history" \
+  --data-urlencode "interval=1h" \
+  --data-urlencode "from=1720000000000" \
+  --data-urlencode "to=1720036000000"
 ```
 
 <Accordion title="Example Response">
   ```json
-  [
-    {
-      "market": "0x747dc809fb79e1b05be09c42d6179459a58de2ef3e40f02484a4e1260f741f7",
-      "value": 7484304.679057
-    }
-  ]
+  {
+    "history": [
+      {
+        "p": "0.4500",
+        "t": 1720000000000
+      },
+      {
+        "p": "0.4700",
+        "t": 1720003600000
+      }
+    ]
+  }
   ```
 </Accordion>
 
-## Market Holders
+## Candlesticks
 
-View the main public holders of different Outcome Tokens.
+Use the candlestick endpoint for time-bucketed price and volume data for a supported currency.
 
 ```bash API
-curl "https://data-api.polymarket.com/holders?market=$CONDITION_ID&limit=1"
+curl -G "$BASE_URL/api/v4/event_contracts/tokens/BTC/candlesticks" \
+  --data-urlencode "interval=1m" \
+  --data-urlencode "limit=100"
 ```
 
-<Accordion title="Example Response">
-  ```json
-  [
-    {
-      "token": "107505882767731489358349912513945399560393482969656700824895970500",
-      "holders": [
-        {
-          "proxyWallet": "0xaf23273e03A924A257e0D6bEae7133CF9D32377f",
-          "amount": 894254.445452,
-          "outcomeIndex": 0,
-          "name": "5Cssss"
-        }
-      ]
-    }
-  ]
-  ```
-</Accordion>
+The available intervals and returned fields are defined by the OpenAPI reference. Treat numeric values as strings where specified to avoid precision loss.
 
-## Real-Time Event Volume
+## Market and Event Aggregation
 
-Aggregate trading volume by Event and inspect the breakdown by Market.
+Use the Events and Markets endpoints to build market lists and aggregate application-level metrics:
 
-```bash API
-curl "https://data-api.polymarket.com/live-volume?id=$EVENT_ID"
+- `GET /api/v4/event_contracts/events` lists events and supports cursor pagination.
+- `GET /api/v4/event_contracts/markets` lists markets and supports filters such as `event_id`, `slug`, `condition_id`, and `tag_slug`.
+- `GET /api/v4/event_contracts/markets/{market_id}/trades` provides the trade-level data used for volume and activity calculations.
+
+DexBuilder does not expose Polymarket `data-api` endpoints such as `/oi`, `/holders`, or `/live-volume`. Do not use those external URLs as part of a DexBuilder integration.
+
+## Real-Time Analytics
+
+For streaming dashboards, subscribe to the Event Contracts WebSocket and combine updates with REST snapshots:
+
+```text
+wss://broker.dexbuilder.com/ws/dex-builder/event-contracts
 ```
 
-<Accordion title="Example Response">
-  ```json
-  [
-    {
-      "total": 60773073.437817,
-      "markets": [
-        {
-          "market": "0x747dc809fb79e1b05be09c42d6179459a58de2ef3e40f02484a4e1260f7",
-          "value": 34909514.911729
-        }
-      ]
-    }
-  ]
-  ```
-</Accordion>
-
-<Note>
-Some analytics endpoints come from external data services. In production integrations, distinguish the DexBuilder Event Contracts API from external data sources and do not treat external endpoints as part of the DexBuilder API contract.
-</Note>
+Public channels include `ec.trades`, `ec.depth`, `ec.bbo`, `ec.status`, `ec.cpi`, `ec.candlestick`, and `ec.oc_price`. See [Real-Time Data](./realtime-data) and [Public Channels](./websocket/public-channels) for subscription payloads and response envelopes.

@@ -1,111 +1,134 @@
 ---
 title: "数据分析"
 sidebarTitle: "数据分析"
-description: "通过成交、Open Interest、持有人与 Event 实时成交量等数据分析预测市场活动。"
+description: "使用 DexBuilder REST API 与 WebSocket 数据分析预测市场活动。"
 ---
 
-本页介绍如何观察预测市场的交易活跃度、资金分布和持仓情况。开始前，先通过「发现市场」获取 Market 的 `condition_id` 与 `event_id`。
+本页介绍如何使用 DexBuilder Prediction API 构建市场活动分析。以下示例使用生产环境 API：
+
+```text
+https://api.dexbuilder.com
+```
+
+公开行情接口不需要认证。开始查询前，可先通过「发现市场」获取 `market_id`、`event_id`、`condition_id` 和 `token_id`。
 
 ```bash
-CONDITION_ID="<condition_id>"
-EVENT_ID="<event_id>"
+BASE_URL="https://api.dexbuilder.com"
+MARKET_ID="<market_id>"
+TOKEN_ID="<token_id>"
 ```
 
 ## 最近成交
 
-用于查看最近撮合的交易，包括方向、价格、数量、结果、钱包和时间戳等信息。
+使用市场成交接口查看指定市场的撮合成交。返回值是数组，`price` 和 `size` 按字符串返回。
 
 ```bash API
-curl "https://data-api.polymarket.com/trades?market=$CONDITION_ID&limit=1"
+curl -G "$BASE_URL/api/v4/prediction/markets/$MARKET_ID/trades" \
+  --data-urlencode "limit=100"
 ```
 
 <Accordion title="响应示例">
   ```json
   [
     {
-      "proxyWallet": "0x50A0cebecFb81DbCbFA6d38F82040343F1E3D95F",
-      "side": "SELL",
-      "asset": "73056302498040856354963998699057693722943027161590344473262285090686949523925",
-      "conditionId": "0x747dc809fb79e1b05be09c42d6179459a58de2ef3e40f02484a4e1260f741f7",
-      "size": 42.62,
-      "price": 0.91,
-      "timestamp": 1782752879,
-      "title": "Will the US confirm that aliens exist before 2027?",
-      "outcome": "No"
+      "id": "trade-123",
+      "market_id": "ge_market-1",
+      "condition_id": "ge_condition-1",
+      "token_id": "ge_token-yes",
+      "outcome": "Yes",
+      "side": "BUY",
+      "price": "0.4500",
+      "size": "10.0000",
+      "created_at": 1720000000123
     }
   ]
   ```
 </Accordion>
 
-## Open Interest
+请求下一页时，使用接口返回的 `cursor` 查询参数。
 
-用于查看一个或多个 Market 当前未平仓持仓的价值。
+## Token 价格与 Ticker
+
+使用最新价格接口获取市场某一方的当前价格：
 
 ```bash API
-curl "https://data-api.polymarket.com/oi?market=$CONDITION_ID"
+curl "$BASE_URL/api/v4/prediction/tokens/$TOKEN_ID/price"
+```
+
+需要最佳买价、最佳卖价和最近成交价时，使用 Ticker 接口：
+
+```bash API
+curl "$BASE_URL/api/v4/prediction/tokens/$TOKEN_ID/ticker"
+```
+
+<Accordion title="Ticker 响应">
+  ```json
+  {
+    "token_id": "ge_token-yes",
+    "best_bid": "0.4400",
+    "best_ask": "0.4600",
+    "last_price": "0.4500",
+    "timestamp": 1720000000123
+  }
+  ```
+</Accordion>
+
+## 价格历史
+
+使用价格历史接口绘制 Token 历史价格。 `from` 和 `to` 是毫秒级 Unix 时间戳。
+
+```bash API
+curl -G "$BASE_URL/api/v4/prediction/tokens/$TOKEN_ID/price_history" \
+  --data-urlencode "interval=1h" \
+  --data-urlencode "from=1720000000000" \
+  --data-urlencode "to=1720036000000"
 ```
 
 <Accordion title="响应示例">
   ```json
-  [
-    {
-      "market": "0x747dc809fb79e1b05be09c42d6179459a58de2ef3e40f02484a4e1260f741f7",
-      "value": 7484304.679057
-    }
-  ]
+  {
+    "history": [
+      {
+        "p": "0.4500",
+        "t": 1720000000000
+      },
+      {
+        "p": "0.4700",
+        "t": 1720003600000
+      }
+    ]
+  }
   ```
 </Accordion>
 
-## Market 持有人
+## K 线
 
-查看不同 Outcome Token 的主要公开持有人。
+使用 K 线接口获取受支持币种的分时价格和成交量数据。
 
 ```bash API
-curl "https://data-api.polymarket.com/holders?market=$CONDITION_ID&limit=1"
+curl -G "$BASE_URL/api/v4/prediction/tokens/BTC/candlesticks" \
+  --data-urlencode "interval=1m" \
+  --data-urlencode "limit=100"
 ```
 
-<Accordion title="响应示例">
-  ```json
-  [
-    {
-      "token": "107505882767731489358349912513945399560393482969656700824895970500",
-      "holders": [
-        {
-          "proxyWallet": "0xaf23273e03A924A257e0D6bEae7133CF9D32377f",
-          "amount": 894254.445452,
-          "outcomeIndex": 0,
-          "name": "5Cssss"
-        }
-      ]
-    }
-  ]
-  ```
-</Accordion>
+可用周期和返回字段以 OpenAPI 参考为准。对于接口声明为字符串的数值字段，应按字符串处理，避免精度损失。
 
-## Event 实时成交量
+## 市场与事件聚合
 
-按 Event 汇总成交量，并查看各 Market 的成交量拆分。
+可使用 Event 和 Market 接口构建市场列表，并在应用层计算分析指标：
 
-```bash API
-curl "https://data-api.polymarket.com/live-volume?id=$EVENT_ID"
+- `GET /api/v4/prediction/events` 获取事件列表，支持 cursor 分页。
+- `GET /api/v4/prediction/markets` 获取市场列表，支持按 `event_id`、`slug`、`condition_id` 和 `tag_slug` 等条件筛选。
+- `GET /api/v4/prediction/markets/{market_id}/trades` 提供用于计算成交量和活动指标的成交明细。
+
+DexBuilder 不提供 Polymarket `data-api` 中的 `/oi`、`/holders` 或 `/live-volume` 接口。DexBuilder 集成中不要使用这些外部地址。
+
+## 实时分析
+
+实时看板可以订阅 Prediction Markets WebSocket，并结合 REST 快照：
+
+```text
+wss://broker.dexbuilder.com/ws/dex-builder/prediction
 ```
 
-<Accordion title="响应示例">
-  ```json
-  [
-    {
-      "total": 60773073.437817,
-      "markets": [
-        {
-          "market": "0x747dc809fb79e1b05be09c42d6179459a58de2ef3e40f02484a4e1260f7",
-          "value": 34909514.911729
-        }
-      ]
-    }
-  ]
-  ```
-</Accordion>
-
-<Note>
-部分分析接口来自外部数据服务。正式集成时应区分 DexBuilder Prediction API 与外部数据源，避免将外部接口当作 DexBuilder API 合同的一部分。
-</Note>
+公开频道包括 `pred.trades`、`pred.depth`、`pred.bbo`、`pred.status`、`pred.cpi`、`pred.candlestick` 和 `pred.oc_price`。订阅参数和返回消息格式请参阅「实时数据」与「公共频道」。
