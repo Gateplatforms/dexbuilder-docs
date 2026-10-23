@@ -13,8 +13,8 @@ description: "查询提现历史"
 
 | 参数 | 位置 | 必填 | 类型 | 说明 |
 | --- | --- | --- | --- | --- |
-| `page` | query | 否 | integer | ；默认值：`1` |
-| `page_size` | query | 否 | integer | ；默认值：`20` |
+| `page` | query | 否 | integer | 页码，从 1 开始；默认值：`1` |
+| `page_size` | query | 否 | integer | 每页条数；默认值：`20` |
 | `sub_user_wallet_addr` | header | 是 | string | 终端用户钱包地址；网关校验该钱包与当前 Broker 的绑定 |
 
 ## 响应

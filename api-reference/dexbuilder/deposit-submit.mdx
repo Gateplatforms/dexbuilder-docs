@@ -1,11 +1,11 @@
 ---
 title: "提交充值回执"
-description: "链上交易完成后上报 tx_hash；支持 Idempotency-Key 幂等。"
+description: "链上交易完成后提交交易哈希；请求头必须携带 `Idempotency-Key`。"
 ---
 
 `POST /api/v4/dexbuilder/deposit/submit`
 
-链上交易完成后上报 tx_hash；支持 Idempotency-Key 幂等。
+链上交易完成后提交交易哈希；请求头必须携带 `Idempotency-Key`。
 
 此接口代终端用户操作。请求头必须提供 `sub_user_wallet_addr`；网关核验该钱包属于当前 Broker 后才会转发。详见[认证与 API Key](/api-reference/dexbuilder/authentication)。
 
@@ -23,7 +23,6 @@ description: "链上交易完成后上报 tx_hash；支持 Idempotency-Key 幂�
 
 | 字段 | 类型 | 必填 | 说明 |
 | --- | --- | --- | --- |
-| `broker_uid` | integer | 否 |  |
 | `chain` | string | 是 |  |
 | `address` | string | 是 |  |
 | `token_address` | string | 是 |  |
