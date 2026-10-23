@@ -32,7 +32,7 @@ description: "订阅当前认证用户的订单、成交、持仓和结算更新
 }
 ```
 
-取消订阅时使用相同的 payload，并将 `op` 设置为 `unsubscribe`。文档不暴露内部用户 Header 或 broker 标识。
+取消订阅时使用相同的 payload，并将 `op` 设置为 `unsubscribe`。
 
 ## `ec.orders`
 
@@ -111,8 +111,6 @@ description: "订阅当前认证用户的订单、成交、持仓和结算更新
   }
 }
 ```
-
-仓位文档不描述标记价格字段。
 
 ## `ec.settlements`
 
