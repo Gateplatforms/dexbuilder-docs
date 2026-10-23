@@ -35,3 +35,28 @@ channel=ec.orders&event=subscribe&time=<Unix秒>&wallet_address=<URL编码的钱
 ```
 
 `time` 在此示例中为 `1720000000`。钱包地址须与生成签名时使用的地址完全一致。订阅其他私有频道时，按实际 `channel` 名称重新生成签名。Broker REST 请求的 Key、Header 与签名规则见[Broker API 认证与签名](../api/broker-authentication)。
+
+## 连接预鉴权（可选）
+
+也可以先通过 `server.sign` 认证连接，再订阅私有频道。此时签名原文中的频道为 `server.sign`、操作为 `auth`，不能复用订阅请求的签名。
+
+```text
+channel=server.sign&event=auth&time=1720000000&wallet_address=<URL编码的钱包地址>
+```
+
+```json
+{
+  "t": 1720000000123,
+  "id": "broker-auth-1",
+  "op": "auth",
+  "ch": "server.sign",
+  "payload": {
+    "method": "broker_api_key",
+    "key": "YOUR_BROKER_API_KEY",
+    "sign": "HEX_SIGNATURE",
+    "wallet_address": "<USER_WALLET>"
+  }
+}
+```
+
+认证成功后，连接绑定该钱包对应的用户。后续私有订阅和退订可以省略 `auth`；同一连接不能切换到其他用户，切换用户须建立新连接。断线重连后须重新认证。WebSocket 客户端在 `auth.wallet_address` 或预鉴权的 `payload.wallet_address` 中提供钱包地址，无需在 WebSocket 握手中额外设置 REST 的 `sub_user_wallet_addr` 请求头。
