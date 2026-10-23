@@ -47,6 +47,10 @@ DexBuilder 平台接口面向 Broker 服务端。请使用分配给当前 Broker
 
 上述路径均以 `/api/v4/dexbuilder` 为前缀。只有列出的 5 个配置查询免钱包校验；其余 14 个接口必须携带 `sub_user_wallet_addr`。网关使用 Broker 身份和钱包地址核验绑定关系，成功后将对应的终端用户身份传给后端；钱包未绑定到当前 Broker 时，请求会被拒绝。客户端无需自行传入用户 UID 或 Broker 身份 Header。
 
+## 认证失败与钱包校验
+
+Broker API Key 或签名无效时，网关可能返回 HTTP `401`；Key 权限不足，或 `sub_user_wallet_addr` 对应的钱包未通过 Broker 归属校验时，可能返回 HTTP `403`。请核对 Key 权限及钱包绑定关系后再重试。
+
 ## 签名规则
 
 签名原文由以下五段内容以换行符 `\n` 连接：

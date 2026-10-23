@@ -3,7 +3,7 @@ title: "DexBuilder 平台 API 概览"
 description: "面向 DexBuilder 项目方的底层 REST 接口，覆盖资产配置、用户、充值与提现。"
 ---
 
-DexBuilder 平台 API 是面向项目方的底层 REST 能力，提供 Broker 资产配置、终端用户查询、Vault 余额，以及链上充值与提现流程。Broker 使用 Broker API Key 请求网关；用户级操作须提供终端用户钱包地址，由网关校验该钱包属于当前 Broker。
+DexBuilder 平台 API 是面向项目方的底层 REST 能力，提供 Broker 资产配置、终端用户查询、Vault 余额，以及链上充值与提现流程。Broker 使用 Broker API Key 请求网关；用户级操作须在请求头 `sub_user_wallet_addr` 中提供终端用户钱包地址，由网关校验该钱包属于当前 Broker。
 
 ## 接入地址
 
