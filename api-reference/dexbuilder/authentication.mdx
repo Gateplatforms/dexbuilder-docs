@@ -54,12 +54,12 @@ DexBuilder 平台接口面向 Broker 服务端。请使用分配给当前 Broker
 ```text
 HTTP 方法（大写）
 外部请求路径（包含 /api/v4/dexbuilder，不包含域名）
-实际发送的 Query String；没有时为空字符串
+请求 URL 中按原顺序排列、未经过 URL 编码的 Query String；没有时为空字符串
 实际发送的请求体原文的 SHA512 十六进制摘要；没有请求体时对空字符串计算
 Timestamp 请求头的值
 ```
 
-使用 `Secret Key` 计算 `SIGN = HexEncode(HMAC_SHA512(Secret Key, 签名原文))`。签名时使用客户端实际访问的外部路径，例如 `/api/v4/dexbuilder/user/info`。Query 参数顺序和请求体字节必须与实际发送内容一致；钱包地址作为独立请求头传递，不拼入签名原文。
+使用 `Secret Key` 计算 `SIGN = HexEncode(HMAC_SHA512(Secret Key, 签名原文))`。签名时使用客户端实际访问的外部路径，例如 `/api/v4/dexbuilder/user/info`。Query 参数顺序必须与实际请求 URL 一致，参与签名时使用未 URL 编码的参数串；请求体摘要按实际发送的字节计算。钱包地址作为独立请求头传递，不拼入签名原文。
 
 签名算法遵循 [Gate APIv4 认证规则](https://www.gate.com/docs/developers/apiv4/zh_CN/#%E8%AE%A4%E8%AF%81)，但 Broker API Key 的申请与权限配置应按 DexBuilder 项目方接入流程办理。
 

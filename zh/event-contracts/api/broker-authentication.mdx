@@ -20,20 +20,21 @@ description: "使用 Broker API Key 代旗下用户调用事件合约私有 REST
 
 ## 生成 HTTP 签名
 
-依次以换行符连接大写 HTTP 方法、实际外部请求路径、实际发送的 Query String、请求体原文的 SHA512 十六进制摘要，以及 `Timestamp` 值；无 Query 或 Body 时使用空字符串对应的值。随后计算 `SIGN = HexEncode(HMAC_SHA512(Secret Key, 签名原文))`。
+依次以换行符连接大写 HTTP 方法、实际外部请求路径、请求 URL 中按原顺序排列、未经过 URL 编码的 Query String、请求体原文的 SHA512 十六进制摘要，以及 `Timestamp` 值；无 Query 或 Body 时使用空字符串对应的值。随后计算 `SIGN = HexEncode(HMAC_SHA512(Secret Key, 签名原文))`。
 
 ```text
 HTTP_METHOD + "\n" + REQUEST_PATH + "\n" + QUERY_STRING + "\n" +
 HexEncode(SHA512(REQUEST_BODY)) + "\n" + TIMESTAMP
 ```
 
-签名路径必须包含 `/api/v4/broker/event_contracts`，例如 `/api/v4/broker/event_contracts/orders`。Query 参数顺序与实际发送的 URL 保持一致；Body 摘要依据实际发送的字节计算。`sub_user_wallet_addr` 是独立 Header，不拼入 HTTP 签名原文。算法细节参见 [Gate APIv4 认证规则](https://www.gate.com/docs/developers/apiv4/zh_CN/#%E8%AE%A4%E8%AF%81)。
+签名路径必须包含 `/api/v4/broker/event_contracts`，例如 `/api/v4/broker/event_contracts/orders`。Query 参数顺序与实际请求 URL 保持一致，参与签名时使用未 URL 编码的参数串；Body 摘要依据实际发送的字节计算。`sub_user_wallet_addr` 是独立 Header，不拼入 HTTP 签名原文。算法细节参见 [Gate APIv4 认证规则](https://www.gate.com/docs/developers/apiv4/zh_CN/#%E8%AE%A4%E8%AF%81)。
 
 ## 请求示例
 
 下例使用已生成的 `SIGN`。在生成签名后，保持 `API_PATH`、Query String 和 Body 与实际请求一致。
 
 ```bash
+BASE_URL="https://api.dexbuilder.com"
 API_PATH="/api/v4/broker/event_contracts/positions"
 curl -i --request GET "${BASE_URL}${API_PATH}" \
   --header "KEY: ${BROKER_API_KEY}" \
