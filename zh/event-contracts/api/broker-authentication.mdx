@@ -1,0 +1,50 @@
+---
+title: "Broker API 认证与签名"
+description: "使用 Broker API Key 代旗下用户调用事件合约私有 REST 接口。"
+---
+
+事件合约的公开行情接口继续使用 `/api/v4/event_contracts/...`，无需 Broker API Key。Broker 代用户执行订单、持仓和账户等私有操作时，使用 `/api/v4/broker/event_contracts/...`，并按本页提供 Broker 身份和目标用户钱包。
+
+## 获取和使用 Broker API Key
+
+通过项目方管理流程申请或创建专用于当前 Broker 的 API Key，并开通事件合约对应的接口权限。读取操作需要只读或读写权限；写入操作需要读写权限。创建后安全保存 `Key` 和 `Secret Key`。终端用户个人 API Key 不能代替 Broker API Key。
+
+| Header | 要求 |
+| --- | --- |
+| `KEY` | Broker API Key |
+| `Timestamp` | 当前 Unix 秒级时间戳，与网关时间差不超过 60 秒 |
+| `SIGN` | 使用 Secret Key 生成的 HMAC-SHA512 十六进制签名 |
+| `sub_user_wallet_addr` | 目标终端用户的钱包地址，所有本节 Broker 私有 REST 接口均必填 |
+
+网关从 Broker API Key 取得 Broker 身份，核验 `sub_user_wallet_addr` 对应的钱包与该 Broker 的绑定关系。只有验证通过，才以对应终端用户身份转发。钱包未绑定或不属于当前 Broker 时请求被拒绝。客户端无需传入用户 UID 或网关内部身份 Header。
+
+## 生成 HTTP 签名
+
+依次以换行符连接大写 HTTP 方法、实际外部请求路径、实际发送的 Query String、请求体原文的 SHA512 十六进制摘要，以及 `Timestamp` 值；无 Query 或 Body 时使用空字符串对应的值。随后计算 `SIGN = HexEncode(HMAC_SHA512(Secret Key, 签名原文))`。
+
+```text
+HTTP_METHOD + "\n" + REQUEST_PATH + "\n" + QUERY_STRING + "\n" +
+HexEncode(SHA512(REQUEST_BODY)) + "\n" + TIMESTAMP
+```
+
+签名路径必须包含 `/api/v4/broker/event_contracts`，例如 `/api/v4/broker/event_contracts/orders`。Query 参数顺序与实际发送的 URL 保持一致；Body 摘要依据实际发送的字节计算。`sub_user_wallet_addr` 是独立 Header，不拼入 HTTP 签名原文。算法细节参见 [Gate APIv4 认证规则](https://www.gate.com/docs/developers/apiv4/zh_CN/#%E8%AE%A4%E8%AF%81)。
+
+## 请求示例
+
+下例使用已生成的 `SIGN`。在生成签名后，保持 `API_PATH`、Query String 和 Body 与实际请求一致。
+
+```bash
+API_PATH="/api/v4/broker/event_contracts/positions"
+curl -i --request GET "${BASE_URL}${API_PATH}" \
+  --header "KEY: ${BROKER_API_KEY}" \
+  --header "SIGN: ${SIGN}" \
+  --header "Timestamp: ${TIMESTAMP}" \
+  --header "sub_user_wallet_addr: ${WALLET}" \
+  --header 'Accept: application/json'
+```
+
+上例中的 `API_PATH` 必须与生成签名时的请求路径一致。Broker Key、Secret 和目标钱包地址应由服务端安全管理。
+
+<Warning>
+  不要将 Secret Key 写入浏览器、日志或工单。公开行情接口不使用上述 Broker 私有路径；本章节标记为 Broker 私有的接口使用 Broker 路由。
+</Warning>

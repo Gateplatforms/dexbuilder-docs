@@ -4,6 +4,10 @@ sidebarTitle: "Place Orders"
 description: "Create private Event Contracts orders through the Event Contracts API."
 ---
 
+<Note>
+  The private requests below use a Broker API Key. Send `KEY`, `Timestamp`, `SIGN`, and `sub_user_wallet_addr` with every request. Sign the exact external path, query string, and body. See [Broker API authentication](/en/event-contracts/api/broker-authentication).
+</Note>
+
 After confirming that the Market currently accepts orders, you can submit a trade for a specific Outcome Token. Public market data does not require authentication; placing an order is a private operation and requires authentication.
 
 Production Base URL:
@@ -31,9 +35,12 @@ Before submitting an order, validate quantity and price against `min_order_size`
 ## 2. Submit an Order
 
 ```bash cURL
-curl -X POST "https://api.dexbuilder.com/api/v4/event_contracts/orders" \
+curl -X POST "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders" \
   -H "Content-Type: application/json" \
-  -H "<authentication-header>: <authentication-value>" \
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${WALLET}" \
   --data '{
     "token_id": "<token_id>",
     "side": "BUY",

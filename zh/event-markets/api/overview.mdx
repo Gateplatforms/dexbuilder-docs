@@ -10,11 +10,14 @@ description: "预测市场 API 的基础地址、访问模型、分页、时间�
 https://api.dexbuilder.com
 ```
 
-预测市场 REST API 前缀为：
+## REST 路由与身份
 
-```text
-/api/v4/predictionprediction
-```
+| 类型 | 路径前缀 |
+| --- | --- |
+| 公开行情路径 | `/api/v4/prediction` |
+| Broker 代用户路径 | `/api/v4/broker/prediction` |
+
+公开市场数据继续使用原路径，无需 Broker Key；订单、持仓、账户及结算等私有接口使用 Broker 路径。私有请求必须携带 Broker API Key、签名和 `sub_user_wallet_addr`，网关核验钱包属于当前 Broker。 详见[Broker API 认证与签名](/zh/event-markets/api/broker-authentication)。
 
 ## 接口访问模型
 

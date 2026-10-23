@@ -1,47 +1,37 @@
 ---
-title: "WebSocket Authentication"
-description: "Authenticate private Prediction Markets API WebSocket subscriptions."
+title: "Broker WebSocket Authentication"
+sidebarTitle: "Authentication"
+description: "Subscribe to private WebSocket channels using a Broker API Key and a linked user wallet."
 ---
 
-Only private channels require authentication. Public market-data channels can be subscribed to without credentials.
+Public market-data channels do not require authentication. For private channels, use the dedicated `broker_api_key` method and include the target end-user wallet in `auth.wallet_address`. The wallet must be linked to the Broker identified by the Key.
 
-## API Key signature
+## Signature
 
-Include the API Key and a locally generated HMAC-SHA512 signature in the `auth` object:
-
-```json
-{
-  "method": "api_key",
-  "key": "YOUR_API_KEY",
-  "sign": "HEX_SIGNATURE"
-}
-```
-
-The signature input for a direct private subscription is:
+The request field `t` is Unix time in milliseconds. Use `floor(t / 1000)` seconds in the signature string, URL-query encode the wallet address, and keep the following field order:
 
 ```text
-channel=pred.orders&event=subscribe&time=1720000000123
+channel=pred.orders&event=subscribe&time=<Unix seconds>&wallet_address=<URL-encoded wallet>
 ```
 
-Compute the hexadecimal HMAC-SHA512 digest with the API Secret as the key. Never send the API Secret.
+Compute `HexEncode(HMAC_SHA512(Broker API Secret, UTF8(signature string)))`. Unlike REST request signing, the WebSocket signature **includes** the wallet address. Never send the Secret Key.
 
-## Private subscription
+## Private subscription example
 
 ```json
 {
   "t": 1720000000123,
-  "id": "private-1",
+  "id": "broker-private-1",
   "op": "subscribe",
   "ch": "pred.orders",
-  "payload": {
-    "all": true
-  },
+  "payload": {"all": true},
   "auth": {
-    "method": "api_key",
-    "key": "YOUR_API_KEY",
-    "sign": "HEX_SIGNATURE"
+    "method": "broker_api_key",
+    "key": "YOUR_BROKER_API_KEY",
+    "sign": "HEX_SIGNATURE",
+    "wallet_address": "<USER_WALLET>"
   }
 }
 ```
 
-The same API Key authentication is used for `pred.usertrades`, `pred.positions`, and `pred.settlements`.
+The signed `time` is `1720000000` for this example. Use the same wallet address in the signature and payload; regenerate the signature when the channel changes. See [Broker API authentication](../api/broker-authentication) for REST request headers and signing.

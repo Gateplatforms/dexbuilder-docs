@@ -302,6 +302,7 @@
                     "group": "事件市场 API",
                     "pages": [
                       "zh/event-markets/api/overview",
+                      "zh/event-markets/api/broker-authentication",
                       "zh/event-markets/apis",
                       "zh/event-markets/error-codes",
                       {
@@ -362,6 +363,7 @@
                     "group": "事件合约 API",
                     "pages": [
                       "zh/event-contracts/api/overview",
+                      "zh/event-contracts/api/broker-authentication",
                       "zh/event-contracts/apis",
                       "zh/event-contracts/error-codes",
                       {
@@ -757,6 +759,7 @@
                     "group": "Prediction Markets API",
                     "pages": [
                       "en/event-markets/api/overview",
+                      "en/event-markets/api/broker-authentication",
                       "en/event-markets/apis",
                       "en/event-markets/error-codes",
                       {
@@ -817,6 +820,7 @@
                     "group": "Event Contracts API",
                     "pages": [
                       "en/event-contracts/api/overview",
+                      "en/event-contracts/api/broker-authentication",
                       "en/event-contracts/apis",
                       "en/event-contracts/error-codes",
                       {
@@ -1166,6 +1170,7 @@
                     "group": "事件市場 API",
                     "pages": [
                       "zh-TW/event-markets/api/overview",
+                      "zh-TW/event-markets/api/broker-authentication",
                       "zh-TW/event-markets/apis",
                       "zh-TW/event-markets/error-codes",
                       {
@@ -1226,6 +1231,7 @@
                     "group": "事件合約 API",
                     "pages": [
                       "zh-TW/event-contracts/api/overview",
+                      "zh-TW/event-contracts/api/broker-authentication",
                       "zh-TW/event-contracts/apis",
                       "zh-TW/event-contracts/error-codes",
                       {

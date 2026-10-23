@@ -4,6 +4,10 @@ sidebarTitle: "Real-Time Order Updates"
 description: "Receive real-time order, trade, position, and settlement-state changes through private WebSocket channels."
 ---
 
+<Note>
+  Use `broker_api_key` and a linked wallet. The WebSocket signature includes the URL-encoded wallet address. See [WebSocket authentication](./websocket/authentication).
+</Note>
+
 Use private `ec.orders` and `ec.usertrades` channels to track the order lifecycle and fills, and use `ec.positions` and `ec.settlements` to track account state.
 
 ## Connection
@@ -14,7 +18,7 @@ wss://broker.dexbuilder.com/ws/dex-builder/event-contracts
 
 ## Subscribe
 
-Use API Key signature authentication:
+Use Broker API Key authentication with a linked user wallet:
 
 ```json
 {
@@ -26,9 +30,10 @@ Use API Key signature authentication:
     "all": true
   },
   "auth": {
-    "method": "api_key",
-    "key": "YOUR_API_KEY",
-    "sign": "HEX_SIGNATURE"
+    "method": "broker_api_key",
+    "key": "YOUR_BROKER_API_KEY",
+    "sign": "HEX_SIGNATURE",
+    "wallet_address": "<USER_WALLET>"
   }
 }
 ```

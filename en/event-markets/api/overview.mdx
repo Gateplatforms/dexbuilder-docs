@@ -11,6 +11,11 @@ Prediction Markets API provides REST API for market discovery, market data, orde
 https://api.dexbuilder.com
 ```
 
-REST endpoints use the `/api/v4/prediction` prefix.
+## REST routes and identity
 
-Public market data does not require account authentication. Private order, position, account, and claim operations require the documented authentication flow.
+| Type | Path prefix |
+| --- | --- |
+| Public market-data path | `/api/v4/prediction` |
+| Broker user-operation path | `/api/v4/broker/prediction` |
+
+Public market data stays on its existing path without a Broker Key. Private order, position, account, and settlement endpoints use the Broker path. Send a Broker API Key, signature, and `sub_user_wallet_addr`; the gateway verifies that the wallet belongs to the Broker. See [Broker API authentication](/en/event-markets/api/broker-authentication).

@@ -4,6 +4,10 @@ sidebarTitle: "提交订单"
 description: "通过 Prediction API 创建预测市场私有订单。"
 ---
 
+<Note>
+  以下私有接口示例使用 Broker API Key。每次请求都需携带 `KEY`、`Timestamp`、`SIGN` 和 `sub_user_wallet_addr`；签名使用实际外部请求路径、Query String 和 Body。 [Broker API 认证与签名](/zh/event-markets/api/broker-authentication)。
+</Note>
+
 在确认 Market 当前接受订单后，可以针对指定 Outcome Token 提交交易。公开市场数据无需认证；下单属于私有操作，需要完成认证。
 
 生产环境 Base URL：
@@ -31,9 +35,12 @@ curl "https://api.dexbuilder.com/api/v4/prediction/tokens/<token_id>/order_book?
 ## 2. 提交订单
 
 ```bash cURL
-curl -X POST "https://api.dexbuilder.com/api/v4/prediction/orders" \
+curl -X POST "https://api.dexbuilder.com/api/v4/broker/prediction/orders" \
   -H "Content-Type: application/json" \
-  -H "<authentication-header>: <authentication-value>" \
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${WALLET}" \
   --data '{
     "token_id": "<token_id>",
     "side": "BUY",
@@ -48,10 +55,6 @@ curl -X POST "https://api.dexbuilder.com/api/v4/prediction/orders" \
     "expire_time": 0
   }'
 ```
-
-<Note>
-上例认证 Header 仅用于表示接口需要认证，实际公开认证方案以正式认证文档为准。不要把内部网关身份 Header 用作客户端认证参数。
-</Note>
 
 ## 请求字段
 

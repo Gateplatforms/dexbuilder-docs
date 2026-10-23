@@ -10,11 +10,14 @@ description: "預測市場 API 的基礎位址、存取模型、分頁、時間�
 https://api.dexbuilder.com
 ```
 
-預測市場 REST API 前綴為：
+## REST 路由與身分
 
-```text
-/api/v4/prediction
-```
+| 類型 | 路徑前綴 |
+| --- | --- |
+| 公開行情路徑 | `/api/v4/prediction` |
+| Broker 代使用者路徑 | `/api/v4/broker/prediction` |
+
+公開市場資料維持原路徑，無須 Broker Key；訂單、持倉、帳戶及結算等私有介面使用 Broker 路徑。私有請求必須攜帶 Broker API Key、簽名和 `sub_user_wallet_addr`，閘道會驗證錢包屬於目前 Broker。 詳見[Broker API 認證與簽名](/zh-TW/event-markets/api/broker-authentication)。
 
 ## 介面存取模型
 

@@ -4,6 +4,10 @@ sidebarTitle: "实时订单更新"
 description: "通过私有 WebSocket 频道实时接收订单、成交、持仓和结算状态变化。"
 ---
 
+<Note>
+  使用 `broker_api_key` 和已绑定的钱包地址；WebSocket 签名包含 URL 编码后的钱包地址。详见[WebSocket 认证](./websocket/authentication)。
+</Note>
+
 使用私有 `ec.orders` 和 `ec.usertrades` 跟踪订单生命周期和成交，使用 `ec.positions` 和 `ec.settlements` 跟踪账户状态。
 
 ## 连接地址
@@ -26,9 +30,10 @@ wss://broker.dexbuilder.com/ws/dex-builder/event-contracts
     "all": true
   },
   "auth": {
-    "method": "api_key",
-    "key": "YOUR_API_KEY",
-    "sign": "HEX_SIGNATURE"
+    "method": "broker_api_key",
+    "key": "YOUR_BROKER_API_KEY",
+    "sign": "HEX_SIGNATURE",
+    "wallet_address": "<USER_WALLET>"
   }
 }
 ```

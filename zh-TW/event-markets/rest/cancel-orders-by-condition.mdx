@@ -1,11 +1,36 @@
 ---
 title: "按市場條件批量撤單"
 description: "按市場條件批量撤單"
-openapi: "/openapi/event-markets-zh-TW.yaml DELETE /api/v4/prediction/orders"
 ---
+
+<Note>
+  此介面僅供 Broker 使用。請求須攜帶 Broker API Key、`Timestamp`、`SIGN` 和 `sub_user_wallet_addr`。閘道確認錢包屬於目前 Broker 後才會轉發。請依外部 `/api/v4/broker/...` 路徑計算簽名。詳見[Broker API 認證與簽名](/zh-TW/event-markets/api/broker-authentication).
+</Note>
 
 按市場條件批量撤單。
 
-<Note>
-該介面為私有介面，需要按照預測市場認證要求完成認證後呼叫。
-</Note>
+## 介面欄位
+
+**請求路徑:** `DELETE /api/v4/broker/prediction/orders`
+
+### 請求參數
+
+| 欄位 | 位置 | 型別 | 必填 | 說明 |
+| --- | --- | --- | --- | --- |
+| `KEY` | header | string | 是 | Broker API Key |
+| `Timestamp` | header | string | 是 | Unix 秒級時間戳，與閘道時間差不超過 60 秒 |
+| `SIGN` | header | string | 是 | 依實際外部請求路徑、Query 與 Body 產生的 HMAC-SHA512 十六進位簽名 |
+| `sub_user_wallet_addr` | header | string | 是 | 目標終端使用者錢包地址；閘道會驗證該錢包屬於目前 Broker |
+| `condition_id` | query | string | 否 |  |
+
+### 成功回應
+
+| 欄位 | 型別 | 說明 |
+| --- | --- | --- |
+| `batch_id` | string |  |
+| `status` | string |  |
+| `total_orders` | integer |  |
+
+介面定義的回應狀態：`200`, `400`, `401`, `503`。
+
+欄位定義依目前介面契約；實際錯誤資訊以回應為準。
