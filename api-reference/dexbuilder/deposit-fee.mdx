@@ -3,18 +3,17 @@ title: "估算充值手续费"
 description: "估算充值手续费"
 ---
 
-`POST /api/dexbuilder/deposit/fee`
+`POST /api/v4/dexbuilder/deposit/fee`
 
 估算充值手续费
 
-调用前请阅读[认证与 API Key](/api-reference/dexbuilder/authentication)。`X-Broker-ID` 对应接入的 Broker，按网关配置传递或由网关注入。
+此接口代终端用户操作。请求头必须提供 `sub_user_wallet_addr`；网关核验该钱包属于当前 Broker 后才会转发。详见[认证与 API Key](/api-reference/dexbuilder/authentication)。
 
 ## 请求参数
 
 | 参数 | 位置 | 必填 | 类型 | 说明 |
 | --- | --- | --- | --- | --- |
-| `X-User-Id` | header | 否 | string | 项目方映射的终端用户 ID（亦可使用 X-Gate-User-Id 或 query user_id） |
-| `sub_user_wallet_addr` | header | 否 | string | 网关透传的终端钱包，用于反查 user_id |
+| `sub_user_wallet_addr` | header | 是 | string | 终端用户钱包地址；网关校验该钱包与当前 Broker 的绑定 |
 
 ## 请求体
 

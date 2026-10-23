@@ -3,13 +3,13 @@ title: "DexBuilder 平台 API 概览"
 description: "面向 DexBuilder 项目方的底层 REST 接口，覆盖资产配置、用户、充值与提现。"
 ---
 
-DexBuilder 平台 API 是面向项目方的底层 REST 能力，提供 Broker 资产配置、终端用户查询、Vault 余额，以及链上充值与提现流程。项目方请求先经过 Gate APIv4 网关验签，再由服务校验 API Key 与 Broker 项目的绑定关系。
+DexBuilder 平台 API 是面向项目方的底层 REST 能力，提供 Broker 资产配置、终端用户查询、Vault 余额，以及链上充值与提现流程。Broker 使用 Broker API Key 请求网关；用户级操作须提供终端用户钱包地址，由网关校验该钱包属于当前 Broker。
 
 ## 接入地址
 
-经网关访问：`https://{host}/api/dexbuilder`。`{host}` 由接入环境提供；下方接口页展示的路径均包含 `/api/dexbuilder` 前缀。请使用接入方提供的网关地址。
+经网关访问：`https://{host}/api/v4/dexbuilder`。`{host}` 由接入环境提供；下方接口页展示的路径均包含 `/api/v4/dexbuilder` 前缀。请使用接入方提供的网关地址。
 
-调用前先阅读[认证与 API Key](/api-reference/dexbuilder/authentication)，完成密钥、签名和 Broker 绑定配置。
+调用前先阅读[认证与 API Key](/api-reference/dexbuilder/authentication)，了解密钥、签名和各接口的钱包地址要求。
 
 ## 接口分类
 

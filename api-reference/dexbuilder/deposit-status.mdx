@@ -3,16 +3,17 @@ title: "查询充值状态"
 description: "查询充值状态"
 ---
 
-`GET /api/dexbuilder/deposit/status`
+`GET /api/v4/dexbuilder/deposit/status`
 
 查询充值状态
 
-调用前请阅读[认证与 API Key](/api-reference/dexbuilder/authentication)。`X-Broker-ID` 对应接入的 Broker，按网关配置传递或由网关注入。
+此接口代终端用户操作。请求头必须提供 `sub_user_wallet_addr`；网关核验该钱包属于当前 Broker 后才会转发。详见[认证与 API Key](/api-reference/dexbuilder/authentication)。
 
 ## 请求参数
 
 | 参数 | 位置 | 必填 | 类型 | 说明 |
 | --- | --- | --- | --- | --- |
+| `sub_user_wallet_addr` | header | 是 | string | 终端用户钱包地址；网关校验该钱包与当前 Broker 的绑定 |
 | `tx_hash` | query | 是 | string | EVM 或 Solana 交易哈希 |
 
 ## 响应

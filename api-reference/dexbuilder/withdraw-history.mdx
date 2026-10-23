@@ -3,11 +3,11 @@ title: "查询提现历史"
 description: "查询提现历史"
 ---
 
-`GET /api/dexbuilder/withdraw/history`
+`GET /api/v4/dexbuilder/withdraw/history`
 
 查询提现历史
 
-调用前请阅读[认证与 API Key](/api-reference/dexbuilder/authentication)。`X-Broker-ID` 对应接入的 Broker，按网关配置传递或由网关注入。
+此接口代终端用户操作。请求头必须提供 `sub_user_wallet_addr`；网关核验该钱包属于当前 Broker 后才会转发。详见[认证与 API Key](/api-reference/dexbuilder/authentication)。
 
 ## 请求参数
 
@@ -15,8 +15,7 @@ description: "查询提现历史"
 | --- | --- | --- | --- | --- |
 | `page` | query | 否 | integer | ；默认值：`1` |
 | `page_size` | query | 否 | integer | ；默认值：`20` |
-| `X-User-Id` | header | 否 | string | 项目方映射的终端用户 ID（亦可使用 X-Gate-User-Id 或 query user_id） |
-| `sub_user_wallet_addr` | header | 否 | string | 网关透传的终端钱包，用于反查 user_id |
+| `sub_user_wallet_addr` | header | 是 | string | 终端用户钱包地址；网关校验该钱包与当前 Broker 的绑定 |
 
 ## 响应
 

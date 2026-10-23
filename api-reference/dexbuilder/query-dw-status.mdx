@@ -3,11 +3,11 @@ title: "查询充提开关"
 description: "查询指定资产与网络的充值/提现是否开启。"
 ---
 
-`GET /api/dexbuilder/dw_status`
+`GET /api/v4/dexbuilder/dw_status`
 
 查询指定资产与网络的充值/提现是否开启。
 
-调用前请阅读[认证与 API Key](/api-reference/dexbuilder/authentication)。`X-Broker-ID` 对应接入的 Broker，按网关配置传递或由网关注入。
+此接口查询 Broker 配置，无需钱包地址；仍须使用 Broker API Key 签名。详见[认证与 API Key](/api-reference/dexbuilder/authentication)。
 
 ## 请求参数
 

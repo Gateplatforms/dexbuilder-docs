@@ -3,19 +3,18 @@ title: "查询资金统计"
 description: "查询用户资金统计（转发 PerpDEX 业务层）。"
 ---
 
-`GET /api/dexbuilder/fund_stats`
+`GET /api/v4/dexbuilder/fund_stats`
 
 查询用户资金统计（转发 PerpDEX 业务层）。
 
-调用前请阅读[认证与 API Key](/api-reference/dexbuilder/authentication)。`X-Broker-ID` 对应接入的 Broker，按网关配置传递或由网关注入。
+此接口代终端用户操作。请求头必须提供 `sub_user_wallet_addr`；网关核验该钱包属于当前 Broker 后才会转发。详见[认证与 API Key](/api-reference/dexbuilder/authentication)。
 
 ## 请求参数
 
 | 参数 | 位置 | 必填 | 类型 | 说明 |
 | --- | --- | --- | --- | --- |
 | `x-gate-device-type` | header | 是 | string | 设备类型，须为 Perp 支持的枚举值（如 web）；示例：`web` |
-| `X-User-Id` | header | 否 | string | 项目方映射的终端用户 ID（亦可使用 X-Gate-User-Id 或 query user_id） |
-| `sub_user_wallet_addr` | header | 否 | string | 网关透传的终端钱包，用于反查 user_id |
+| `sub_user_wallet_addr` | header | 是 | string | 终端用户钱包地址；网关校验该钱包与当前 Broker 的绑定 |
 
 ## 响应
 
