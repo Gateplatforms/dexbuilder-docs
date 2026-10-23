@@ -1,51 +1,11 @@
 ---
 title: "查詢已結算持倉"
 description: "查詢已結算的事件合約持倉"
+openapi: "/openapi/event-contracts-zh-TW.yaml GET /api/v4/event_contracts/positions/settled"
 ---
-
-<Note>
-  此介面僅供 Broker 使用。請求須攜帶 Broker API Key、`Timestamp`、`SIGN` 和 `sub_user_wallet_addr`。閘道確認錢包屬於目前 Broker 後才會轉發。請依外部 `/api/v4/broker/...` 路徑計算簽名。詳見[Broker API 認證與簽名](/zh-TW/event-contracts/api/broker-authentication).
-</Note>
 
 查詢目前帳戶已結算的事件合約持倉。
 
-## 介面欄位
-
-**請求路徑:** `GET /api/v4/broker/event_contracts/positions/settled`
-
-### 請求參數
-
-| 欄位 | 位置 | 型別 | 必填 | 說明 |
-| --- | --- | --- | --- | --- |
-| `KEY` | header | string | 是 | Broker API Key |
-| `Timestamp` | header | string | 是 | Unix 秒級時間戳，與閘道時間差不超過 60 秒 |
-| `SIGN` | header | string | 是 | 依實際外部請求路徑、Query 與 Body 產生的 HMAC-SHA512 十六進位簽名 |
-| `sub_user_wallet_addr` | header | string | 是 | 目標終端使用者錢包地址；閘道會驗證該錢包屬於目前 Broker |
-| `event_id` | query | string | 否 |  |
-| `condition_id` | query | string | 否 |  |
-| `cursor` | query | string | 否 |  |
-| `limit` | query | integer | 否 |  |
-
-### 成功回應
-
-| 欄位 | 型別 | 說明 |
-| --- | --- | --- |
-| `items` | PositionItem[] |  |
-| `items[].available_size` | string |  |
-| `items[].avg_open_price` | string |  |
-| `items[].claimable_amount` | string |  |
-| `items[].event_id` | string |  |
-| `items[].locked_size` | string |  |
-| `items[].outcome` | string |  |
-| `items[].position_id` | string |  |
-| `items[].position_value` | string |  |
-| `items[].settlement_status` | string |  |
-| `items[].size` | string |  |
-| `items[].token_id` | string |  |
-| `items[].updated_at` | integer |  |
-| `items[].won` | boolean |  |
-| `next_cursor` | string |  |
-
-介面定義的回應狀態：`200`, `400`, `401`, `503`。
-
-欄位定義依目前介面契約；實際錯誤資訊以回應為準。
+<Note>
+  此介面為私有介面，需要按照事件合約認證要求完成認證後呼叫。
+</Note>

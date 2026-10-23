@@ -4,10 +4,6 @@ sidebarTitle: "Account Activity"
 description: "Query Event Contracts positions, trades, and related activity for the currently authenticated account."
 ---
 
-<Note>
-  The private requests below use a Broker API Key. Send `KEY`, `Timestamp`, `SIGN`, and `sub_user_wallet_addr` with every request. Sign the exact external path, query string, and body. See [Broker API authentication](/en/event-contracts/api/broker-authentication).
-</Note>
-
 The Event Contracts API provides positions and trade records for the currently authenticated account. These are private endpoints and require authentication.
 
 Production Base URL:
@@ -19,11 +15,8 @@ https://api.dexbuilder.com
 ## List Positions
 
 ```bash cURL
-curl -G "https://api.dexbuilder.com/api/v4/broker/event_contracts/positions" \
-  -H "KEY: ${BROKER_API_KEY}" \
-  -H "SIGN: ${SIGN}" \
-  -H "Timestamp: ${TIMESTAMP}" \
-  -H "sub_user_wallet_addr: ${WALLET}" \
+curl -G "https://api.dexbuilder.com/api/v4/event_contracts/positions" \
+  -H "<authentication-header>: <authentication-value>" \
   --data-urlencode "event_id=<event_id>" \
   --data-urlencode "condition_id=<condition_id>" \
   --data-urlencode "settlement_status=OPEN" \
@@ -35,11 +28,8 @@ Common response fields include `position_id`, `event_id`, `token_id`, `outcome`,
 ## List Settled Positions
 
 ```bash cURL
-curl -G "https://api.dexbuilder.com/api/v4/broker/event_contracts/positions/settled" \
-  -H "KEY: ${BROKER_API_KEY}" \
-  -H "SIGN: ${SIGN}" \
-  -H "Timestamp: ${TIMESTAMP}" \
-  -H "sub_user_wallet_addr: ${WALLET}"
+curl -G "https://api.dexbuilder.com/api/v4/event_contracts/positions/settled" \
+  -H "<authentication-header>: <authentication-value>"
 ```
 
 This endpoint returns settled Event Contracts positions.
@@ -47,11 +37,8 @@ This endpoint returns settled Event Contracts positions.
 ## List User Trades
 
 ```bash cURL
-curl -G "https://api.dexbuilder.com/api/v4/broker/event_contracts/usertrades" \
-  -H "KEY: ${BROKER_API_KEY}" \
-  -H "SIGN: ${SIGN}" \
-  -H "Timestamp: ${TIMESTAMP}" \
-  -H "sub_user_wallet_addr: ${WALLET}" \
+curl -G "https://api.dexbuilder.com/api/v4/event_contracts/usertrades" \
+  -H "<authentication-header>: <authentication-value>" \
   --data-urlencode "condition_id=<condition_id>" \
   --data-urlencode "token_id=<token_id>" \
   --data-urlencode "limit=20"

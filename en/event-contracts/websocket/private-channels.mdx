@@ -3,7 +3,7 @@ title: "Private Channels"
 description: "Authenticated Event Contracts API WebSocket channels."
 ---
 
-Private channels require a Broker API Key signature and a linked user wallet. Do not send the API Secret over the network. See [WebSocket Authentication](./authentication).
+Private channels require an API Key signature. Do not send the API Secret over the network. See [WebSocket Authentication](./authentication).
 
 ## Subscribe
 
@@ -23,10 +23,9 @@ Use the channel prefix `ec`. A single item can be subscribed with `items`, or al
     ]
   },
   "auth": {
-    "method": "broker_api_key",
-    "key": "YOUR_BROKER_API_KEY",
-    "sign": "SIGNATURE",
-    "wallet_address": "<USER_WALLET>"
+    "method": "api_key",
+    "key": "YOUR_API_KEY",
+    "sign": "SIGNATURE"
   }
 }
 ```

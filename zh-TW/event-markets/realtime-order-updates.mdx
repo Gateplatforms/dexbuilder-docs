@@ -4,10 +4,6 @@ sidebarTitle: "即時訂單更新"
 description: "透過私有 WebSocket 頻道即時接收訂單、成交、持倉和結算狀態變化。"
 ---
 
-<Note>
-  使用 `broker_api_key` 和已綁定的錢包地址；WebSocket 簽名包含 URL 編碼後的錢包地址。詳見[WebSocket 認證](./websocket/authentication)。
-</Note>
-
 使用私有 `pred.orders` 和 `pred.usertrades` 跟踪订单生命周期和成交，使用 `pred.positions` 和 `pred.settlements` 跟踪账户状态。
 
 ## 连接地址
@@ -21,7 +17,7 @@ wss://broker.dexbuilder.com/ws/dex-builder/prediction
 使用 API Key 签名认证：
 
 ```json
-{"t":1720000000123,"id":"orders-1","op":"subscribe","ch":"pred.orders","payload":{"all":true},"auth":{"method":"broker_api_key","key":"YOUR_BROKER_API_KEY","sign":"HEX_SIGNATURE", "wallet_address": "<USER_WALLET>"}}
+{"t":1720000000123,"id":"orders-1","op":"subscribe","ch":"pred.orders","payload":{"all":true},"auth":{"method":"api_key","key":"YOUR_API_KEY","sign":"HEX_SIGNATURE"}}
 ```
 
 ## 推送内容

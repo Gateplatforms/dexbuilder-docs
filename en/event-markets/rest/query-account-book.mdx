@@ -1,29 +1,24 @@
 ---
 title: "Get Account Book"
 description: "Get Account Book."
+openapi: "/openapi/event-markets-en.yaml GET /api/v4/prediction/account_book"
 ---
-
-<Note>
-  This endpoint is for Broker integration. Send a Broker API Key, `Timestamp`, `SIGN`, and `sub_user_wallet_addr`. The gateway verifies that the wallet belongs to the Broker. Sign the external `/api/v4/broker/...` path. See [Broker API authentication](/en/event-markets/api/broker-authentication).
-</Note>
 
 Returns authenticated account-book entries.
 
 **Base URL:** `https://api.dexbuilder.com`
 
+**Authentication:** This is a private endpoint and requires API authentication. The authenticated account is inferred from the request credentials; do not send internal user headers.
+
 ## Request
 
 ```bash
-curl -G "https://api.dexbuilder.com/api/v4/broker/prediction/account_book" \
-  -H "KEY: ${BROKER_API_KEY}" \
-  -H "SIGN: ${SIGN}" \
-  -H "Timestamp: ${TIMESTAMP}" \
-  -H "sub_user_wallet_addr: ${WALLET}"
+curl -G "https://api.dexbuilder.com/api/v4/prediction/account_book"
 ```
 
 Use the supported cursor, time range, and transaction filters.
 
-The field tables below define the documented parameters, types, and request-body fields. Timestamps are Unix timestamps unless the field description states otherwise.
+The OpenAPI panel below is the source of truth for required parameters, types, enum values, and request-body fields. Timestamps are Unix timestamps unless the field description states otherwise.
 
 ## Response
 
@@ -32,35 +27,3 @@ Returns entries containing amount, currency, direction, condition, related order
 A successful response uses HTTP 200. Invalid parameters or request bodies return HTTP 400. Private endpoints can return HTTP 401 when authentication fails, and temporary upstream failures can return HTTP 503. The error response contains a machine-readable label and message.
 
 For order, position, claim, transfer, and account operations, treat the response as the current server result and query the resource again when the operation is asynchronous.
-
-## Endpoint fields
-
-**Request path:** `GET /api/v4/broker/prediction/account_book`
-
-### Request parameters
-
-| Field | Location | Type | Required | Description |
-| --- | --- | --- | --- | --- |
-| `KEY` | header | string | Yes | Broker API Key |
-| `Timestamp` | header | string | Yes | Unix time in seconds; within 60 seconds of gateway time |
-| `SIGN` | header | string | Yes | Hex HMAC-SHA512 signature over the external request path, query string, and body |
-| `sub_user_wallet_addr` | header | string | Yes | End-user wallet address; the gateway verifies its binding to this Broker |
-| `limit` | query | integer | No |  |
-| `cursor` | query | string | No |  |
-
-### Success response
-
-| Field | Type | Description |
-| --- | --- | --- |
-| `items` | AccountBookItem[] |  |
-| `items[].amount` | string |  |
-| `items[].condition_id` | string |  |
-| `items[].created_at` | integer |  |
-| `items[].currency` | string |  |
-| `items[].direction` | string |  |
-| `items[].related_order_id` | string |  |
-| `next_cursor` | string |  |
-
-Documented response statuses:`200`, `400`, `401`, `503`.
-
-Field definitions follow the endpoint contract. Use the actual response for error details.

@@ -4,10 +4,6 @@ sidebarTitle: "提交訂單"
 description: "透過 Event Contracts API 建立事件合約私有訂單。"
 ---
 
-<Note>
-  以下私有介面範例使用 Broker API Key。每次請求都須攜帶 `KEY`、`Timestamp`、`SIGN` 和 `sub_user_wallet_addr`；簽名使用實際外部請求路徑、Query String 和 Body。 [Broker API 認證與簽名](/zh-TW/event-contracts/api/broker-authentication)。
-</Note>
-
 在確認 Market 目前接受訂單後，可以針對指定 Outcome Token 提交交易。公開市場資料無需認證；下單屬於私有操作，需要完成認證。
 
 生產環境 Base URL：
@@ -35,12 +31,9 @@ curl "https://api.dexbuilder.com/api/v4/event_contracts/tokens/<token_id>/order_
 ## 2. 提交訂單
 
 ```bash cURL
-curl -X POST "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders" \
+curl -X POST "https://api.dexbuilder.com/api/v4/event_contracts/orders" \
   -H "Content-Type: application/json" \
-  -H "KEY: ${BROKER_API_KEY}" \
-  -H "SIGN: ${SIGN}" \
-  -H "Timestamp: ${TIMESTAMP}" \
-  -H "sub_user_wallet_addr: ${WALLET}" \
+  -H "<authentication-header>: <authentication-value>" \
   --data '{
     "token_id": "<token_id>",
     "side": "BUY",
@@ -55,6 +48,10 @@ curl -X POST "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders" \
     "expire_time": 0
   }'
 ```
+
+<Note>
+  上例認證 Header 僅用於表示介面需要認證，實際公開認證方案以正式認證文檔為準。不要把內部網關身份 Header 用作客戶端認證參數。
+</Note>
 
 ## 請求欄位
 
