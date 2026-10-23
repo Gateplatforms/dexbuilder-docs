@@ -1,11 +1,62 @@
 ---
 title: "查询订单列表"
 description: "查询订单列表"
-openapi: "/openapi/event-contracts.yaml GET /api/v4/event_contracts/orders"
 ---
+
+<Note>
+  此接口仅供 Broker 使用。请求须携带 Broker API Key、`Timestamp`、`SIGN` 和 `sub_user_wallet_addr`。网关确认钱包属于当前 Broker 后转发。请按外部 `/api/v4/broker/...` 路径计算签名。详见[Broker API 认证与签名](/zh/event-contracts/api/broker-authentication).
+</Note>
 
 查询订单列表。
 
-<Note>
-该接口为私有接口，需要按照事件合约认证要求完成认证后调用。
-</Note>
+## 接口字段
+
+**请求路径:** `GET /api/v4/broker/event_contracts/orders`
+
+### 请求参数
+
+| 字段 | 位置 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- | --- |
+| `KEY` | header | string | 是 | Broker API Key |
+| `Timestamp` | header | string | 是 | Unix 秒级时间戳，与网关时间差不超过 60 秒 |
+| `SIGN` | header | string | 是 | 按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名 |
+| `sub_user_wallet_addr` | header | string | 是 | 目标终端用户的钱包地址；网关校验该钱包属于当前 Broker |
+| `status` | query | string | 否 |  |
+| `condition_id` | query | string | 否 |  |
+| `event_id` | query | string | 否 |  |
+| `order_id` | query | string | 否 |  |
+| `client_order_id` | query | string | 否 |  |
+| `sort_type` | query | string | 否 |  |
+| `cursor` | query | string | 否 |  |
+| `from` | query | integer | 否 |  |
+| `to` | query | integer | 否 |  |
+| `limit` | query | integer | 否 |  |
+
+### 成功响应
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `items` | OrderListItem[] |  |
+| `items[].client_order_id` | string |  |
+| `items[].condition_id` | string |  |
+| `items[].created_at` | integer |  |
+| `items[].error_code` | string |  |
+| `items[].event_id` | string |  |
+| `items[].expire_time` | integer |  |
+| `items[].order_id` | string |  |
+| `items[].order_mode` | string |  |
+| `items[].order_type` | string |  |
+| `items[].outcome` | string |  |
+| `items[].price` | string |  |
+| `items[].side` | string |  |
+| `items[].size` | string |  |
+| `items[].size_left` | string |  |
+| `items[].size_matched` | string |  |
+| `items[].status` | string |  |
+| `items[].token_id` | string |  |
+| `items[].updated_at` | integer |  |
+| `next_cursor` | string |  |
+
+接口契约列出的响应状态：`200`, `400`, `401`, `503`。Broker 无权限或钱包绑定校验未通过时，网关还可能返回 `403`。
+
+字段定义依据当前接口契约；实际错误信息以响应为准。

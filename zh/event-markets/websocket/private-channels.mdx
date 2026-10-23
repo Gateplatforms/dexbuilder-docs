@@ -4,7 +4,7 @@ sidebarTitle: "私有频道"
 description: "订阅当前认证用户的订单、成交、持仓和结算更新。"
 ---
 
-私有频道需要 API Key 签名认证。API Secret 只在本地用于签名，不能通过网络发送。详见[WebSocket 认证](./authentication)。
+私有频道需要 Broker API Key 签名认证及已绑定的钱包地址。API Secret 只在本地用于签名，不能通过网络发送。详见[WebSocket 认证](./authentication)。
 
 ## 订阅
 
@@ -24,14 +24,15 @@ description: "订阅当前认证用户的订单、成交、持仓和结算更新
     ]
   },
   "auth": {
-    "method": "api_key",
-    "key": "YOUR_API_KEY",
-    "sign": "SIGNATURE"
+    "method": "broker_api_key",
+    "key": "YOUR_BROKER_API_KEY",
+    "sign": "SIGNATURE",
+    "wallet_address": "<USER_WALLET>"
   }
 }
 ```
 
-取消订阅时使用相同的 payload，并将 `op` 设置为 `unsubscribe`。文档不暴露内部用户 Header 或 broker 标识。
+取消订阅时使用相同的 payload，并将 `op` 设置为 `unsubscribe`。
 
 ## `pred.orders`
 
@@ -110,8 +111,6 @@ description: "订阅当前认证用户的订单、成交、持仓和结算更新
   }
 }
 ```
-
-仓位文档不描述标记价格字段。
 
 ## `pred.settlements`
 

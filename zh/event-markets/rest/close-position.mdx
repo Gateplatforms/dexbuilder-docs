@@ -1,11 +1,35 @@
 ---
 title: "平仓"
 description: "平仓"
-openapi: "/openapi/event-markets.yaml POST /api/v4/prediction/positions/{position_id}/close"
 ---
+
+<Note>
+  此接口仅供 Broker 使用。请求须携带 Broker API Key、`Timestamp`、`SIGN` 和 `sub_user_wallet_addr`。网关确认钱包属于当前 Broker 后转发。请按外部 `/api/v4/broker/...` 路径计算签名。详见[Broker API 认证与签名](/zh/event-markets/api/broker-authentication).
+</Note>
 
 平仓。
 
-<Note>
-该接口为私有接口，需要按照预测市场认证要求完成认证后调用。
-</Note>
+## 接口字段
+
+**请求路径:** `POST /api/v4/broker/prediction/positions/{position_id}/close`
+
+### 请求参数
+
+| 字段 | 位置 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- | --- |
+| `KEY` | header | string | 是 | Broker API Key |
+| `Timestamp` | header | string | 是 | Unix 秒级时间戳，与网关时间差不超过 60 秒 |
+| `SIGN` | header | string | 是 | 按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名 |
+| `sub_user_wallet_addr` | header | string | 是 | 目标终端用户的钱包地址；网关校验该钱包属于当前 Broker |
+| `position_id` | path | string | 是 |  |
+
+### 成功响应
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `position_id` | string |  |
+| `status` | string |  |
+
+接口契约列出的响应状态：`200`, `400`, `401`, `503`。Broker 无权限或钱包绑定校验未通过时，网关还可能返回 `403`。
+
+字段定义依据当前接口契约；实际错误信息以响应为准。

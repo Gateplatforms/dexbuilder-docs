@@ -4,6 +4,10 @@ sidebarTitle: "管理订单"
 description: "通过 Event Contracts API 查询和取消事件合约私有订单。"
 ---
 
+<Note>
+  以下私有接口示例使用 Broker API Key。每次请求都需携带 `KEY`、`Timestamp`、`SIGN` 和 `sub_user_wallet_addr`；签名使用实际外部请求路径、Query String 和 Body。 [Broker API 认证与签名](/zh/event-contracts/api/broker-authentication)。
+</Note>
+
 订单查询与撤单都属于私有操作，需要认证。生产环境 Base URL：
 
 ```text
@@ -13,8 +17,11 @@ https://api.dexbuilder.com
 ## 查询订单列表
 
 ```bash cURL
-curl -G "https://api.dexbuilder.com/api/v4/event_contracts/orders" \
-  -H "<authentication-header>: <authentication-value>" \
+curl -G "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders" \
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${WALLET}" \
   --data-urlencode "status=OPEN" \
   --data-urlencode "condition_id=<condition_id>" \
   --data-urlencode "limit=20"
@@ -57,8 +64,11 @@ curl -G "https://api.dexbuilder.com/api/v4/event_contracts/orders" \
 ## 查询单个订单
 
 ```bash cURL
-curl "https://api.dexbuilder.com/api/v4/event_contracts/orders/<order_id>" \
-  -H "<authentication-header>: <authentication-value>"
+curl "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders/<order_id>" \
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${WALLET}"
 ```
 
 详情响应包含列表中的订单标识、价格、数量、成交进度与状态等字段，并可能包含订单服务返回的 `error_code`。
@@ -66,8 +76,11 @@ curl "https://api.dexbuilder.com/api/v4/event_contracts/orders/<order_id>" \
 ## 取消单个订单
 
 ```bash cURL
-curl -X DELETE "https://api.dexbuilder.com/api/v4/event_contracts/orders/<order_id>" \
-  -H "<authentication-header>: <authentication-value>"
+curl -X DELETE "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders/<order_id>" \
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${WALLET}"
 ```
 
 ```json
@@ -81,8 +94,11 @@ curl -X DELETE "https://api.dexbuilder.com/api/v4/event_contracts/orders/<order_
 ## 按 Condition 取消订单
 
 ```bash cURL
-curl -X DELETE "https://api.dexbuilder.com/api/v4/event_contracts/orders?condition_id=<condition_id>" \
-  -H "<authentication-header>: <authentication-value>"
+curl -X DELETE "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders?condition_id=<condition_id>" \
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${WALLET}"
 ```
 
 ```json
@@ -92,7 +108,3 @@ curl -X DELETE "https://api.dexbuilder.com/api/v4/event_contracts/orders?conditi
   "total_orders": 3
 }
 ```
-
-<Note>
-文档中的认证 Header 为占位写法，正式接入应使用最终对外认证方案。内部网关注入的身份字段不属于外部客户端请求参数。
-</Note>

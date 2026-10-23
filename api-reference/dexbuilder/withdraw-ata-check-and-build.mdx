@@ -1,0 +1,34 @@
+---
+title: "Solana ATA 检测与构建"
+description: "检测目标 SPL 账户是否存在；不存在时返回待签名 base64 交易。"
+---
+
+`POST /api/v4/dexbuilder/withdraw/ata/check-and-build`
+
+检测目标 SPL 账户是否存在；不存在时返回待签名 base64 交易。
+
+此接口代终端用户操作。请求头必须提供 `sub_user_wallet_addr`；网关核验该钱包属于当前 Broker 后才会转发。详见[认证与 API Key](/api-reference/dexbuilder/authentication)。
+
+## 请求参数
+
+| 参数 | 位置 | 必填 | 类型 | 说明 |
+| --- | --- | --- | --- | --- |
+| `sub_user_wallet_addr` | header | 是 | string | 终端用户钱包地址；网关校验该钱包与当前 Broker 的绑定 |
+
+## 请求体
+
+`Content-Type: application/json`。
+
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `payer_address` | string | 是 |  |
+| `target_address` | string | 是 |  |
+
+## 响应
+
+成功时返回统一结构：`code`、`message`、`data`、`trace_id`；具体 `data` 字段如下。
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `data.status` | integer | 0=需创建 ATA；1=已存在 |
+| `data.tx_data` | string | base64 交易，status=0 时有值 |

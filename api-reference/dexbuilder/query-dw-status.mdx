@@ -1,0 +1,28 @@
+---
+title: "查询充提开关"
+description: "查询指定资产与网络的充值/提现是否开启。"
+---
+
+`GET /api/v4/dexbuilder/dw_status`
+
+查询指定资产与网络的充值/提现是否开启。
+
+此接口查询 Broker 配置，无需钱包地址；仍须使用 Broker API Key 签名。详见[认证与 API Key](/api-reference/dexbuilder/authentication)。
+
+## 请求参数
+
+| 参数 | 位置 | 必填 | 类型 | 说明 |
+| --- | --- | --- | --- | --- |
+| `asset` | query | 否 | string | 按资产筛选；示例：`USDT` |
+| `network` | query | 否 | string | 按网络筛选；示例：`ethereum` |
+
+## 响应
+
+成功时返回统一结构：`code`、`message`、`data`、`trace_id`；具体 `data` 字段如下。
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `data.asset` | string |  |
+| `data.network` | string |  |
+| `data.deposit_enabled` | boolean |  |
+| `data.withdraw_enabled` | boolean |  |

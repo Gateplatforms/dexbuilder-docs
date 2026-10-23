@@ -1,0 +1,30 @@
+---
+title: "查询用户信息"
+description: "查询项目下终端用户 ID 与已绑定钱包列表。"
+---
+
+`GET /api/v4/dexbuilder/user/info`
+
+查询项目下终端用户 ID 与已绑定钱包列表。
+
+此接口代终端用户操作。请求头必须提供 `sub_user_wallet_addr`；网关核验该钱包属于当前 Broker 后才会转发。详见[认证与 API Key](/api-reference/dexbuilder/authentication)。
+
+## 请求参数
+
+| 参数 | 位置 | 必填 | 类型 | 说明 |
+| --- | --- | --- | --- | --- |
+| `sub_user_wallet_addr` | header | 是 | string | 终端用户钱包地址；网关校验该钱包与当前 Broker 的绑定 |
+
+## 响应
+
+成功时返回统一结构：`code`、`message`、`data`、`trace_id`；具体 `data` 字段如下。
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `data.user_id` | string |  |
+| `data.project_id` | string |  |
+| `data.status` | string | 示例：`active` |
+| `data.wallets` | object[] |  |
+| `data.wallets[].chain` | string |  |
+| `data.wallets[].address` | string |  |
+| `data.wallets[].status` | string |  |

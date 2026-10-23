@@ -1,0 +1,89 @@
+---
+title: "Broker API Key 与请求认证"
+description: "使用 Broker API Key 调用 DexBuilder 平台接口，按接口要求提供终端用户钱包地址。"
+---
+
+DexBuilder 平台接口面向 Broker 服务端。请使用分配给当前 Broker 的 **Broker API Key** 发起请求；终端用户的个人 API Key 不能代替 Broker API Key。网关从 Key 确认 Broker 身份，并在用户级请求中校验目标钱包与该 Broker 的绑定关系。
+
+## 接入地址
+
+生产环境 Base URL 为 `https://api.dexbuilder.com`。签名中的请求路径仅包含 `/api/v4/dexbuilder/...`，不包含域名。
+
+## 获取 Broker API Key
+
+通过项目方管理流程申请或创建 Broker API Key，并为所需接口开通 `dex_builder` 权限。查询接口需要只读或读写权限；提交类接口需要读写权限。创建后安全保存 `Key` 与 `Secret Key`。`Key` 放在请求头 `KEY` 中；`Secret Key` 仅在 Broker 服务端用于生成签名，不发送到 API。
+
+请按接入环境配置网关地址和调用服务器的 IP 白名单。若需新增、变更或轮换 Key，请通过项目方管理流程操作。普通个人 API Key 不具备 Broker 代用户访问权限。
+
+## Broker 代用户访问的共同规则
+
+`sub_user_wallet_addr` 是 Broker 代旗下用户访问私有 REST 接口时使用的请求头，适用于 DexBuilder、预测市场和事件合约；并非 DexBuilder 专用。网关根据 Broker API Key 识别 Broker，再校验该钱包地址对应的用户归属。无需指定终端用户的个人 API Key。
+
+| 接口范围 | `sub_user_wallet_addr` |
+| --- | --- |
+| DexBuilder 的 Broker 配置查询 | 不需要 |
+| DexBuilder 的用户、充值与提现接口 | 必需 |
+| [预测市场 Broker 私有接口](/zh/event-markets/api/broker-authentication) | 必需 |
+| [事件合约 Broker 私有接口](/zh/event-contracts/api/broker-authentication) | 必需 |
+| 预测市场和事件合约的公开行情接口 | 不需要 |
+
+## 请求头与钱包规则
+
+| Header | 用途 | 要求 |
+| --- | --- | --- |
+| `KEY` | Broker API Key | 所有接口必需 |
+| `Timestamp` | Unix 秒级时间戳 | 所有接口必需；与网关时间差不超过 60 秒 |
+| `SIGN` | HMAC-SHA512 十六进制签名 | 所有接口必需 |
+| `sub_user_wallet_addr` | 本次操作的终端用户钱包地址 | 下表所列用户级接口必需 |
+| `x-gate-device-type` | 设备类型，例如 `web` | 以具体接口的参数要求为准 |
+| `Idempotency-Key` | 提交操作的幂等标识 | `POST /deposit/submit`、`POST /withdraw/submit` 必需 |
+
+| 类别 | 是否需要 `sub_user_wallet_addr` | 接口路径（省略 `/api/v4/dexbuilder` 前缀） |
+| --- | --- | --- |
+| Broker 配置查询 | 否 | `GET /assets`、`GET /networks`、`GET /dw_status`、`GET /fee`、`GET /withdraw_limit` |
+| 用户 | 是 | `GET /user/info`、`GET /wallet/list`、`GET /user/balance`、`GET /fund_stats` |
+| 充值 | 是 | `POST /deposit/fee`、`POST /deposit/sign_data`、`POST /deposit/submit`、`GET /deposit/status`、`GET /deposit/history` |
+| 提现 | 是 | `POST /withdraw/sign_data`、`POST /withdraw/submit`、`POST /withdraw/ata/check-and-build`、`GET /withdraw/status`、`GET /withdraw/history` |
+
+上述路径均以 `/api/v4/dexbuilder` 为前缀。只有列出的 5 个配置查询免钱包校验；其余 14 个接口必须携带 `sub_user_wallet_addr`。网关使用 Broker 身份和钱包地址核验绑定关系，成功后将对应的终端用户身份传给后端；钱包未绑定到当前 Broker 时，请求会被拒绝。客户端无需自行传入用户 UID 或 Broker 身份 Header。
+
+## 认证失败与钱包校验
+
+Broker API Key 或签名无效时，网关可能返回 HTTP `401`；Key 权限不足，或 `sub_user_wallet_addr` 对应的钱包未通过 Broker 归属校验时，可能返回 HTTP `403`。请核对 Key 权限及钱包绑定关系后再重试。
+
+## 签名规则
+
+签名原文由以下五段内容以换行符 `\n` 连接：
+
+```text
+HTTP 方法（大写）
+外部请求路径（包含 /api/v4/dexbuilder，不包含域名）
+请求 URL 中按原顺序排列、未经过 URL 编码的 Query String；没有时为空字符串
+实际发送的请求体原文的 SHA512 十六进制摘要；没有请求体时对空字符串计算
+Timestamp 请求头的值
+```
+
+使用 `Secret Key` 计算 `SIGN = HexEncode(HMAC_SHA512(Secret Key, 签名原文))`。签名时使用客户端实际访问的外部路径，例如 `/api/v4/dexbuilder/user/info`。Query 参数顺序必须与实际请求 URL 一致，参与签名时使用未 URL 编码的参数串；请求体摘要按实际发送的字节计算。钱包地址作为独立请求头传递，不拼入签名原文。
+
+签名算法遵循 [Gate APIv4 认证规则](https://www.gate.com/docs/developers/apiv4/zh_CN/#%E8%AE%A4%E8%AF%81)，但 Broker API Key 的申请与权限配置应按 DexBuilder 项目方接入流程办理。
+
+## 请求示例
+
+查询用户信息时，先按上面的规则计算 `SIGN`，再携带目标用户的钱包地址：
+
+```bash
+BASE_URL="https://api.dexbuilder.com"
+API_PATH="/api/v4/dexbuilder/user/info"
+curl -i --request GET "${BASE_URL}${API_PATH}" \
+  --header "KEY: ${BROKER_API_KEY}" \
+  --header "SIGN: ${SIGN}" \
+  --header "Timestamp: ${TIMESTAMP}" \
+  --header "sub_user_wallet_addr: ${WALLET}" \
+  --header 'Accept: application/json'
+```
+
+查询 Broker 支持资产时，请使用 `/api/v4/dexbuilder/assets` 生成签名并发起请求，无需携带 `sub_user_wallet_addr`。
+
+<Warning>
+  Broker API Secret 只能存放在可信服务端。请勿将 Key、Secret 或完整签名请求写入日志、前端代码或工单。
+</Warning>
