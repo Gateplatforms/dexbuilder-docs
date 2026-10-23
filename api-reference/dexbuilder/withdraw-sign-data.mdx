@@ -1,0 +1,40 @@
+---
+title: "获取提现签名数据"
+description: "获取提现签名数据"
+---
+
+`POST /api/dexbuilder/withdraw/sign_data`
+
+获取提现签名数据
+
+调用前请阅读[认证与 API Key](/api-reference/dexbuilder/authentication)。`X-Broker-ID` 对应接入的 Broker，按网关配置传递或由网关注入。
+
+## 请求参数
+
+| 参数 | 位置 | 必填 | 类型 | 说明 |
+| --- | --- | --- | --- | --- |
+| `X-User-Id` | header | 否 | string | 项目方映射的终端用户 ID（亦可使用 X-Gate-User-Id 或 query user_id） |
+| `sub_user_wallet_addr` | header | 否 | string | 网关透传的终端钱包，用于反查 user_id |
+
+## 请求体
+
+`Content-Type: application/json`。
+
+| 字段 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `chain` | string | 否 |  |
+| `token_symbol` | string | 否 |  |
+| `token_address` | string | 否 |  |
+| `token_amount` | string | 否 |  |
+| `to_address` | string | 否 |  |
+| `address` | string | 否 |  |
+
+## 响应
+
+成功时返回统一结构：`code`、`message`、`data`、`trace_id`；具体 `data` 字段如下。
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `data.data` | string |  |
+| `data.contract_address` | string |  |
+| `data.timestamp` | integer |  |

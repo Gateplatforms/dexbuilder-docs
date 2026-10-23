@@ -1,0 +1,36 @@
+---
+title: "DexBuilder 平台 API 概览"
+description: "面向 DexBuilder 项目方的底层 REST 接口，覆盖资产配置、用户、充值与提现。"
+---
+
+DexBuilder 平台 API 是面向项目方的底层 REST 能力，提供 Broker 资产配置、终端用户查询、Vault 余额，以及链上充值与提现流程。项目方请求先经过 Gate APIv4 网关验签，再由服务校验 API Key 与 Broker 项目的绑定关系。
+
+## 接入地址
+
+经网关访问：`https://{host}/api/dexbuilder`。`{host}` 由接入环境提供；下方接口页展示的路径均包含 `/api/dexbuilder` 前缀。请使用接入方提供的网关地址。
+
+调用前先阅读[认证与 API Key](/api-reference/dexbuilder/authentication)，完成密钥、签名和 Broker 绑定配置。
+
+## 接口分类
+
+| 分类 | 能力 |
+| --- | --- |
+| 资产配置 | 查询支持资产、网络、充提状态、费率和提现限额 |
+| 用户 | 查询用户信息、钱包列表、Vault 余额和资金统计 |
+| 充值 | 估算手续费、获取签名数据、提交链上交易回执、查询状态与历史 |
+| 提现 | 获取签名数据、提交提现、查询状态与历史、处理 Solana ATA |
+
+## 通用响应
+
+成功响应使用统一包络；各接口的 `data` 字段见对应页面。
+
+```json
+{
+  "code": 0,
+  "message": "success",
+  "data": {},
+  "trace_id": "..."
+}
+```
+
+`trace_id` 可用于定位请求。错误响应以接口实际返回的 `code`、`message` 等字段为准。
