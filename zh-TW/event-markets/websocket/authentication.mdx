@@ -1,37 +1,38 @@
 ---
-title: "Broker WebSocket 認證"
+title: "認證與連接可靠性"
 sidebarTitle: "認證"
-description: "使用 Broker API Key 與使用者錢包地址訂閱私有 WebSocket 頻道。"
+description: "完成預測市場私有 WebSocket 認證，並處理心跳、錯誤和斷線重連。"
 ---
 
-公開行情頻道無須認證。訂閱私有頻道時，Broker 使用專用的 `broker_api_key` 認證方式，並在 `auth.wallet_address` 提供目標終端使用者的錢包地址。認證服務會校驗錢包與該 Broker 的綁定關係，私有訊息才會以對應使用者身分訂閱。
+只有私有频道需要认证，公共行情频道可以直接订阅。
 
-## 簽名
+## API Key 签名
 
-請求中的 `t` 為 Unix 毫秒時間戳。簽名原文的 `time` 使用 `floor(t / 1000)` 秒，錢包地址依 URL Query 規則編碼，並保持下列欄位順序：
+在 `auth` 中传入 API Key 和本地生成的 HMAC-SHA512 签名：
 
-```text
-channel=pred.orders&event=subscribe&time=<Unix秒>&wallet_address=<URL編碼的錢包地址>
+```json
+{"method":"api_key","key":"YOUR_API_KEY","sign":"HEX_SIGNATURE"}
 ```
 
-使用 Broker API Secret 計算 `HexEncode(HMAC_SHA512(Secret, UTF8(簽名原文)))`。WebSocket 簽名**包含**錢包地址，與 REST 請求簽名不同。不要傳送 API Secret。
+直接订阅私有频道时，签名原文为：
 
-## 私有訂閱範例
+```text
+channel=pred.orders&event=subscribe&time=1720000000123
+```
+
+使用 API Secret 作为 HMAC-SHA512 密钥并输出十六进制摘要。API Secret 不能发送到服务端。
+
+## 私有订阅示例
 
 ```json
 {
   "t": 1720000000123,
-  "id": "broker-private-1",
+  "id": "private-1",
   "op": "subscribe",
   "ch": "pred.orders",
   "payload": {"all": true},
-  "auth": {
-    "method": "broker_api_key",
-    "key": "YOUR_BROKER_API_KEY",
-    "sign": "HEX_SIGNATURE",
-    "wallet_address": "<USER_WALLET>"
-  }
+  "auth": {"method":"api_key","key":"YOUR_API_KEY","sign":"HEX_SIGNATURE"}
 }
 ```
 
-此範例簽名中的 `time` 為 `1720000000`。簽名與請求必須使用相同錢包地址；切換頻道時重新簽名。Broker REST 的 Header 與簽名規則請見[Broker API 認證與簽名](../api/broker-authentication)。
+`pred.usertrades`、`pred.positions` 和 `pred.settlements` 使用相同的 API Key 认证方式。
