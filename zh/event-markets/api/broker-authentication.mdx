@@ -47,5 +47,5 @@ curl -i --request GET "${BASE_URL}${API_PATH}" \
 上例中的 `API_PATH` 必须与生成签名时的请求路径一致。Broker Key、Secret 和目标钱包地址应由服务端安全管理。
 
 <Warning>
-  不要将 Secret Key 写入浏览器、日志或工单。公开行情接口不使用上述 Broker 私有路径；本章节标记为 Broker 私有的接口使用 Broker 路由。
+  请仅在服务端保存 Secret Key，不要将其暴露在客户端代码或日志中。调用预测市场私有接口时，使用 `/api/v4/broker/prediction/...` 并提供 `sub_user_wallet_addr`；公开行情接口使用 `/api/v4/prediction/...`。
 </Warning>
