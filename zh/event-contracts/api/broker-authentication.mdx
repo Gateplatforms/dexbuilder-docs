@@ -27,7 +27,7 @@ HTTP_METHOD + "\n" + REQUEST_PATH + "\n" + QUERY_STRING + "\n" +
 HexEncode(SHA512(REQUEST_BODY)) + "\n" + TIMESTAMP
 ```
 
-签名路径必须包含 `/api/v4/broker/event_contracts`，例如 `/api/v4/broker/event_contracts/orders`。Query 参数顺序与实际请求 URL 保持一致，参与签名时使用未 URL 编码的参数串；Body 摘要依据实际发送的字节计算。`sub_user_wallet_addr` 是独立 Header，不拼入 HTTP 签名原文。算法细节参见 [Gate APIv4 认证规则](https://www.gate.com/docs/developers/apiv4/zh_CN/#%E8%AE%A4%E8%AF%81)。
+签名路径必须包含 `/api/v4/broker/event_contracts`，例如 `/api/v4/broker/event_contracts/orders`。Query 参数顺序与实际请求 URL 保持一致，参与签名时使用未 URL 编码的参数串；Body 摘要依据实际发送的字节计算。`sub_user_wallet_addr` 是独立 Header，不拼入 HTTP 签名原文。完整认证步骤与签名规则参见 [Broker API 认证与签名](/api-reference/dexbuilder/authentication)。
 
 ## 请求示例
 
