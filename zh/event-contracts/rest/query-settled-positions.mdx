@@ -1,6 +1,7 @@
 ---
 title: "查询已结算持仓"
 description: "查询已结算的事件合约持仓"
+openapi: "/openapi/event-contracts.yaml GET /api/v4/broker/event_contracts/positions/settled"
 ---
 
 <Note>
@@ -8,44 +9,3 @@ description: "查询已结算的事件合约持仓"
 </Note>
 
 查询当前账户已结算的事件合约持仓。
-
-## 接口字段
-
-**请求路径:** `GET /api/v4/broker/event_contracts/positions/settled`
-
-### 请求参数
-
-| 字段 | 位置 | 类型 | 必填 | 说明 |
-| --- | --- | --- | --- | --- |
-| `KEY` | header | string | 是 | Broker API Key |
-| `Timestamp` | header | string | 是 | Unix 秒级时间戳，与网关时间差不超过 60 秒 |
-| `SIGN` | header | string | 是 | 按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名 |
-| `sub_user_wallet_addr` | header | string | 是 | 目标终端用户的钱包地址；网关校验该钱包属于当前 Broker |
-| `event_id` | query | string | 否 |  |
-| `condition_id` | query | string | 否 |  |
-| `cursor` | query | string | 否 |  |
-| `limit` | query | integer | 否 |  |
-
-### 成功响应
-
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `items` | PositionItem[] |  |
-| `items[].available_size` | string |  |
-| `items[].avg_open_price` | string |  |
-| `items[].claimable_amount` | string |  |
-| `items[].event_id` | string |  |
-| `items[].locked_size` | string |  |
-| `items[].outcome` | string |  |
-| `items[].position_id` | string |  |
-| `items[].position_value` | string |  |
-| `items[].settlement_status` | string |  |
-| `items[].size` | string |  |
-| `items[].token_id` | string |  |
-| `items[].updated_at` | integer |  |
-| `items[].won` | boolean |  |
-| `next_cursor` | string |  |
-
-接口契约列出的响应状态：`200`, `400`, `401`, `503`。Broker 无权限或钱包绑定校验未通过时，网关还可能返回 `403`。
-
-字段定义依据当前接口契约；实际错误信息以响应为准。
