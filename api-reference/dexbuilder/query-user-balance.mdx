@@ -1,26 +1,15 @@
 ---
 title: "查询 Vault 余额"
-description: "查询终端用户在 Vault 中的余额。"
+description: "查询终端用户的 Vault 可用余额。"
 openapi: "/openapi/dexbuilder.yaml GET /api/v4/dexbuilder/user/balance"
 ---
 
-`GET /api/v4/dexbuilder/user/balance`
+查询终端用户的 Vault 可用余额。
 
-查询终端用户在 Vault 中的余额。
+<Note>
+  使用 Broker API Key 调用，并在请求头提供 `sub_user_wallet_addr`。网关会校验钱包与 Broker 的归属关系。 认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
+</Note>
 
-此接口代终端用户操作。请求头必须提供 `sub_user_wallet_addr`；网关核验该钱包属于当前 Broker 后才会转发。详见[认证与 API Key](/api-reference/dexbuilder/authentication)。
+## 使用说明
 
-## 请求参数
-
-| 参数 | 位置 | 必填 | 类型 | 说明 |
-| --- | --- | --- | --- | --- |
-| `x-gate-device-type` | header | 是 | string | 设备类型，须为 Perp 支持的枚举值（如 web）；示例：`web` |
-| `sub_user_wallet_addr` | header | 是 | string | 终端用户钱包地址；网关校验该钱包与当前 Broker 的绑定 |
-
-## 响应
-
-成功时返回统一结构：`code`、`message`、`data`、`trace_id`。`data` 包含以下字段：
-
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `data.available` | string | Vault 可用余额，单位待确认 |
+- `available` 为 USDT 计价的 Vault 可用余额。调用时按 OpenAPI 要求提供 `x-perp-device-type`。

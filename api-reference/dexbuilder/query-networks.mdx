@@ -1,35 +1,15 @@
 ---
 title: "查询资产网络"
-description: "按资产查询可用的链/网络配置（token 地址、vault、最小充提等）。"
+description: "查询资产支持的充值和提现网络。"
 openapi: "/openapi/dexbuilder.yaml GET /api/v4/dexbuilder/networks"
 ---
 
-`GET /api/v4/dexbuilder/networks`
+查询资产支持的充值和提现网络。
 
-按资产查询可用的链/网络配置（token 地址、vault、最小充提等）。
+<Note>
+  使用 Broker API Key 调用。此接口查询 Broker 配置，无需提供 `sub_user_wallet_addr`。 认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
+</Note>
 
-此接口查询 Broker 配置，无需钱包地址；仍须使用 Broker API Key 签名。详见[认证与 API Key](/api-reference/dexbuilder/authentication)。
+## 使用说明
 
-## 请求参数
-
-| 参数 | 位置 | 必填 | 类型 | 说明 |
-| --- | --- | --- | --- | --- |
-| `asset` | query | 否 | string | 按资产筛选；示例：`USDT` |
-
-## 响应
-
-成功时返回统一结构：`code`、`message`、`data`、`trace_id`；具体 `data` 字段如下。
-
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `data[].asset` | string |  |
-| `data[].network` | string |  |
-| `data[].chain_id` | string |  |
-| `data[].vm` | string |  |
-| `data[].token_address` | string |  |
-| `data[].vault_address` | string |  |
-| `data[].decimals` | integer |  |
-| `data[].deposit_enabled` | boolean |  |
-| `data[].withdraw_enabled` | boolean |  |
-| `data[].min_deposit` | string |  |
-| `data[].min_withdraw` | string |  |
+- 当前主要提供 USDT 的 Ethereum 网络；`min_deposit` 和 `min_withdraw` 是可读的 token 数量，非链上最小单位。
