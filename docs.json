@@ -302,6 +302,8 @@
                     "group": "事件市场 API",
                     "pages": [
                       "api-reference/common/overview",
+                      "api-reference/common/sub-user-wallet",
+                      "api-reference/common/broker-authentication",
                       "zh/event-markets/api/overview",
                       "zh/event-markets/api/broker-authentication",
                       "zh/event-markets/apis",

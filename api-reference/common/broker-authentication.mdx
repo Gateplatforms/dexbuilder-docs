@@ -1,0 +1,81 @@
+---
+title: "Broker API Key 与签名"
+description: "DexBuilder 平台、预测市场和事件合约 Broker 私有 REST 接口的认证方法。"
+---
+
+本页适用于 DexBuilder 平台、预测市场和事件合约的 **Broker 私有 REST 接口**。Broker 使用分配给自身的 Broker API Key 在服务端调用接口。终端用户的个人 API Key 不能代替 Broker API Key。
+
+<Note>
+  PerpDEX 目前不支持 Broker API，其 API Key 和签名规则见[PerpDEX 认证与签名](/api-reference/perpdex/authentication)。WebSocket 私有频道的认证以对应产品的 WebSocket 文档为准。
+</Note>
+
+## Key、Secret 与权限
+
+- `Key` 用于标识 Broker，放入请求头 `KEY`。
+- `Secret Key` 仅用于在 Broker 服务端生成签名，不随请求发送。
+- 调用前确认 Key 已开通目标产品及接口权限。只读权限用于查询；提交类操作需要读写权限。DexBuilder 平台接口还需要 `dex_builder` 权限。
+- 如果当前 Key 配置了 IP 白名单，应从已允许的服务端出口 IP 发起请求。
+
+Broker API Key 的申请、变更与轮换流程由产品方提供。
+
+## 请求头
+
+| Header | 要求 |
+| --- | --- |
+| `KEY` | Broker API Key，私有 REST 请求必传 |
+| `Timestamp` | Unix 秒级时间戳，私有 REST 请求必传；与服务端时间差不超过 60 秒 |
+| `SIGN` | 使用 Secret Key 计算的 HMAC-SHA512 十六进制签名，私有 REST 请求必传 |
+| `sub_user_wallet_addr` | 用户级接口必传；适用范围见[代表用户访问](/api-reference/common/sub-user-wallet) |
+
+## 签名原文
+
+按以下顺序连接五段内容，段与段之间使用一个换行符 `\n`：
+
+```text
+HTTP_METHOD
+REQUEST_PATH
+QUERY_STRING
+HexEncode(SHA512(REQUEST_BODY))
+TIMESTAMP
+```
+
+然后计算：
+
+```text
+SIGN = HexEncode(HMAC_SHA512(Secret Key, 签名原文))
+```
+
+- `HTTP_METHOD` 使用大写方法名，例如 `GET`、`POST`。
+- `REQUEST_PATH` 是实际请求的外部路径，包含 `/api/v4` 前缀，不包含域名和 Query。例如 `/api/v4/broker/prediction/positions`。
+- `QUERY_STRING` 与实际请求参数的顺序一致；签名时使用未 URL 编码的参数串。没有 Query 时使用空字符串。
+- `REQUEST_BODY` 使用实际发送的请求体原文。没有请求体时，对空字符串计算 SHA512。JSON 序列化后的字段顺序、空格和换行变化会改变摘要。
+- `TIMESTAMP` 必须与请求头 `Timestamp` 的值完全一致。
+- `sub_user_wallet_addr` 是单独的请求头，不拼入上述签名原文。
+
+签名时必须使用实际访问的外部路径：DexBuilder 平台为 `/api/v4/dexbuilder/...`，预测市场 Broker 私有接口为 `/api/v4/broker/prediction/...`，事件合约 Broker 私有接口为 `/api/v4/broker/event_contracts/...`。
+
+## GET 请求示例
+
+以下示例查询用户信息。先生成 `SIGN`，再发送请求；`sub_user_wallet_addr` 为目标用户的钱包地址。
+
+```bash
+BASE_URL="https://api.dexbuilder.com"
+API_PATH="/api/v4/dexbuilder/user/info"
+
+curl -i --request GET "${BASE_URL}${API_PATH}" \
+  --header "KEY: ${BROKER_API_KEY}" \
+  --header "SIGN: ${SIGN}" \
+  --header "Timestamp: ${TIMESTAMP}" \
+  --header "sub_user_wallet_addr: ${WALLET}" \
+  --header "Accept: application/json"
+```
+
+对带请求体的操作，应先确定最终发送的请求体字节，再据此计算摘要和签名。不要在签名后改变请求路径、Query 或 Body。
+
+## 认证问题排查
+
+认证失败时，请依次核对 Key 的产品与读写权限、IP 白名单、服务器时间、外部路径、Query 参数顺序，以及 Body 是否与计算摘要时完全一致。用户级请求还需确认钱包地址属于当前 Broker。错误响应的具体字段以对应产品文档为准。
+
+<Warning>
+  Secret Key 只应保存在可信服务端。不要将其写入前端代码、日志或工单；排查问题时也应避免记录完整认证请求。
+</Warning>
