@@ -1,40 +1,15 @@
 ---
 title: "获取提现签名数据"
-description: "获取提现签名数据"
+description: "构建提现交易的签名数据。"
 openapi: "/openapi/dexbuilder.yaml POST /api/v4/dexbuilder/withdraw/sign_data"
 ---
 
-`POST /api/v4/dexbuilder/withdraw/sign_data`
+构建提现交易的签名数据。
 
-获取提现签名数据
+<Note>
+  使用 Broker API Key 调用，并在请求头提供 `sub_user_wallet_addr`。网关会校验钱包与 Broker 的归属关系。 认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
+</Note>
 
-此接口代终端用户操作。请求头必须提供 `sub_user_wallet_addr`；网关核验该钱包属于当前 Broker 后才会转发。详见[认证与 API Key](/api-reference/dexbuilder/authentication)。
+## 使用说明
 
-## 请求参数
-
-| 参数 | 位置 | 必填 | 类型 | 说明 |
-| --- | --- | --- | --- | --- |
-| `sub_user_wallet_addr` | header | 是 | string | 终端用户钱包地址；网关校验该钱包与当前 Broker 的绑定 |
-
-## 请求体
-
-`Content-Type: application/json`。
-
-| 字段 | 类型 | 必填 | 说明 |
-| --- | --- | --- | --- |
-| `chain` | string | 否 |  |
-| `token_symbol` | string | 否 |  |
-| `token_address` | string | 否 |  |
-| `token_amount` | string | 否 |  |
-| `to_address` | string | 否 |  |
-| `address` | string | 否 |  |
-
-## 响应
-
-成功时返回统一结构：`code`、`message`、`data`、`trace_id`；具体 `data` 字段如下。
-
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `data.data` | string |  |
-| `data.contract_address` | string |  |
-| `data.timestamp` | integer |  |
+- `address` 为用户已绑定的签名钱包；`to_address` 可为第三方到账地址。用户对返回的 `data` 签名后，将签名分量和原样 `timestamp` 用于[提交提现](/api-reference/dexbuilder/withdraw-submit)。

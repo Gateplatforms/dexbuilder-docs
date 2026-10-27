@@ -1,43 +1,16 @@
 ---
 title: "提交充值回执"
-description: "链上交易完成后提交交易哈希；请求头必须携带 `Idempotency-Key`。"
+description: "提交已广播充值交易的回执。"
 openapi: "/openapi/dexbuilder.yaml POST /api/v4/dexbuilder/deposit/submit"
 ---
 
-`POST /api/v4/dexbuilder/deposit/submit`
-
-链上交易完成后提交交易哈希；请求头必须携带 `Idempotency-Key`。
-
-此接口代终端用户操作。请求头必须提供 `sub_user_wallet_addr`；网关核验该钱包属于当前 Broker 后才会转发。详见[认证与 API Key](/api-reference/dexbuilder/authentication)。
-
-## 请求参数
-
-| 参数 | 位置 | 必填 | 类型 | 说明 |
-| --- | --- | --- | --- | --- |
-| `Idempotency-Key` | header | 是 | string |  |
-| `x-gate-device-type` | header | 是 | string | 设备类型，须为 Perp 支持的枚举值（如 web）；示例：`web` |
-| `sub_user_wallet_addr` | header | 是 | string | 终端用户钱包地址；网关校验该钱包与当前 Broker 的绑定 |
-
-## 请求体
-
-`Content-Type: application/json`。
-
-| 字段 | 类型 | 必填 | 说明 |
-| --- | --- | --- | --- |
-| `chain` | string | 是 |  |
-| `address` | string | 是 |  |
-| `token_address` | string | 是 |  |
-| `txn_hash` | string | 是 |  |
-| `token_amount` | string | 是 |  |
-
-## 响应
-
-成功时返回统一结构：`code`、`message`、`data`、`trace_id`；具体 `data` 字段如下。
-
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `data.success` | boolean |  |
+提交已广播充值交易的回执。
 
 <Note>
-  提交接口要求 `Idempotency-Key`；对同一业务操作重试时复用相同的 Key。
+  使用 Broker API Key 调用，并在请求头提供 `sub_user_wallet_addr`。网关会校验钱包与 Broker 的归属关系。 认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
 </Note>
+
+## 使用说明
+
+- 用户完成链上签名与广播后，提交交易哈希。`Idempotency-Key` 必填，同一用户在此接口内重试相同 Key 时回放首次成功响应；不同请求不要复用 Key。
+- `success=true` 表示请求已受理，不表示链上充值完成；最终状态通过[查询充值状态](/api-reference/dexbuilder/deposit-status)获取。

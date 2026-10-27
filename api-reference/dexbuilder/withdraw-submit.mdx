@@ -1,49 +1,16 @@
 ---
 title: "提交提现"
-description: "提交已签名的提现请求；请求头必须携带 `Idempotency-Key`。"
+description: "提交已签名的提现请求。"
 openapi: "/openapi/dexbuilder.yaml POST /api/v4/dexbuilder/withdraw/submit"
 ---
 
-`POST /api/v4/dexbuilder/withdraw/submit`
-
-提交已签名的提现请求；请求头必须携带 `Idempotency-Key`。
-
-此接口代终端用户操作。请求头必须提供 `sub_user_wallet_addr`；网关核验该钱包属于当前 Broker 后才会转发。详见[认证与 API Key](/api-reference/dexbuilder/authentication)。
-
-## 请求参数
-
-| 参数 | 位置 | 必填 | 类型 | 说明 |
-| --- | --- | --- | --- | --- |
-| `Idempotency-Key` | header | 是 | string |  |
-| `x-gate-device-type` | header | 是 | string | 设备类型，须为 Perp 支持的枚举值（如 web）；示例：`web` |
-| `sub_user_wallet_addr` | header | 是 | string | 终端用户钱包地址；网关校验该钱包与当前 Broker 的绑定 |
-
-## 请求体
-
-`Content-Type: application/json`。
-
-| 字段 | 类型 | 必填 | 说明 |
-| --- | --- | --- | --- |
-| `r` | string | 否 |  |
-| `v` | integer | 否 |  |
-| `s` | string | 否 |  |
-| `chain` | string | 否 |  |
-| `token_address` | string | 否 |  |
-| `address` | string | 否 |  |
-| `token_amount` | string | 否 |  |
-| `to_address` | string | 否 |  |
-| `timestamp` | integer | 否 |  |
-| `token_symbol` | string | 否 |  |
-
-## 响应
-
-成功时返回统一结构：`code`、`message`、`data`、`trace_id`；具体 `data` 字段如下。
-
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `data.event_id` | string |  |
-| `data.success` | boolean |  |
+提交已签名的提现请求。
 
 <Note>
-  提交接口要求 `Idempotency-Key`；对同一业务操作重试时复用相同的 Key。
+  使用 Broker API Key 调用，并在请求头提供 `sub_user_wallet_addr`。网关会校验钱包与 Broker 的归属关系。 认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
 </Note>
+
+## 使用说明
+
+- `r`、`v`、`s` 为用户对签名数据的签名分量；`timestamp` 必须与[获取提现签名数据](/api-reference/dexbuilder/withdraw-sign-data)的返回值一致。
+- `Idempotency-Key` 必填，同一用户在此接口内重试相同 Key 时回放首次成功响应。`success=true` 表示请求已受理；最终状态通过[查询提现状态](/api-reference/dexbuilder/withdraw-status)获取。

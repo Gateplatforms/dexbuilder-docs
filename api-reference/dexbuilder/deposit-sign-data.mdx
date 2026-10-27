@@ -1,45 +1,16 @@
 ---
 title: "获取充值签名数据"
-description: "返回链上充值所需的 calldata 与 vault 合约地址；可能触发 Perp 账户绑定。"
+description: "构建链上充值所需的签名数据。"
 openapi: "/openapi/dexbuilder.yaml POST /api/v4/dexbuilder/deposit/sign_data"
 ---
 
-`POST /api/v4/dexbuilder/deposit/sign_data`
+构建链上充值所需的签名数据。
 
-返回链上充值所需的 calldata 与 vault 合约地址；可能触发 Perp 账户绑定。
+<Note>
+  使用 Broker API Key 调用，并在请求头提供 `sub_user_wallet_addr`。网关会校验钱包与 Broker 的归属关系。 认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
+</Note>
 
-此接口代终端用户操作。请求头必须提供 `sub_user_wallet_addr`；网关核验该钱包属于当前 Broker 后才会转发。详见[认证与 API Key](/api-reference/dexbuilder/authentication)。
+## 使用说明
 
-## 请求参数
-
-| 参数 | 位置 | 必填 | 类型 | 说明 |
-| --- | --- | --- | --- | --- |
-| `x-gate-device-type` | header | 是 | string | 设备类型，须为 Perp 支持的枚举值（如 web）；示例：`web` |
-| `sub_user_wallet_addr` | header | 是 | string | 终端用户钱包地址；网关校验该钱包与当前 Broker 的绑定 |
-
-## 请求体
-
-`Content-Type: application/json`。
-
-| 字段 | 类型 | 必填 | 说明 |
-| --- | --- | --- | --- |
-| `address` | string | 是 |  |
-| `chain` | string | 是 |  |
-| `token_address` | string | 是 |  |
-| `token_amount` | string | 是 |  |
-| `token_symbol` | string | 是 |  |
-| `native_fee` | integer | 否 |  |
-| `lz_fee` | integer | 否 |  |
-
-## 响应
-
-成功时返回统一结构：`code`、`message`、`data`、`trace_id`；具体 `data` 字段如下。
-
-| 字段 | 类型 | 说明 |
-| --- | --- | --- |
-| `data.account_id` | string |  |
-| `data.broker_hash` | string |  |
-| `data.token_hash` | string |  |
-| `data.token_amount` | string |  |
-| `data.contract_address` | string |  |
-| `data.data` | string |  |
+- 建议先调用[估算充值手续费](/api-reference/dexbuilder/deposit-fee)，将 `native_fee` 原样传入，并将 `lz_fee` 按 USDT 6 位小数转换为整数。
+- 首次成功调用可能为用户持久绑定 Perp 账户；重复调用不会重复绑定。返回的 `contract_address` 与 `data` 用于构造链上交易。`x-perp-device-type` 可选，建议用于风控。
