@@ -26,6 +26,14 @@ DexBuilder 平台 API 提供资产配置、终端用户查询、Vault 余额，�
 
 成功时返回 `code`、`message`、`data`、`trace_id` 等字段；`code=0` 表示业务成功。`data` 的结构见各接口的 OpenAPI 响应模型。
 
-错误时可能增加机器可读的 `label`。部分下游业务或风控错误仍使用 HTTP 200，因此应同时检查 `code` 或 `label`。具体业务错误见[业务错误标识](/api-reference/dexbuilder/error-labels)；签名与权限失败见统一网关认证说明。
+错误时可能增加机器可读的 `label`。部分下游业务或风控错误仍使用 HTTP 200，因此应同时检查 `code` 或 `label`。常见业务错误如下；签名与权限失败见统一网关认证说明。
+
+| HTTP | `label` | 含义 |
+| --- | --- | --- |
+| 400 | `INVALID_ARGUMENT`、`MISSING_REQUIRED_HEADER` | 参数或必填请求头无效 |
+| 400 | `USER_NOT_FOUND`、`INVALID_ADDRESS` | 用户或钱包地址无效 |
+| 400 | `INVALID_DEVICE_TYPE` | 设备类型缺失或取值无效 |
+| 403 | `PROJECT_ACCESS_DENIED`、`PRODUCT_DISABLED` | 项目访问或产品权限被拒绝 |
+| 200 | `BUSINESS_ERROR`、`RISK_CONTROL_REJECTED` | 下游业务处理或风控拒绝；查看 `message` |
 
 充值和提现的提交接口返回“已受理”不代表链上终态。请使用相应状态查询接口确认结果。
