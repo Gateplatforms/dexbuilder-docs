@@ -1,36 +1,31 @@
 ---
 title: "DexBuilder 平台 API 概览"
-description: "面向 DexBuilder 项目方的底层 REST 接口，覆盖资产配置、用户、充值与提现。"
+description: "面向 Broker 的 19 个 DexBuilder 平台 REST 业务接口。"
 ---
 
-DexBuilder 平台 API 是面向项目方的底层 REST 能力，提供 Broker 资产配置、终端用户查询、Vault 余额，以及链上充值与提现流程。Broker 使用 Broker API Key 请求网关；用户级操作须在请求头 `sub_user_wallet_addr` 中提供终端用户钱包地址，由网关校验该钱包属于当前 Broker。
+DexBuilder 平台 API 提供资产配置、终端用户查询、Vault 余额，以及链上充值与提现能力。本节包含 19 个业务接口；入驻申请接口不在本节范围内。
 
 ## 接入地址
 
-生产环境 Base URL：`https://api.dexbuilder.com`。DexBuilder 平台接口路径以 `/api/v4/dexbuilder` 开头，完整地址格式为 `https://api.dexbuilder.com/api/v4/dexbuilder/...`。
+生产环境 Base URL：`https://api.dexbuilder.com`。接口路径以 `/api/v4/dexbuilder` 开头，例如 `https://api.dexbuilder.com/api/v4/dexbuilder/assets`。
 
-调用前先阅读[Broker API Key 与签名](/api-reference/common/broker-authentication)和[代表用户访问](/api-reference/common/sub-user-wallet)，了解签名和各接口的钱包地址要求；DexBuilder 平台特有的权限及请求头见[平台 API 认证](/api-reference/dexbuilder/authentication)。
+使用 Broker API Key 调用。签名规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)；用户级接口须按[代表用户访问](/api-reference/common/sub-user-wallet)提供 `sub_user_wallet_addr`。平台权限和各类接口的钱包要求见[平台 API 认证](/api-reference/dexbuilder/authentication)。
 
 ## 接口分类
 
 | 分类 | 能力 |
 | --- | --- |
-| 资产配置 | 查询支持资产、网络、充提状态、费率和提现限额 |
-| 用户 | 查询用户信息、钱包列表、Vault 余额和资金统计 |
-| 充值 | 估算手续费、获取签名数据、提交链上交易回执、查询状态与历史 |
+| 资产配置 | 查询资产、网络、充提开关、固定手续费和提现限额 |
+| 用户 | 查询用户信息、已绑定钱包、Vault 可用余额和资金统计 |
+| 充值 | 估算手续费、获取签名数据、提交交易回执、查询状态与历史 |
 | 提现 | 获取签名数据、提交提现、查询状态与历史、处理 Solana ATA |
 
-## 通用响应
+资产配置接口不需要终端用户钱包；其余用户、充值和提现接口需要 `sub_user_wallet_addr`。部分接口还需要 `x-perp-device-type` 或 `Idempotency-Key`，以对应接口的参数表为准。
 
-成功响应使用统一包络；各接口的 `data` 字段见对应页面。
+## 响应与错误
 
-```json
-{
-  "code": 0,
-  "message": "success",
-  "data": {},
-  "trace_id": "..."
-}
-```
+成功时返回 `code`、`message`、`data`、`trace_id` 等字段；`code=0` 表示业务成功。`data` 的结构见各接口的 OpenAPI 响应模型。
 
-`trace_id` 可用于定位请求。错误响应以接口实际返回的 `code`、`message` 等字段为准。
+错误时可能增加机器可读的 `label`。部分下游业务或风控错误仍使用 HTTP 200，因此应同时检查 `code` 或 `label`。具体业务错误见[业务错误标识](/api-reference/dexbuilder/error-labels)；签名与权限失败见统一网关认证说明。
+
+充值和提现的提交接口返回“已受理”不代表链上终态。请使用相应状态查询接口确认结果。
