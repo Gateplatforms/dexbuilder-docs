@@ -311,6 +311,7 @@
                           "zh/event-markets/rest/query-events",
                           "zh/event-markets/rest/query-event",
                           "zh/event-markets/rest/query-event-by-slug",
+                          "zh/event-markets/rest/query-event-reference-price",
                           "zh/event-markets/rest/query-markets",
                           "zh/event-markets/rest/query-market",
                           "zh/event-markets/rest/query-market-by-slug",
