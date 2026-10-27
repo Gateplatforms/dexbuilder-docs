@@ -17,4 +17,11 @@ description: "查询当前 Broker 的永续合约相关费率。"
 
 ## 响应
 
-成功时返回统一结构：`code`、`message`、`data`、`trace_id`。`data` 字段结构待接口提供方确认。
+成功时返回统一结构：`code`、`message`、`data`、`trace_id`。`data` 包含以下字段：
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `data.list` | array | 各链的费率列表 |
+| `data.list[].chain` | string | 链标识 |
+| `data.list[].deposit_fee` | string | 充值费率或费用，单位待确认 |
+| `data.list[].withdraw_fee` | string | 提现费率或费用，单位待确认 |
