@@ -18,7 +18,7 @@ description: "PerpDEX REST API 与 WebSocket API 的权限、认证及签名规�
 
 使用时需要注意：
 
-- PerpDEX API 使用独立的 API Key 进行服务端调用与认证。
+- PerpDEX 目前不支持 Broker API，使用独立的 API Key 进行服务端调用与认证。
 - 交易类接口需要 API Key 具备对应的读写权限。
 - 建议为 API Key 配置 IP 白名单，减少密钥泄露后的风险。
 - API Secret 仅用于本地生成签名，不应发送给服务端，也不应写入前端代码。
