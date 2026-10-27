@@ -56,6 +56,28 @@ SIGN = HexEncode(HMAC_SHA512(Secret Key, 签名原文))
 
 ## GET 请求示例
 
+下面的 Python 示例生成查询用户信息所需的 `SIGN`。将 Broker 凭据保存在服务端环境变量中，生成的 `Timestamp` 和 `SIGN` 用于紧接着发送的同一请求。
+
+```python
+import hashlib
+import hmac
+import os
+import time
+
+path = "/api/v4/dexbuilder/user/info"
+timestamp = str(int(time.time()))
+payload_hash = hashlib.sha512(b"").hexdigest()
+signature_string = "\n".join(["GET", path, "", payload_hash, timestamp])
+sign = hmac.new(
+    os.environ["BROKER_API_SECRET"].encode("utf-8"),
+    signature_string.encode("utf-8"),
+    hashlib.sha512,
+).hexdigest()
+
+print("Timestamp:", timestamp)
+print("SIGN:", sign)
+```
+
 以下示例查询用户信息。先生成 `SIGN`，再发送请求；`sub_user_wallet_addr` 为目标用户的钱包地址。
 
 ```bash
