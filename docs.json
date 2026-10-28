@@ -196,6 +196,65 @@
             "tab": "API Reference",
             "menu": [
               {
+                "item": "接入与通用规则",
+                "groups": [
+                  {
+                    "group": "通用说明",
+                    "pages": [
+                      "api-reference/common/overview",
+                      "api-reference/common/broker-authentication",
+                      "api-reference/common/sub-user-wallet"
+                    ]
+                  }
+                ]
+              },
+              {
+                "item": "DexBuilder 平台 API",
+                "pages": [
+                  "api-reference/dexbuilder/overview",
+                  "api-reference/dexbuilder/authentication",
+                  {
+                    "group": "资产配置",
+                    "pages": [
+                      "api-reference/dexbuilder/query-assets",
+                      "api-reference/dexbuilder/query-networks",
+                      "api-reference/dexbuilder/query-dw-status",
+                      "api-reference/dexbuilder/query-fee",
+                      "api-reference/dexbuilder/query-withdraw-limit"
+                    ]
+                  },
+                  {
+                    "group": "用户",
+                    "pages": [
+                      "api-reference/dexbuilder/query-user-info",
+                      "api-reference/dexbuilder/query-wallet-list",
+                      "api-reference/dexbuilder/query-user-balance",
+                      "api-reference/dexbuilder/query-fund-stats"
+                    ]
+                  },
+                  {
+                    "group": "充值",
+                    "pages": [
+                      "api-reference/dexbuilder/deposit-fee",
+                      "api-reference/dexbuilder/deposit-sign-data",
+                      "api-reference/dexbuilder/deposit-submit",
+                      "api-reference/dexbuilder/deposit-status",
+                      "api-reference/dexbuilder/deposit-history"
+                    ]
+                  },
+                  {
+                    "group": "提现",
+                    "pages": [
+                      "api-reference/dexbuilder/withdraw-sign-data",
+                      "api-reference/dexbuilder/withdraw-submit",
+                      "api-reference/dexbuilder/withdraw-status",
+                      "api-reference/dexbuilder/withdraw-history",
+                      "api-reference/dexbuilder/withdraw-ata-check-and-build"
+                    ]
+                  }
+                ]
+              },
+              {
                 "item": "PerpDEX",
                 "pages": [
                   {
@@ -413,65 +472,6 @@
                           "zh/event-contracts/websocket/authentication"
                         ]
                       }
-                    ]
-                  }
-                ]
-              },
-              {
-                "item": "DexBuilder 平台 API",
-                "pages": [
-                  "api-reference/dexbuilder/overview",
-                  "api-reference/dexbuilder/authentication",
-                  {
-                    "group": "资产配置",
-                    "pages": [
-                      "api-reference/dexbuilder/query-assets",
-                      "api-reference/dexbuilder/query-networks",
-                      "api-reference/dexbuilder/query-dw-status",
-                      "api-reference/dexbuilder/query-fee",
-                      "api-reference/dexbuilder/query-withdraw-limit"
-                    ]
-                  },
-                  {
-                    "group": "用户",
-                    "pages": [
-                      "api-reference/dexbuilder/query-user-info",
-                      "api-reference/dexbuilder/query-wallet-list",
-                      "api-reference/dexbuilder/query-user-balance",
-                      "api-reference/dexbuilder/query-fund-stats"
-                    ]
-                  },
-                  {
-                    "group": "充值",
-                    "pages": [
-                      "api-reference/dexbuilder/deposit-fee",
-                      "api-reference/dexbuilder/deposit-sign-data",
-                      "api-reference/dexbuilder/deposit-submit",
-                      "api-reference/dexbuilder/deposit-status",
-                      "api-reference/dexbuilder/deposit-history"
-                    ]
-                  },
-                  {
-                    "group": "提现",
-                    "pages": [
-                      "api-reference/dexbuilder/withdraw-sign-data",
-                      "api-reference/dexbuilder/withdraw-submit",
-                      "api-reference/dexbuilder/withdraw-status",
-                      "api-reference/dexbuilder/withdraw-history",
-                      "api-reference/dexbuilder/withdraw-ata-check-and-build"
-                    ]
-                  }
-                ]
-              },
-              {
-                "item": "接入与通用规则",
-                "groups": [
-                  {
-                    "group": "通用说明",
-                    "pages": [
-                      "api-reference/common/overview",
-                      "api-reference/common/broker-authentication",
-                      "api-reference/common/sub-user-wallet"
                     ]
                   }
                 ]
