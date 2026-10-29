@@ -17,7 +17,7 @@
           "资产配置"
         ],
         "summary": "查询支持资产",
-        "description": "返回当前 Broker 支持的充值/提现资产列表（MVP 静态配置，可扩展为多资产）。",
+        "description": "返回当前 Broker 可用的充值与提现资产列表。",
         "operationId": "listDexBuilderAssets",
         "responses": {
           "200": {
@@ -177,7 +177,7 @@
           "资产配置"
         ],
         "summary": "查询费率",
-        "description": "查询 Broker 永续相关费率。",
+        "description": "查询按网络配置的固定充值和提现手续费，金额以 USDT 计价。",
         "operationId": "getDexBuilderFee",
         "parameters": [
           {
@@ -621,7 +621,7 @@
           "充值"
         ],
         "summary": "获取充值签名数据",
-        "description": "返回链上充值所需的 calldata 与 vault 合约地址；可能触发 Perp 账户绑定。 若用户在该链尚未创建 Perp 账户，首次成功调用会触发 UserBindWallet（持久绑定）；重复调用幂等。",
+        "description": "返回链上充值所需的 calldata 与 Vault 合约地址。若用户在该链尚未绑定 Perp 账户，首次成功调用会完成绑定；重复调用不会重复绑定。",
         "operationId": "dexBuilderDepositSignData",
         "parameters": [
           {
