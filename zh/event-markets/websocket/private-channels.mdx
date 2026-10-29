@@ -58,7 +58,7 @@ description: "订阅当前认证用户的订单、成交、持仓和结算更新
 }
 ```
 
-状态可能为 `PROCESSING`、`OPEN`、`CANCELLING`、`MATCHED`、`CANCELED` 或 `FAILED`。
+WebSocket 的 `status` 是上游大写 UI 状态，与 REST 接口的小写五态不同。常见值包括 `PROCESSING`、`OPEN`、`CANCELLING`、`MATCHED`、`CANCELED` 和 `FAILED`。
 
 ## `pred.usertrades`
 

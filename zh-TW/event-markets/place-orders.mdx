@@ -31,7 +31,7 @@ curl "https://api.dexbuilder.com/api/v4/prediction/tokens/<token_id>/order_book?
 ## 2. 提交訂單
 
 ```bash cURL
-curl -X POST "https://api.dexbuilder.com/api/v4/prediction/orders" \
+curl -X POST "https://api.dexbuilder.com/api/v4/broker/prediction/orders" \
   -H "Content-Type: application/json" \
   -H "<authentication-header>: <authentication-value>" \
   --data '{
@@ -40,8 +40,8 @@ curl -X POST "https://api.dexbuilder.com/api/v4/prediction/orders" \
     "price": "0.52",
     "size": "10",
     "total_cost": "5.20",
-    "order_type": "LIMIT",
-    "order_mode": "GTC",
+    "order_type": "GTC",
+    "order_mode": "LIMIT",
     "client_order_id": "client-order-001",
     "post_only": false,
     "sell_all": false,
@@ -62,8 +62,8 @@ curl -X POST "https://api.dexbuilder.com/api/v4/prediction/orders" \
 | `price` | 限價，decimal string |
 | `size` | 下單數量，decimal string |
 | `total_cost` | 某些訂單模式下使用的訂單總成本 |
-| `order_type` | 交易服務定義的訂單類型 |
-| `order_mode` | Time-in-force / 執行模式 |
+| `order_type` | 訂單有效方式：`GTC`、`GTD`、`FOK` 或 `FAK` |
+| `order_mode` | 下單模式：`LIMIT` 或 `MARKET` |
 | `client_order_id` | 可選的客戶端冪等 / 跟蹤 ID |
 | `post_only` | 是否只作為 Maker 提供流動性 |
 | `sell_all` | 賣出時是否使用全部可用持倉 |
@@ -75,12 +75,12 @@ curl -X POST "https://api.dexbuilder.com/api/v4/prediction/orders" \
 {
   "order_id": "order-123",
   "client_order_id": "client-order-001",
-  "status": "ACCEPTED",
+  "status": "processing",
   "created_at": 1782753357
 }
 ```
 
-`ACCEPTED` 只表示訂單請求已被系統接受，並不代表已經全部成交。後續應透過訂單查詢介面讀取實際狀態。
+`processing` 表示訂單請求已受理並開始處理，不代表訂單已成交。後續應透過訂單查詢介面讀取目前的 REST 狀態。
 
 ## 下單前檢查
 

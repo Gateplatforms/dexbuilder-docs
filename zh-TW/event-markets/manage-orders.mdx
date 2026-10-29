@@ -13,9 +13,9 @@ https://api.dexbuilder.com
 ## 查詢訂單清單
 
 ```bash cURL
-curl -G "https://api.dexbuilder.com/api/v4/prediction/orders" \
+curl -G "https://api.dexbuilder.com/api/v4/broker/prediction/orders" \
   -H "<authentication-header>: <authentication-value>" \
-  --data-urlencode "status=OPEN" \
+  --data-urlencode "status=open" \
   --data-urlencode "condition_id=<condition_id>" \
   --data-urlencode "limit=20"
 ```
@@ -41,9 +41,9 @@ curl -G "https://api.dexbuilder.com/api/v4/prediction/orders" \
       "size": "10",
       "size_matched": "4",
       "size_left": "6",
-      "order_type": "LIMIT",
-      "order_mode": "GTC",
-      "status": "OPEN",
+      "order_type": "GTC",
+      "order_mode": "LIMIT",
+      "status": "open",
       "created_at": 1782753357,
       "updated_at": 1782753357
     }
@@ -57,7 +57,7 @@ curl -G "https://api.dexbuilder.com/api/v4/prediction/orders" \
 ## 查詢單個訂單
 
 ```bash cURL
-curl "https://api.dexbuilder.com/api/v4/prediction/orders/<order_id>" \
+curl "https://api.dexbuilder.com/api/v4/broker/prediction/orders/<order_id>" \
   -H "<authentication-header>: <authentication-value>"
 ```
 
@@ -66,29 +66,29 @@ curl "https://api.dexbuilder.com/api/v4/prediction/orders/<order_id>" \
 ## 取消單個訂單
 
 ```bash cURL
-curl -X DELETE "https://api.dexbuilder.com/api/v4/prediction/orders/<order_id>" \
+curl -X DELETE "https://api.dexbuilder.com/api/v4/broker/prediction/orders/<order_id>" \
   -H "<authentication-header>: <authentication-value>"
 ```
 
 ```json
 {
   "order_id": "order-123",
-  "status": "ACCEPTED",
-  "cancel_status": "PENDING"
+  "status": "processing",
+  "cancel_status": "accepted"
 }
 ```
 
 ## 按 Condition 取消訂單
 
 ```bash cURL
-curl -X DELETE "https://api.dexbuilder.com/api/v4/prediction/orders?condition_id=<condition_id>" \
+curl -X DELETE "https://api.dexbuilder.com/api/v4/broker/prediction/orders?condition_id=<condition_id>" \
   -H "<authentication-header>: <authentication-value>"
 ```
 
 ```json
 {
   "batch_id": "batch-123",
-  "status": "ACCEPTED",
+  "status": "accepted",
   "total_orders": 3
 }
 ```

@@ -31,7 +31,7 @@ Before submitting an order, validate quantity and price against `min_order_size`
 ## 2. Submit an Order
 
 ```bash cURL
-curl -X POST "https://api.dexbuilder.com/api/v4/prediction/orders" \
+curl -X POST "https://api.dexbuilder.com/api/v4/broker/prediction/orders" \
   -H "Content-Type: application/json" \
   -H "<authentication-header>: <authentication-value>" \
   --data '{
@@ -40,8 +40,8 @@ curl -X POST "https://api.dexbuilder.com/api/v4/prediction/orders" \
     "price": "0.52",
     "size": "10",
     "total_cost": "5.20",
-    "order_type": "LIMIT",
-    "order_mode": "GTC",
+    "order_type": "GTC",
+    "order_mode": "LIMIT",
     "client_order_id": "client-order-001",
     "post_only": false,
     "sell_all": false,
@@ -62,8 +62,8 @@ The authentication Header above only indicates that the endpoint requires authen
 | `price` | Limit price, as a decimal string |
 | `size` | Order size, as a decimal string |
 | `total_cost` | Total order cost used by some order modes |
-| `order_type` | Order type defined by the trading service |
-| `order_mode` | Time-in-force / execution mode |
+| `order_type` | Time-in-force: `GTC`, `GTD`, `FOK`, or `FAK` |
+| `order_mode` | Execution mode: `LIMIT` or `MARKET` |
 | `client_order_id` | Optional client idempotency / tracking ID |
 | `post_only` | Whether the order should only provide liquidity as Maker |
 | `sell_all` | Whether to use the full available position when selling |
@@ -75,12 +75,12 @@ The authentication Header above only indicates that the endpoint requires authen
 {
   "order_id": "order-123",
   "client_order_id": "client-order-001",
-  "status": "ACCEPTED",
+  "status": "processing",
   "created_at": 1782753357
 }
 ```
 
-`ACCEPTED` only means the order request has been accepted by the system; it does not mean the order has been fully filled. Read the actual status through the order query endpoint.
+`processing` means the order request has been accepted for processing; it does not mean the order has been filled. Query the order to check its current REST status.
 
 ## Pre-Order Checks
 

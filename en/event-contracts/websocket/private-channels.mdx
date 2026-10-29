@@ -49,8 +49,8 @@ Order state changes for the authenticated account.
     "token_id": "ge_token-yes",
     "outcome": "Yes",
     "side": "BUY",
-    "order_mode": "GTC",
-    "order_type": "LIMIT",
+    "order_mode": "LIMIT",
+    "order_type": "GTC",
     "px": "0.45",
     "qty": "10",
     "filled_qty": "4",
@@ -62,7 +62,7 @@ Order state changes for the authenticated account.
 }
 ```
 
-The `status` value reflects the public order state, such as `PROCESSING`, `OPEN`, `CANCELLING`, `MATCHED`, `CANCELED`, or `FAILED`.
+WebSocket `status` is an uppercase upstream UI state, separate from the five lowercase REST order states. Examples include `PROCESSING`, `OPEN`, `CANCELLING`, `MATCHED`, `CANCELED`, and `FAILED`.
 
 ## `ec.usertrades`
 

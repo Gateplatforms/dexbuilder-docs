@@ -15,7 +15,7 @@ https://api.dexbuilder.com
 ```bash cURL
 curl -G "https://api.dexbuilder.com/api/v4/event_contracts/orders" \
   -H "<authentication-header>: <authentication-value>" \
-  --data-urlencode "status=OPEN" \
+  --data-urlencode "status=open" \
   --data-urlencode "condition_id=<condition_id>" \
   --data-urlencode "limit=20"
 ```
@@ -41,9 +41,9 @@ curl -G "https://api.dexbuilder.com/api/v4/event_contracts/orders" \
       "size": "10",
       "size_matched": "4",
       "size_left": "6",
-      "order_type": "LIMIT",
-      "order_mode": "GTC",
-      "status": "OPEN",
+      "order_type": "GTC",
+      "order_mode": "LIMIT",
+      "status": "open",
       "created_at": 1782753357,
       "updated_at": 1782753357
     }
@@ -73,8 +73,8 @@ curl -X DELETE "https://api.dexbuilder.com/api/v4/event_contracts/orders/<order_
 ```json
 {
   "order_id": "order-123",
-  "status": "ACCEPTED",
-  "cancel_status": "PENDING"
+  "status": "processing",
+  "cancel_status": "accepted"
 }
 ```
 
@@ -88,7 +88,7 @@ curl -X DELETE "https://api.dexbuilder.com/api/v4/event_contracts/orders?conditi
 ```json
 {
   "batch_id": "batch-123",
-  "status": "ACCEPTED",
+  "status": "accepted",
   "total_orders": 3
 }
 ```
