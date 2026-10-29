@@ -887,15 +887,6 @@
               },
               {
                 "item": "DexBuilder Platform API"
-              },
-              {
-                "item": "Untitled Item",
-                "groups": [
-                  {
-                    "group": "DexBuilder API",
-                    "pages": []
-                  }
-                ]
               }
             ]
           }
