@@ -884,6 +884,9 @@
                     ]
                   }
                 ]
+              },
+              {
+                "item": "DexBuilder Platform API"
               }
             ]
           }
