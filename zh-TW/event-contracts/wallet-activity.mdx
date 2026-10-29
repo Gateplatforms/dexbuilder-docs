@@ -15,7 +15,7 @@ https://api.dexbuilder.com
 ## 查詢持倉
 
 ```bash cURL
-curl -G "https://api.dexbuilder.com/api/v4/event_contracts/positions" \
+curl -G "https://api.dexbuilder.com/api/v4/broker/event_contracts/positions" \
   -H "<authentication-header>: <authentication-value>" \
   --data-urlencode "event_id=<event_id>" \
   --data-urlencode "condition_id=<condition_id>" \
@@ -28,7 +28,7 @@ curl -G "https://api.dexbuilder.com/api/v4/event_contracts/positions" \
 ## 查詢已結算持倉
 
 ```bash cURL
-curl -G "https://api.dexbuilder.com/api/v4/event_contracts/positions/settled" \
+curl -G "https://api.dexbuilder.com/api/v4/broker/event_contracts/positions/settled" \
   -H "<authentication-header>: <authentication-value>"
 ```
 
@@ -37,7 +37,7 @@ curl -G "https://api.dexbuilder.com/api/v4/event_contracts/positions/settled" \
 ## 查詢個人成交
 
 ```bash cURL
-curl -G "https://api.dexbuilder.com/api/v4/event_contracts/usertrades" \
+curl -G "https://api.dexbuilder.com/api/v4/broker/event_contracts/usertrades" \
   -H "<authentication-header>: <authentication-value>" \
   --data-urlencode "condition_id=<condition_id>" \
   --data-urlencode "token_id=<token_id>" \

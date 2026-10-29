@@ -15,7 +15,7 @@ https://api.dexbuilder.com
 ## List Positions
 
 ```bash cURL
-curl -G "https://api.dexbuilder.com/api/v4/prediction/positions" \
+curl -G "https://api.dexbuilder.com/api/v4/broker/prediction/positions" \
   -H "<authentication-header>: <authentication-value>" \
   --data-urlencode "event_id=<event_id>" \
   --data-urlencode "condition_id=<condition_id>" \
@@ -45,14 +45,14 @@ Use the returned `next_cursor` as `cursor` for the next page.
 ## Get a Position
 
 ```bash cURL
-curl "https://api.dexbuilder.com/api/v4/prediction/positions/<position_id>" \
+curl "https://api.dexbuilder.com/api/v4/broker/prediction/positions/<position_id>" \
   -H "<authentication-header>: <authentication-value>"
 ```
 
 ## List User Trades
 
 ```bash cURL
-curl -G "https://api.dexbuilder.com/api/v4/prediction/usertrades" \
+curl -G "https://api.dexbuilder.com/api/v4/broker/prediction/usertrades" \
   -H "<authentication-header>: <authentication-value>" \
   --data-urlencode "condition_id=<condition_id>" \
   --data-urlencode "token_id=<token_id>" \

@@ -31,7 +31,7 @@ Before submitting an order, validate quantity and price against `min_order_size`
 ## 2. Submit an Order
 
 ```bash cURL
-curl -X POST "https://api.dexbuilder.com/api/v4/event_contracts/orders" \
+curl -X POST "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders" \
   -H "Content-Type: application/json" \
   -H "<authentication-header>: <authentication-value>" \
   --data '{

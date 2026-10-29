@@ -13,7 +13,7 @@ https://api.dexbuilder.com
 ## List Orders
 
 ```bash cURL
-curl -G "https://api.dexbuilder.com/api/v4/event_contracts/orders" \
+curl -G "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders" \
   -H "<authentication-header>: <authentication-value>" \
   --data-urlencode "status=open" \
   --data-urlencode "condition_id=<condition_id>" \
@@ -57,7 +57,7 @@ Pass `next_cursor` unchanged as `cursor` for the next page.
 ## Get an Order
 
 ```bash cURL
-curl "https://api.dexbuilder.com/api/v4/event_contracts/orders/<order_id>" \
+curl "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders/<order_id>" \
   -H "<authentication-header>: <authentication-value>"
 ```
 
@@ -66,7 +66,7 @@ The detail response includes the order identifiers, price, quantity, fill progre
 ## Cancel an Order
 
 ```bash cURL
-curl -X DELETE "https://api.dexbuilder.com/api/v4/event_contracts/orders/<order_id>" \
+curl -X DELETE "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders/<order_id>" \
   -H "<authentication-header>: <authentication-value>"
 ```
 
@@ -81,7 +81,7 @@ curl -X DELETE "https://api.dexbuilder.com/api/v4/event_contracts/orders/<order_
 ## Cancel Orders by Condition
 
 ```bash cURL
-curl -X DELETE "https://api.dexbuilder.com/api/v4/event_contracts/orders?condition_id=<condition_id>" \
+curl -X DELETE "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders?condition_id=<condition_id>" \
   -H "<authentication-header>: <authentication-value>"
 ```
 
