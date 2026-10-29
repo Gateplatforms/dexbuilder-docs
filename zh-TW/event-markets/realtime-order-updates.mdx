@@ -14,10 +14,10 @@ wss://broker.dexbuilder.com/ws/dex-builder/prediction
 
 ## 订阅
 
-使用 API Key 签名认证：
+請使用 Broker API Key 簽名，並在 `auth.wallet_address` 傳入目標使用者的錢包地址。詳見 [Broker WebSocket 認證](/zh-TW/event-markets/websocket/authentication)：
 
 ```json
-{"t":1720000000123,"id":"orders-1","op":"subscribe","ch":"pred.orders","payload":{"all":true},"auth":{"method":"api_key","key":"YOUR_API_KEY","sign":"HEX_SIGNATURE"}}
+{"t":1720000000123,"id":"orders-1","op":"subscribe","ch":"pred.orders","payload":{"all":true},"auth":{"method":"broker_api_key","key":"YOUR_BROKER_API_KEY","sign":"HEX_SIGNATURE","wallet_address":"<USER_WALLET>"}}
 ```
 
 ## 推送内容
@@ -32,4 +32,4 @@ WebSocket 是事件推送，不能替代 REST 查询。连接或重连后：
 2. 通过对应 REST 接口查询订单、成交、仓位和账户当前状态。
 3. 使用标识和时间戳应用后续 WebSocket 更新。
 
-客户端请求中不要暴露内部用户 Header 或 broker 账户标识。
+錢包地址須與產生簽名時使用的地址一致。

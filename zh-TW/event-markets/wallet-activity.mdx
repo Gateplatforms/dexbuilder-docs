@@ -4,7 +4,7 @@ sidebarTitle: "帳戶活動"
 description: "查詢目前認證帳戶的預測市場持倉、成交和相關帳戶活動。"
 ---
 
-預測市場 API 提供目前認證帳戶的持倉和成交記錄。相關介面屬於私有介面，需要完成認證後呼叫。
+Broker API 根據 `sub_user_wallet_addr` 指定的使用者，查詢其持倉與成交記錄。這些私有介面需要 Broker API Key。簽名規則見 [Broker API Key 與簽名](/api-reference/common/broker-authentication)。
 
 生產環境 Base URL：
 
@@ -16,7 +16,10 @@ https://api.dexbuilder.com
 
 ```bash cURL
 curl -G "https://api.dexbuilder.com/api/v4/broker/prediction/positions" \
-  -H "<authentication-header>: <authentication-value>" \
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${USER_WALLET}" \
   --data-urlencode "event_id=<event_id>" \
   --data-urlencode "condition_id=<condition_id>" \
   --data-urlencode "settlement_status=OPEN" \
@@ -46,14 +49,20 @@ curl -G "https://api.dexbuilder.com/api/v4/broker/prediction/positions" \
 
 ```bash cURL
 curl "https://api.dexbuilder.com/api/v4/broker/prediction/positions/<position_id>" \
-  -H "<authentication-header>: <authentication-value>"
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${USER_WALLET}"
 ```
 
 ## 查詢個人成交
 
 ```bash cURL
 curl -G "https://api.dexbuilder.com/api/v4/broker/prediction/usertrades" \
-  -H "<authentication-header>: <authentication-value>" \
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${USER_WALLET}" \
   --data-urlencode "condition_id=<condition_id>" \
   --data-urlencode "token_id=<token_id>" \
   --data-urlencode "limit=20"
