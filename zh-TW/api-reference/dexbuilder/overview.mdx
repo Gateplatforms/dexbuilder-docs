@@ -1,0 +1,39 @@
+---
+title: "DexBuilder 平台 API 概覽"
+description: "面向 Broker 的 19 個 DexBuilder 平台 REST 業務介面。"
+---
+
+DexBuilder 平台 API 提供資產配置、終端使用者查詢、Vault 餘額，以及鏈上充值與提現能力。本節包含 19 個業務介面。
+
+## 接入地址
+
+生產環境 Base URL：`https://api.dexbuilder.com`。介面路徑以 `/api/v4/dexbuilder` 開頭，例如 `https://api.dexbuilder.com/api/v4/dexbuilder/assets`。
+
+使用 Broker API Key 呼叫。簽名規則及使用者級介面的 `sub_user_wallet_addr` 要求見[Broker API 認證與簽名](/zh-TW/api-reference/common/broker-authentication)；平台權限和各類介面的錢包要求見[平台 API 認證](/zh-TW/api-reference/dexbuilder/authentication)。
+
+## 介面分類
+
+| 分類 | 能力 |
+| --- | --- |
+| 資產配置 | 查詢資產、網路、充提開關、固定手續費和提現限額 |
+| 使用者 | 查詢使用者資訊、已綁定錢包、Vault 可用餘額和資金統計 |
+| 充值 | 估算手續費、獲取簽名資料、提交交易回執、查詢狀態與歷史 |
+| 提現 | 獲取簽名資料、提交提現、查詢狀態與歷史、處理 Solana ATA |
+
+資產配置介面不需要終端使用者錢包；其餘使用者、充值和提現介面需要 `sub_user_wallet_addr`。部分介面還需要 `x-perp-device-type` 或 `Idempotency-Key`，以對應介面的參數表為準。
+
+## 回應與錯誤
+
+成功時回傳 `code`、`message`、`data`、`trace_id` 等欄位；`code=0` 表示業務成功。`data` 的結構見各介面的 OpenAPI 回應模型。
+
+錯誤時可能增加機器可讀的 `label`。部分下游業務或風控錯誤仍使用 HTTP 200，因此應同時檢查 `code` 或 `label`。常見業務錯誤如下；簽名與權限失敗見統一網關認證說明。
+
+| HTTP | `label` | 含義 |
+| --- | --- | --- |
+| 400 | `INVALID_ARGUMENT`、`MISSING_REQUIRED_HEADER` | 參數或必填請求頭無效 |
+| 400 | `USER_NOT_FOUND`、`INVALID_ADDRESS` | 使用者或錢包地址無效 |
+| 400 | `INVALID_DEVICE_TYPE` | 設備類型缺失或取值無效 |
+| 403 | `PROJECT_ACCESS_DENIED`、`PRODUCT_DISABLED` | 專案存取或產品權限被拒絕 |
+| 200 | `BUSINESS_ERROR`、`RISK_CONTROL_REJECTED` | 下游業務處理或風控拒絕；查看 `message` |
+
+充值和提現的提交介面回傳“已受理”不代表鏈上終態。請使用相應狀態查詢介面確認結果。

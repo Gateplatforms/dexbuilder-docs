@@ -891,7 +891,8 @@
                   {
                     "group": "DexBuilder API",
                     "pages": [
-                      "en/api-reference/dexbuilder/overview"
+                      "en/api-reference/dexbuilder/overview",
+                      "en/api-reference/dexbuilder/authentication"
                     ]
                   }
                 ]
@@ -1323,7 +1324,10 @@
                 "groups": [
                   {
                     "group": "DexBuilder API",
-                    "pages": []
+                    "pages": [
+                      "zh-TW/api-reference/dexbuilder/overview",
+                      "zh-TW/api-reference/dexbuilder/authentication"
+                    ]
                   }
                 ]
               },
