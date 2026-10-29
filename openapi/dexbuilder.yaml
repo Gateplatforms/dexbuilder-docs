@@ -31,23 +31,31 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效"
+            "description": "Broker API Key 或签名无效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验"
+            "description": "Broker 权限不足，或目标钱包未通过归属校验",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ],
-            "Timestamp": [
-
-            ],
-            "Signature": [
-
-            ]
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
           }
         ]
       }
@@ -77,23 +85,31 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效"
+            "description": "Broker API Key 或签名无效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验"
+            "description": "Broker 权限不足，或目标钱包未通过归属校验",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ],
-            "Timestamp": [
-
-            ],
-            "Signature": [
-
-            ]
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
           }
         ]
       }
@@ -126,23 +142,31 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效"
+            "description": "Broker API Key 或签名无效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验"
+            "description": "Broker 权限不足，或目标钱包未通过归属校验",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ],
-            "Timestamp": [
-
-            ],
-            "Signature": [
-
-            ]
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
           }
         ]
       }
@@ -153,7 +177,7 @@
           "资产配置"
         ],
         "summary": "查询费率",
-        "description": "查询 Broker 永续相关费率（转发 PerpDEX 业务层）。",
+        "description": "查询 Broker 永续相关费率。",
         "operationId": "getDexBuilderFee",
         "parameters": [
           {
@@ -172,23 +196,31 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效"
+            "description": "Broker API Key 或签名无效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验"
+            "description": "Broker 权限不足，或目标钱包未通过归属校验",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ],
-            "Timestamp": [
-
-            ],
-            "Signature": [
-
-            ]
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
           }
         ]
       }
@@ -199,7 +231,7 @@
           "资产配置"
         ],
         "summary": "查询提现限额",
-        "description": "查询当前 Broker 提现限制（转发 PerpDEX 业务层）。",
+        "description": "查询当前 Broker 提现限制。",
         "operationId": "getDexBuilderWithdrawLimit",
         "parameters": [
           {
@@ -218,23 +250,31 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效"
+            "description": "Broker API Key 或签名无效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验"
+            "description": "Broker 权限不足，或目标钱包未通过归属校验",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ],
-            "Timestamp": [
-
-            ],
-            "Signature": [
-
-            ]
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
           }
         ]
       }
@@ -264,26 +304,41 @@
             }
           },
           "400": {
-            "$ref": "#/components/responses/UserNotFound"
+            "$ref": "#/components/responses/UserNotFound",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
+            "$ref": "#/components/responses/ProjectAccessDenied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "401": {
-            "description": "Broker API Key 或签名无效"
+            "description": "Broker API Key 或签名无效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ],
-            "Timestamp": [
-
-            ],
-            "Signature": [
-
-            ]
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
           }
         ]
       }
@@ -313,26 +368,41 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效"
+            "description": "Broker API Key 或签名无效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验"
+            "description": "Broker 权限不足，或目标钱包未通过归属校验",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "400": {
-            "$ref": "#/components/responses/OpenAPIBadRequest"
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ],
-            "Timestamp": [
-
-            ],
-            "Signature": [
-
-            ]
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
           }
         ]
       }
@@ -343,7 +413,7 @@
           "用户"
         ],
         "summary": "查询 Vault 余额",
-        "description": "查询用户在 PerpDEX Vault 中的余额（转发上游）。",
+        "description": "查询用户在 PerpDEX Vault 中的余额。",
         "operationId": "getDexBuilderUserVaultBalance",
         "parameters": [
           {
@@ -365,26 +435,41 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效"
+            "description": "Broker API Key 或签名无效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验"
+            "description": "Broker 权限不足，或目标钱包未通过归属校验",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "400": {
-            "$ref": "#/components/responses/OpenAPIBadRequest"
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ],
-            "Timestamp": [
-
-            ],
-            "Signature": [
-
-            ]
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
           }
         ]
       }
@@ -395,7 +480,7 @@
           "用户"
         ],
         "summary": "查询资金统计",
-        "description": "查询用户资金统计（转发 PerpDEX 业务层）。",
+        "description": "查询用户资金统计。",
         "operationId": "getDexBuilderFundStats",
         "parameters": [
           {
@@ -417,26 +502,41 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效"
+            "description": "Broker API Key 或签名无效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验"
+            "description": "Broker 权限不足，或目标钱包未通过归属校验",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "400": {
-            "$ref": "#/components/responses/OpenAPIBadRequest"
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ],
-            "Timestamp": [
-
-            ],
-            "Signature": [
-
-            ]
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
           }
         ]
       }
@@ -475,28 +575,44 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效"
+            "description": "Broker API Key 或签名无效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验"
+            "description": "Broker 权限不足，或目标钱包未通过归属校验",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "400": {
-            "$ref": "#/components/responses/OpenAPIBadRequest"
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ],
-            "Timestamp": [
-
-            ],
-            "Signature": [
-
-            ]
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
           }
-        ]
+        ],
+        "description": ""
       }
     },
     "/api/v4/dexbuilder/deposit/sign_data": {
@@ -549,26 +665,41 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效"
+            "description": "Broker API Key 或签名无效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验"
+            "description": "Broker 权限不足，或目标钱包未通过归属校验",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "400": {
-            "$ref": "#/components/responses/OpenAPIBadRequest"
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ],
-            "Timestamp": [
-
-            ],
-            "Signature": [
-
-            ]
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
           }
         ]
       }
@@ -614,26 +745,41 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效"
+            "description": "Broker API Key 或签名无效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验"
+            "description": "Broker 权限不足，或目标钱包未通过归属校验",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "400": {
-            "$ref": "#/components/responses/OpenAPIBadRequest"
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ],
-            "Timestamp": [
-
-            ],
-            "Signature": [
-
-            ]
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
           }
         ]
       }
@@ -671,28 +817,44 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效"
+            "description": "Broker API Key 或签名无效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验"
+            "description": "Broker 权限不足，或目标钱包未通过归属校验",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "400": {
-            "$ref": "#/components/responses/OpenAPIBadRequest"
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ],
-            "Timestamp": [
-
-            ],
-            "Signature": [
-
-            ]
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
           }
-        ]
+        ],
+        "description": ""
       }
     },
     "/api/v4/dexbuilder/deposit/history": {
@@ -725,28 +887,44 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效"
+            "description": "Broker API Key 或签名无效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验"
+            "description": "Broker 权限不足，或目标钱包未通过归属校验",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "400": {
-            "$ref": "#/components/responses/OpenAPIBadRequest"
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ],
-            "Timestamp": [
-
-            ],
-            "Signature": [
-
-            ]
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
           }
-        ]
+        ],
+        "description": ""
       }
     },
     "/api/v4/dexbuilder/withdraw/sign_data": {
@@ -783,28 +961,44 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效"
+            "description": "Broker API Key 或签名无效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验"
+            "description": "Broker 权限不足，或目标钱包未通过归属校验",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "400": {
-            "$ref": "#/components/responses/OpenAPIBadRequest"
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ],
-            "Timestamp": [
-
-            ],
-            "Signature": [
-
-            ]
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
           }
-        ]
+        ],
+        "description": ""
       }
     },
     "/api/v4/dexbuilder/withdraw/submit": {
@@ -848,26 +1042,41 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效"
+            "description": "Broker API Key 或签名无效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验"
+            "description": "Broker 权限不足，或目标钱包未通过归属校验",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "400": {
-            "$ref": "#/components/responses/OpenAPIBadRequest"
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ],
-            "Timestamp": [
-
-            ],
-            "Signature": [
-
-            ]
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
           }
         ]
       }
@@ -906,28 +1115,44 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效"
+            "description": "Broker API Key 或签名无效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验"
+            "description": "Broker 权限不足，或目标钱包未通过归属校验",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "400": {
-            "$ref": "#/components/responses/OpenAPIBadRequest"
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ],
-            "Timestamp": [
-
-            ],
-            "Signature": [
-
-            ]
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
           }
-        ]
+        ],
+        "description": ""
       }
     },
     "/api/v4/dexbuilder/withdraw/history": {
@@ -960,28 +1185,44 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效"
+            "description": "Broker API Key 或签名无效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验"
+            "description": "Broker 权限不足，或目标钱包未通过归属校验",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "400": {
-            "$ref": "#/components/responses/OpenAPIBadRequest"
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ],
-            "Timestamp": [
-
-            ],
-            "Signature": [
-
-            ]
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
           }
-        ]
+        ],
+        "description": ""
       }
     },
     "/api/v4/dexbuilder/withdraw/ata/check-and-build": {
@@ -1019,26 +1260,41 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效"
+            "description": "Broker API Key 或签名无效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验"
+            "description": "Broker 权限不足，或目标钱包未通过归属校验",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           },
           "400": {
-            "$ref": "#/components/responses/OpenAPIBadRequest"
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
           }
         },
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ],
-            "Timestamp": [
-
-            ],
-            "Signature": [
-
-            ]
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
           }
         ]
       }
@@ -1135,7 +1391,7 @@
         "name": "Idempotency-Key",
         "in": "header",
         "required": true,
-        "description": "幂等键，最长 128 字符，建议 UUID。作用域：`deposit-submit:{user_id}` / `withdraw-submit:{user_id}`。相同 scope + Key 且首次 HTTP 200 成功时，重复请求直接回放首次响应体；网络超时后可安全重试同一 Key。不同请求体复用同一 Key 时行为未定义，请勿复用。",
+        "description": "幂等键，最长 128 字符，建议使用 UUID。同一用户在同一提交接口使用相同 Key 重试时，服务端返回首次成功请求的响应；网络超时后可使用原 Key 重试。不同请求不得复用 Key。",
         "schema": {
           "type": "string",
           "maxLength": 128
@@ -1212,7 +1468,7 @@
         }
       },
       "GatewayUnauthorized": {
-        "description": "网关验签失败（未到达本服务或 KEY/SIGN/Timestamp 无效）",
+        "description": "Broker API Key、签名或时间戳无效",
         "content": {
           "application/json": {
             "schema": {
@@ -1256,7 +1512,7 @@
             "properties": {
               "label": {
                 "type": "string",
-                "description": "Gate API v4 对齐的稳定错误标识（OpenAPI 错误响应专用）"
+                "description": "稳定的机器可读错误标识"
               },
               "data": {
                 "nullable": true,
@@ -1281,7 +1537,7 @@
           },
           "reason": {
             "type": "string",
-            "description": "内部 reason，成功时多为空串"
+            "description": "错误原因标识；成功时通常为空字符串"
           },
           "trace_id": {
             "type": "string",
@@ -1856,7 +2112,7 @@
           },
           "fee_source": {
             "type": "integer",
-            "description": "费用来源：0=默认；其他取值由 Perp 定义，对接以 0 为主"
+            "description": "费用来源标识；0 表示默认。"
           }
         }
       },

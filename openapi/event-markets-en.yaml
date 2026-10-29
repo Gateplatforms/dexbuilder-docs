@@ -905,7 +905,7 @@
         ]
       }
     },
-    "/api/v4/prediction/orders": {
+    "/api/v4/broker/prediction/orders": {
       "post": {
         "summary": "Place Order",
         "description": "Place Order.",
@@ -1213,7 +1213,7 @@
         ]
       }
     },
-    "/api/v4/prediction/orders/{order_id}": {
+    "/api/v4/broker/prediction/orders/{order_id}": {
       "get": {
         "summary": "Get Order",
         "description": "Get Order.",
@@ -1329,7 +1329,7 @@
         ]
       }
     },
-    "/api/v4/prediction/positions": {
+    "/api/v4/broker/prediction/positions": {
       "get": {
         "summary": "List Positions",
         "description": "List Positions.",
@@ -1420,7 +1420,7 @@
         ]
       }
     },
-    "/api/v4/prediction/positions/{position_id}": {
+    "/api/v4/broker/prediction/positions/{position_id}": {
       "get": {
         "summary": "Get Position",
         "description": "Get Position.",
@@ -1479,7 +1479,7 @@
         ]
       }
     },
-    "/api/v4/prediction/positions/{position_id}/close": {
+    "/api/v4/broker/prediction/positions/{position_id}/close": {
       "post": {
         "summary": "Close Position",
         "description": "Close Position.",
@@ -1538,7 +1538,7 @@
         ]
       }
     },
-    "/api/v4/prediction/usertrades": {
+    "/api/v4/broker/prediction/usertrades": {
       "get": {
         "summary": "List User Trades",
         "description": "List User Trades.",
@@ -1653,7 +1653,7 @@
         ]
       }
     },
-    "/api/v4/prediction/assets": {
+    "/api/v4/broker/prediction/assets": {
       "get": {
         "summary": "Get Account Assets",
         "description": "Get Account Assets.",
@@ -1702,7 +1702,7 @@
         }
       }
     },
-    "/api/v4/prediction/account_book": {
+    "/api/v4/broker/prediction/account_book": {
       "get": {
         "summary": "Get Account Book",
         "description": "Get Account Book.",
@@ -1769,7 +1769,7 @@
         ]
       }
     },
-    "/api/v4/prediction/fee": {
+    "/api/v4/broker/prediction/fee": {
       "get": {
         "summary": "Get Trading Fee",
         "description": "Get Trading Fee.",
@@ -1828,7 +1828,7 @@
         ]
       }
     },
-    "/api/v4/prediction/claims/available": {
+    "/api/v4/broker/prediction/claims/available": {
       "get": {
         "summary": "List Available Claims",
         "description": "List Available Claims.",
@@ -1877,7 +1877,7 @@
         }
       }
     },
-    "/api/v4/prediction/claims/available/{token_id}": {
+    "/api/v4/broker/prediction/claims/available/{token_id}": {
       "get": {
         "summary": "Get Available Claim for Token",
         "description": "Get Available Claim for Token.",
@@ -1936,7 +1936,7 @@
         ]
       }
     },
-    "/api/v4/prediction/claims": {
+    "/api/v4/broker/prediction/claims": {
       "post": {
         "summary": "Create Claim",
         "description": "Create Claim.",
@@ -2000,7 +2000,7 @@
         }
       }
     },
-    "/api/v4/prediction/claims/{record_id}": {
+    "/api/v4/broker/prediction/claims/{record_id}": {
       "get": {
         "summary": "Get Claim Result",
         "description": "Get Claim Result.",

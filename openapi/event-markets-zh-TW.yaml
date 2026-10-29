@@ -905,7 +905,7 @@
         ]
       }
     },
-    "/api/v4/prediction/orders": {
+    "/api/v4/broker/prediction/orders": {
       "post": {
         "summary": "提交訂單",
         "description": "提交訂單",
@@ -1213,7 +1213,7 @@
         ]
       }
     },
-    "/api/v4/prediction/orders/{order_id}": {
+    "/api/v4/broker/prediction/orders/{order_id}": {
       "get": {
         "summary": "查詢單個訂單",
         "description": "查詢單個訂單",
@@ -1329,7 +1329,7 @@
         ]
       }
     },
-    "/api/v4/prediction/positions": {
+    "/api/v4/broker/prediction/positions": {
       "get": {
         "summary": "查詢持倉清單",
         "description": "查詢持倉清單",
@@ -1420,7 +1420,7 @@
         ]
       }
     },
-    "/api/v4/prediction/positions/{position_id}": {
+    "/api/v4/broker/prediction/positions/{position_id}": {
       "get": {
         "summary": "查詢持倉詳情",
         "description": "查詢持倉詳情",
@@ -1479,7 +1479,7 @@
         ]
       }
     },
-    "/api/v4/prediction/positions/{position_id}/close": {
+    "/api/v4/broker/prediction/positions/{position_id}/close": {
       "post": {
         "summary": "平倉",
         "description": "平倉",
@@ -1538,7 +1538,7 @@
         ]
       }
     },
-    "/api/v4/prediction/usertrades": {
+    "/api/v4/broker/prediction/usertrades": {
       "get": {
         "summary": "查詢個人成交",
         "description": "查詢個人成交",
@@ -1653,7 +1653,7 @@
         ]
       }
     },
-    "/api/v4/prediction/assets": {
+    "/api/v4/broker/prediction/assets": {
       "get": {
         "summary": "查詢帳戶資產",
         "description": "查詢帳戶資產",
@@ -1702,7 +1702,7 @@
         }
       }
     },
-    "/api/v4/prediction/account_book": {
+    "/api/v4/broker/prediction/account_book": {
       "get": {
         "summary": "查詢資金流水",
         "description": "查詢資金流水",
@@ -1769,7 +1769,7 @@
         ]
       }
     },
-    "/api/v4/prediction/fee": {
+    "/api/v4/broker/prediction/fee": {
       "get": {
         "summary": "查詢手續費",
         "description": "查詢手續費",
@@ -1828,7 +1828,7 @@
         ]
       }
     },
-    "/api/v4/prediction/claims/available": {
+    "/api/v4/broker/prediction/claims/available": {
       "get": {
         "summary": "查詢全部可領取資產",
         "description": "查詢全部可領取資產",
@@ -1877,7 +1877,7 @@
         }
       }
     },
-    "/api/v4/prediction/claims/available/{token_id}": {
+    "/api/v4/broker/prediction/claims/available/{token_id}": {
       "get": {
         "summary": "查詢 Token 可領取資產",
         "description": "查詢 Token 可領取資產",
@@ -1936,7 +1936,7 @@
         ]
       }
     },
-    "/api/v4/prediction/claims": {
+    "/api/v4/broker/prediction/claims": {
       "post": {
         "summary": "發起領取",
         "description": "發起領取",
@@ -2000,7 +2000,7 @@
         }
       }
     },
-    "/api/v4/prediction/claims/{record_id}": {
+    "/api/v4/broker/prediction/claims/{record_id}": {
       "get": {
         "summary": "查詢領取結果",
         "description": "查詢領取結果",
