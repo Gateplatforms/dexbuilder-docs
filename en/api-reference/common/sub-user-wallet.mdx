@@ -1,0 +1,43 @@
+---
+title: "Access on behalf of a user"
+description: "When to pass sub_user_wallet_addr and how the Broker wallet ownership check works."
+---
+
+When your Broker calls a private endpoint on behalf of a user, authenticate with your Broker API Key and identify the user with the sub_user_wallet_addr request header. The gateway verifies that the wallet belongs to your Broker. You do not need the user's personal API Key or UID.
+
+## When to pass the wallet
+
+| Endpoint scope | sub_user_wallet_addr |
+| --- | --- |
+| DexBuilder asset-configuration queries | Not required |
+| DexBuilder user, deposit, and withdrawal endpoints | Required |
+| Prediction Markets and Event Contracts private REST endpoints | Required |
+| Prediction Markets and Event Contracts public market data | Not required |
+
+Private order, position, and account requests use the Broker path prefixes in [API conventions](/en/api-reference/common/overview). A request is rejected if the wallet does not belong to the Broker or the Key lacks the required permission.
+
+## DexBuilder Platform endpoints
+
+All paths below begin with /api/v4/dexbuilder. All require a Broker API Key and signature.
+
+| Group | Wallet | Endpoints |
+| --- | --- | --- |
+| Asset configuration | Not required | GET /assets, /networks, /dw_status, /fee, /withdraw_limit |
+| User | Required | GET /user/info, /wallet/list, /user/balance, /fund_stats |
+| Deposit | Required | POST /deposit/fee, /deposit/sign_data, /deposit/submit; GET /deposit/status, /deposit/history |
+| Withdrawal | Required | POST /withdraw/sign_data, /withdraw/submit, /withdraw/ata/check-and-build; GET /withdraw/status, /withdraw/history |
+
+Some endpoints require additional headers or Idempotency-Key; follow each endpoint page.
+
+## Example
+
+~~~http
+GET /api/v4/dexbuilder/user/info HTTP/1.1
+Host: api.dexbuilder.com
+KEY: <BROKER_API_KEY>
+Timestamp: <UNIX_SECONDS>
+SIGN: <SIGN>
+sub_user_wallet_addr: <USER_WALLET_ADDRESS>
+~~~
+
+sub_user_wallet_addr is not part of the REST signature string. See [Broker API Key and signing](/en/api-reference/common/broker-authentication). Private WebSocket channels identify the user according to their product-specific WebSocket documentation.

@@ -1,0 +1,39 @@
+---
+title: "API 使用說明"
+description: "DexBuilder API Reference 的接入地址、路由和通用請求約定。"
+---
+
+本文說明 DexBuilder 平台、預測市場和事件合約 API 的共同接入約定。各介面的參數、時間單位、分頁方式、回應和錯誤欄位以對應介面頁為準。
+
+## 接入地址與介面範圍
+
+生產環境 Base URL：`https://api.dexbuilder.com`。
+
+| 產品與介面類型 | 路徑前綴 | 認證要求 |
+| --- | --- | --- |
+| DexBuilder 平台 API | `/api/v4/dexbuilder/...` | 使用 Broker API Key 簽名；使用者級介面還需提供 `sub_user_wallet_addr` |
+| 預測市場公開行情 | `/api/v4/prediction/...` | 無需 Broker API Key |
+| 預測市場 Broker 私有介面 | `/api/v4/broker/prediction/...` | Broker API Key 簽名及 `sub_user_wallet_addr` |
+| 事件合約公開行情 | `/api/v4/event_contracts/...` | 無需 Broker API Key |
+| 事件合約 Broker 私有介面 | `/api/v4/broker/event_contracts/...` | Broker API Key 簽名及 `sub_user_wallet_addr` |
+
+DexBuilder 平台的資產配置查詢也使用 Broker API Key，但無需指定終端使用者錢包。具體介面清單見[代表使用者存取](/zh-TW/api-reference/common/sub-user-wallet)。
+
+<Note>
+  PerpDEX 目前不支持 Broker API。PerpDEX 介面使用獨立的 API Key 和認證規則，詳見[PerpDEX 認證與簽名](/zh-TW/api-reference/perpdex/authentication)。
+</Note>
+
+## 請求約定
+
+- 使用介面頁標明的 HTTP 方法、路徑、Query 參數和請求體。私有 REST 請求的簽名必須依據實際發送的請求內容計算，詳見[Broker API Key 與簽名](/zh-TW/api-reference/common/broker-authentication)。
+- `Timestamp` 請求頭使用 Unix 秒級時間戳。業務欄位的時間單位可能因產品和欄位而異，請以介面欄位說明為準。
+- 請求體、Query 參數的順序和編碼會影響簽名。計算簽名後，發送請求時保持參與簽名的內容不變。
+- 列表介面的分頁參數和回傳結構以對應介面頁為準。價格、數量和金額欄位應按介面給出的類型處理，涉及精度時使用十進制數。
+
+## 回應與錯誤
+
+不同產品的業務回應和錯誤欄位可能不同。請先根據 HTTP 狀態碼判斷請求結果，再按照對應介面頁及產品錯誤碼頁解析回應體。對提交類請求，若網路超時或收到不確定結果，應先查詢操作狀態，再決定是否重試；有冪等鍵要求的介面須按介面頁提供冪等鍵。
+
+- [DexBuilder 平台 API 概覽](/zh-TW/api-reference/dexbuilder/overview)
+- [預測市場 API 概覽](/zh-TW/event-markets/api/overview)與[錯誤碼](/zh-TW/event-markets/error-codes)
+- [事件合約 API 概覽](/zh-TW/event-contracts/api/overview)與[錯誤碼](/zh-TW/event-contracts/error-codes)

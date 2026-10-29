@@ -890,7 +890,9 @@
                 "groups": [
                   {
                     "group": "DexBuilder API",
-                    "pages": []
+                    "pages": [
+                      "en/api-reference/dexbuilder/overview"
+                    ]
                   }
                 ]
               },
@@ -899,7 +901,11 @@
                 "groups": [
                   {
                     "group": "Shared API guides",
-                    "pages": []
+                    "pages": [
+                      "en/api-reference/common/overview",
+                      "en/api-reference/common/broker-authentication",
+                      "en/api-reference/common/sub-user-wallet"
+                    ]
                   }
                 ]
               }
@@ -1326,7 +1332,11 @@
                 "groups": [
                   {
                     "group": "通用說明",
-                    "pages": []
+                    "pages": [
+                      "zh-TW/api-reference/common/overview",
+                      "zh-TW/api-reference/common/broker-authentication",
+                      "zh-TW/api-reference/common/sub-user-wallet"
+                    ]
                   }
                 ]
               }
