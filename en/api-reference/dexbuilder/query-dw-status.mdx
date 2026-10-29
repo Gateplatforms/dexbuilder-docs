@@ -1,0 +1,15 @@
+---
+title: "Get deposit and withdrawal availability"
+description: "Check whether deposits and withdrawals are enabled for an asset and network."
+openapi: "/openapi/dexbuilder-en.yaml GET /api/v4/dexbuilder/dw_status"
+---
+
+Check whether deposits and withdrawals are enabled for an asset and network.
+
+<Note>
+  Use a Broker API Key. This endpoint reads Broker configuration and does not require sub_user_wallet_addr. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
+</Note>
+
+## Usage notes
+
+- If asset or network is omitted, its corresponding response field is an empty string.

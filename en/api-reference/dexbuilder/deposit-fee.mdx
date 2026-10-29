@@ -1,0 +1,17 @@
+---
+title: "Estimate deposit fees"
+description: "Estimate the fees for a user's onchain deposit."
+openapi: "/openapi/dexbuilder-en.yaml POST /api/v4/dexbuilder/deposit/fee"
+---
+
+Estimate the fees for a user's onchain deposit.
+
+<Note>
+  Use a Broker API Key and pass the target user's wallet in sub_user_wallet_addr. The gateway checks that the wallet belongs to your Broker. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
+</Note>
+
+## Usage notes
+
+- address must be a wallet bound to the target user.
+- lz_fee is a USDT decimal string. Convert it to an integer using six decimal places before calling Get deposit signing data. For example, 0.5 becomes 500000.
+- Pass native_fee unchanged as an integer in the chain's smallest native unit.

@@ -1,0 +1,17 @@
+---
+title: "Check and build a Solana ATA"
+description: "Check whether a Solana associated token account exists and build its creation transaction when needed."
+openapi: "/openapi/dexbuilder-en.yaml POST /api/v4/dexbuilder/withdraw/ata/check-and-build"
+---
+
+Check whether a Solana associated token account exists and build its creation transaction when needed.
+
+<Note>
+  Use a Broker API Key and pass the target user's wallet in sub_user_wallet_addr. The gateway checks that the wallet belongs to your Broker. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
+</Note>
+
+## Usage notes
+
+- payer_address is the user's bound Solana wallet and pays onchain rent and fees. target_address is the ATA owner.
+- When status=0, have the user sign and broadcast the returned base64 tx_data before withdrawing. When status=1, the ATA exists and tx_data is empty.
+- You can query and build again after a failure.

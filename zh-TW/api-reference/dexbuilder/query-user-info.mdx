@@ -1,0 +1,15 @@
+---
+title: "查詢使用者資訊"
+description: "查詢終端使用者及已綁定錢包資訊。"
+openapi: "/openapi/dexbuilder-zh-TW.yaml GET /api/v4/dexbuilder/user/info"
+---
+
+查詢終端使用者及已綁定錢包資訊。
+
+<Note>
+  使用 Broker API Key 呼叫，並在請求頭提供 `sub_user_wallet_addr`。網關會校驗錢包與 Broker 的歸屬關係。 認證規則見[Broker API 認證與簽名](/zh-TW/api-reference/common/broker-authentication)。
+</Note>
+
+## 使用說明
+
+- 當前僅回傳已綁定錢包。使用者狀態為 `active`，錢包狀態為 `bound`。

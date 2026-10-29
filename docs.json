@@ -896,20 +896,41 @@
                       {
                         "group": "Asset configuration",
                         "pages": [
-                          "en/api-reference/dexbuilder/query-assets"
+                          "en/api-reference/dexbuilder/query-assets",
+                          "en/api-reference/dexbuilder/query-networks",
+                          "en/api-reference/dexbuilder/query-dw-status",
+                          "en/api-reference/dexbuilder/query-fee",
+                          "en/api-reference/dexbuilder/query-withdraw-limit"
                         ]
                       },
                       {
                         "group": "User",
-                        "pages": []
+                        "pages": [
+                          "en/api-reference/dexbuilder/query-user-info",
+                          "en/api-reference/dexbuilder/query-wallet-list",
+                          "en/api-reference/dexbuilder/query-user-balance",
+                          "en/api-reference/dexbuilder/query-fund-stats"
+                        ]
                       },
                       {
                         "group": "Deposit",
-                        "pages": []
+                        "pages": [
+                          "en/api-reference/dexbuilder/deposit-fee",
+                          "en/api-reference/dexbuilder/deposit-sign-data",
+                          "en/api-reference/dexbuilder/deposit-submit",
+                          "en/api-reference/dexbuilder/deposit-status",
+                          "en/api-reference/dexbuilder/deposit-history"
+                        ]
                       },
                       {
                         "group": "Withdrawal",
-                        "pages": []
+                        "pages": [
+                          "en/api-reference/dexbuilder/withdraw-sign-data",
+                          "en/api-reference/dexbuilder/withdraw-submit",
+                          "en/api-reference/dexbuilder/withdraw-status",
+                          "en/api-reference/dexbuilder/withdraw-history",
+                          "en/api-reference/dexbuilder/withdraw-ata-check-and-build"
+                        ]
                       }
                     ]
                   }
@@ -1347,11 +1368,20 @@
                       "zh-TW/api-reference/dexbuilder/authentication",
                       {
                         "group": "資產配置",
-                        "pages": []
+                        "pages": [
+                          "zh-TW/api-reference/dexbuilder/query-assets",
+                          "zh-TW/api-reference/dexbuilder/query-networks",
+                          "zh-TW/api-reference/dexbuilder/query-dw-status",
+                          "zh-TW/api-reference/dexbuilder/query-fee",
+                          "zh-TW/api-reference/dexbuilder/query-withdraw-limit"
+                        ]
                       },
                       {
                         "group": "使用者",
-                        "pages": []
+                        "pages": [
+                          "zh-TW/api-reference/dexbuilder/query-user-info",
+                          "zh-TW/api-reference/dexbuilder/query-wallet-list"
+                        ]
                       },
                       {
                         "group": "充值",

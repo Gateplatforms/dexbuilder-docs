@@ -1,0 +1,16 @@
+---
+title: "Get fixed deposit and withdrawal fees"
+description: "Get the fixed deposit and withdrawal fees configured by network."
+openapi: "/openapi/dexbuilder-en.yaml GET /api/v4/dexbuilder/fee"
+---
+
+Get the fixed deposit and withdrawal fees configured by network.
+
+<Note>
+  Use a Broker API Key. This endpoint reads Broker configuration and does not require sub_user_wallet_addr. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
+</Note>
+
+## Usage notes
+
+- deposit_fee and withdraw_fee are fixed USDT amounts, not percentage rates.
+- Pass x-perp-device-type as specified in the OpenAPI request parameters.

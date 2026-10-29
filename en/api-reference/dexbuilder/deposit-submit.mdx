@@ -1,0 +1,17 @@
+---
+title: "Submit a deposit transaction"
+description: "Report the hash of a broadcast deposit transaction."
+openapi: "/openapi/dexbuilder-en.yaml POST /api/v4/dexbuilder/deposit/submit"
+---
+
+Report the hash of a broadcast deposit transaction.
+
+<Note>
+  Use a Broker API Key and pass the target user's wallet in sub_user_wallet_addr. The gateway checks that the wallet belongs to your Broker. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
+</Note>
+
+## Usage notes
+
+- After the user signs and broadcasts the onchain transaction, submit its hash.
+- Idempotency-Key is required. Retrying with the same key for the same user and endpoint returns the first successful response; do not reuse the key for a different request.
+- success=true means the request was accepted. Query deposit status to determine the final onchain state.

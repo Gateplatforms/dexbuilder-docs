@@ -1,0 +1,16 @@
+---
+title: "List bound wallets"
+description: "List all wallets currently bound to a user."
+openapi: "/openapi/dexbuilder-en.yaml GET /api/v4/dexbuilder/wallet/list"
+---
+
+List all wallets currently bound to a user.
+
+<Note>
+  Use a Broker API Key and pass the target user's wallet in sub_user_wallet_addr. The gateway checks that the wallet belongs to your Broker. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
+</Note>
+
+## Usage notes
+
+- The current response returns all bound wallets without pagination.
+- bound_at is a Unix timestamp in milliseconds.

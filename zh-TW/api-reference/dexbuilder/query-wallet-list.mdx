@@ -1,0 +1,15 @@
+---
+title: "查詢錢包列表"
+description: "查詢終端使用者的全部已綁定錢包。"
+openapi: "/openapi/dexbuilder-zh-TW.yaml GET /api/v4/dexbuilder/wallet/list"
+---
+
+查詢終端使用者的全部已綁定錢包。
+
+<Note>
+  使用 Broker API Key 呼叫，並在請求頭提供 `sub_user_wallet_addr`。網關會校驗錢包與 Broker 的歸屬關係。 認證規則見[Broker API 認證與簽名](/zh-TW/api-reference/common/broker-authentication)。
+</Note>
+
+## 使用說明
+
+- 當前回傳全部已綁定錢包，不分頁；`bound_at` 為 Unix 毫秒時間戳。

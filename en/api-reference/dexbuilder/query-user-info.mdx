@@ -1,0 +1,15 @@
+---
+title: "Get user information"
+description: "Get a user's information and bound wallets."
+openapi: "/openapi/dexbuilder-en.yaml GET /api/v4/dexbuilder/user/info"
+---
+
+Get a user's information and bound wallets.
+
+<Note>
+  Use a Broker API Key and pass the target user's wallet in sub_user_wallet_addr. The gateway checks that the wallet belongs to your Broker. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
+</Note>
+
+## Usage notes
+
+- The current response lists bound wallets. User status is active and wallet status is bound.
