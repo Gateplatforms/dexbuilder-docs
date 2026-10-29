@@ -1,0 +1,15 @@
+---
+title: "Get deposit history"
+description: "List a user's deposit records."
+openapi: "/openapi/dexbuilder-en.yaml GET /api/v4/dexbuilder/deposit/history"
+---
+
+List a user's deposit records.
+
+<Note>
+  Use a Broker API Key and pass the target user's wallet in sub_user_wallet_addr. The gateway checks that the wallet belongs to your Broker. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
+</Note>
+
+## Usage notes
+
+- Current history records do not contain creation or update timestamps. Record the submission time in your own system if you need a timeline.

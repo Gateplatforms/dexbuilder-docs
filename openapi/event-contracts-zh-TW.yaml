@@ -905,7 +905,7 @@
         ]
       }
     },
-    "/api/v4/event_contracts/orders": {
+    "/api/v4/broker/event_contracts/orders": {
       "post": {
         "summary": "提交訂單",
         "description": "提交訂單",
@@ -983,10 +983,22 @@
                     "type": "string"
                   },
                   "order_type": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "GTC",
+                      "GTD",
+                      "FOK",
+                      "FAK"
+                    ],
+                    "description": "訂單有效方式：GTC、GTD、FOK 或 FAK"
                   },
                   "order_mode": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "LIMIT",
+                      "MARKET"
+                    ],
+                    "description": "下單模式：LIMIT 或 MARKET"
                   },
                   "client_order_id": {
                     "type": "string"
@@ -1058,7 +1070,15 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "processing",
+                "open",
+                "matched",
+                "canceled",
+                "failed"
+              ],
+              "description": "REST 訂單狀態，使用小寫值"
             }
           },
           {
@@ -1193,7 +1213,7 @@
         ]
       }
     },
-    "/api/v4/event_contracts/orders/{order_id}": {
+    "/api/v4/broker/event_contracts/orders/{order_id}": {
       "get": {
         "summary": "查詢單個訂單",
         "description": "查詢單個訂單",
@@ -1309,7 +1329,7 @@
         ]
       }
     },
-    "/api/v4/event_contracts/positions": {
+    "/api/v4/broker/event_contracts/positions": {
       "get": {
         "summary": "查詢持倉清單",
         "description": "查詢持倉清單",
@@ -1400,7 +1420,7 @@
         ]
       }
     },
-    "/api/v4/event_contracts/usertrades": {
+    "/api/v4/broker/event_contracts/usertrades": {
       "get": {
         "summary": "查詢個人成交",
         "description": "查詢個人成交",
@@ -1515,7 +1535,7 @@
         ]
       }
     },
-    "/api/v4/event_contracts/assets": {
+    "/api/v4/broker/event_contracts/assets": {
       "get": {
         "summary": "查詢帳戶資產",
         "description": "查詢帳戶資產",
@@ -1564,7 +1584,7 @@
         }
       }
     },
-    "/api/v4/event_contracts/account_book": {
+    "/api/v4/broker/event_contracts/account_book": {
       "get": {
         "summary": "查詢資金流水",
         "description": "查詢資金流水",
@@ -1786,7 +1806,7 @@
         ]
       }
     },
-    "/api/v4/event_contracts/positions/settled": {
+    "/api/v4/broker/event_contracts/positions/settled": {
       "get": {
         "summary": "查詢已結算持倉",
         "description": "查詢已結算的事件合約持倉。",
@@ -1869,7 +1889,7 @@
         ]
       }
     },
-    "/api/v4/event_contracts/balance": {
+    "/api/v4/broker/event_contracts/balance": {
       "get": {
         "summary": "查詢帳戶餘額",
         "description": "查詢目前使用者的事件合約帳戶餘額。",
@@ -1908,7 +1928,7 @@
         }
       }
     },
-    "/api/v4/event_contracts/fund_flows": {
+    "/api/v4/broker/event_contracts/fund_flows": {
       "get": {
         "summary": "查詢資金流水",
         "description": "查詢目前使用者資金流水，支援類型、時間範圍與游標分頁。",
@@ -2007,7 +2027,7 @@
         ]
       }
     },
-    "/api/v4/event_contracts/fee/current": {
+    "/api/v4/broker/event_contracts/fee/current": {
       "get": {
         "summary": "查詢目前手續費",
         "description": "查詢目前手續費設定。",
@@ -2066,7 +2086,7 @@
         ]
       }
     },
-    "/api/v4/event_contracts/transfer": {
+    "/api/v4/broker/event_contracts/transfer": {
       "post": {
         "summary": "事件合約轉帳",
         "description": "在現貨帳戶與事件合約子帳戶之間發起 USDT 劃轉。",
@@ -2815,7 +2835,10 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "accepted"
+            ]
           },
           "total_orders": {
             "type": "integer"
@@ -2827,7 +2850,10 @@
         "type": "object",
         "properties": {
           "cancel_status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "accepted"
+            ]
           },
           "order_id": {
             "type": "string"
@@ -2917,10 +2943,22 @@
             "type": "string"
           },
           "order_mode": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "LIMIT",
+              "MARKET"
+            ],
+            "description": "下單模式：LIMIT 或 MARKET"
           },
           "order_type": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "GTC",
+              "GTD",
+              "FOK",
+              "FAK"
+            ],
+            "description": "訂單有效方式：GTC、GTD、FOK 或 FAK"
           },
           "outcome": {
             "type": "string"
@@ -2941,7 +2979,15 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "processing",
+              "open",
+              "matched",
+              "canceled",
+              "failed"
+            ],
+            "description": "REST 訂單狀態，使用小寫值"
           },
           "token_id": {
             "type": "string"
@@ -2977,10 +3023,22 @@
             "type": "string"
           },
           "order_mode": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "LIMIT",
+              "MARKET"
+            ],
+            "description": "下單模式：LIMIT 或 MARKET"
           },
           "order_type": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "GTC",
+              "GTD",
+              "FOK",
+              "FAK"
+            ],
+            "description": "訂單有效方式：GTC、GTD、FOK 或 FAK"
           },
           "outcome": {
             "type": "string"
@@ -3001,7 +3059,15 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "processing",
+              "open",
+              "matched",
+              "canceled",
+              "failed"
+            ],
+            "description": "REST 訂單狀態，使用小寫值"
           },
           "token_id": {
             "type": "string"
@@ -3025,7 +3091,10 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "processing"
+            ]
           }
         },
         "description": "回應物件。"

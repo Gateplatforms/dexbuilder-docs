@@ -11,6 +11,4 @@ Event Contracts API provides REST API for market discovery, market data, orders,
 https://api.dexbuilder.com
 ```
 
-REST endpoints use the `/api/v4/event_contracts` prefix.
-
-Public market data does not require account authentication. Private order, position, account, and claim operations require the documented authentication flow.
+Public market-data REST endpoints use `/api/v4/event_contracts` and do not require authentication. Private order, position, account, and claim endpoints use `/api/v4/broker/event_contracts`. Call private endpoints with a Broker API Key and pass the target user's wallet address in `sub_user_wallet_addr`. See [Broker API Key and signing](/api-reference/common/broker-authentication) and [Access on behalf of a user](/api-reference/common/sub-user-wallet). Private WebSocket subscriptions use the separate [Broker WebSocket authentication](/en/event-contracts/websocket/authentication) flow.

@@ -1,0 +1,15 @@
+---
+title: "查询 Vault 余额"
+description: "查询终端用户的 Vault 可用余额。"
+openapi: "/openapi/dexbuilder.yaml GET /api/v4/dexbuilder/user/balance"
+---
+
+查询终端用户的 Vault 可用余额。
+
+<Note>
+  使用 Broker API Key 调用，并在请求头提供 `sub_user_wallet_addr`。网关会校验钱包与 Broker 的归属关系。 认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
+</Note>
+
+## 使用说明
+
+- `available` 为 USDT 计价的 Vault 可用余额。调用时按 OpenAPI 要求提供 `x-perp-device-type`。

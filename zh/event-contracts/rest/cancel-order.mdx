@@ -1,11 +1,11 @@
 ---
 title: "取消单个订单"
 description: "取消单个订单"
-openapi: "/openapi/event-contracts.yaml DELETE /api/v4/event_contracts/orders/{order_id}"
+openapi: "/openapi/event-contracts.yaml DELETE /api/v4/broker/event_contracts/orders/{order_id}"
 ---
 
-取消单个订单。
-
 <Note>
-该接口为私有接口，需要按照事件合约认证要求完成认证后调用。
+  此接口仅供 Broker 使用。请求须携带 Broker API Key、`Timestamp`、`SIGN` 和 `sub_user_wallet_addr`。网关确认钱包属于当前 Broker 后转发。请按外部 `/api/v4/broker/...` 路径计算签名。详见[Broker API 认证与签名](/zh/event-contracts/api/broker-authentication).
 </Note>
+
+取消单个订单。

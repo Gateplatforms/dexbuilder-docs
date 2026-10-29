@@ -1,0 +1,15 @@
+---
+title: "查询用户信息"
+description: "查询终端用户及已绑定钱包信息。"
+openapi: "/openapi/dexbuilder.yaml GET /api/v4/dexbuilder/user/info"
+---
+
+查询终端用户及已绑定钱包信息。
+
+<Note>
+  使用 Broker API Key 调用，并在请求头提供 `sub_user_wallet_addr`。网关会校验钱包与 Broker 的归属关系。 认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
+</Note>
+
+## 使用说明
+
+- 当前仅返回已绑定钱包。用户状态为 `active`，钱包状态为 `bound`。

@@ -1,0 +1,27 @@
+---
+title: "DexBuilder 平台 API 認證"
+description: "使用 Broker API Key 存取平台介面，並按介面要求提供使用者錢包地址。"
+---
+
+DexBuilder 平台 API 的 Base URL 為 `https://api.dexbuilder.com`，路徑以 `/api/v4/dexbuilder` 開頭。所有介面都需要 `KEY`、`Timestamp` 和 `SIGN` 請求頭。簽名方法見[Broker API Key 與簽名](/zh-TW/api-reference/common/broker-authentication)。
+
+Broker API Key 須具備 `dex_builder` 產品權限。查詢介面需要唯讀或讀寫權限；提交介面需要讀寫權限。終端使用者的個人 API Key 不可代替 Broker API Key。
+
+## 使用者錢包地址
+
+五個資產配置介面不需要 `sub_user_wallet_addr`。其餘 14 個使用者、充值和提現介面須在此請求頭提供目標使用者的錢包地址。網關會驗證該錢包所屬使用者是否屬於目前的 Broker。完整清單見[代表使用者存取](/zh-TW/api-reference/common/sub-user-wallet)。
+
+充值和提現的提交介面還需要 `Idempotency-Key`。其他請求頭以各介面的參數說明為準。
+
+## 請求示例
+
+```bash
+curl -i --request GET "https://api.dexbuilder.com/api/v4/dexbuilder/user/info" \
+  --header "KEY: <BROKER_API_KEY>" \
+  --header "SIGN: <SIGN>" \
+  --header "Timestamp: <UNIX_SECONDS>" \
+  --header "sub_user_wallet_addr: <USER_WALLET>" \
+  --header "Accept: application/json"
+```
+
+請以實際傳送的請求方法、外部路徑、查詢字串、請求體和時間戳產生 `SIGN`。

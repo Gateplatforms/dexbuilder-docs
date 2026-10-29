@@ -1,0 +1,15 @@
+---
+title: "查询费率"
+description: "查询按链计算的固定充值和提现手续费。"
+openapi: "/openapi/dexbuilder.yaml GET /api/v4/dexbuilder/fee"
+---
+
+查询按链计算的固定充值和提现手续费。
+
+<Note>
+  使用 Broker API Key 调用。此接口查询 Broker 配置，无需提供 `sub_user_wallet_addr`。 认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
+</Note>
+
+## 使用说明
+
+- `deposit_fee` 和 `withdraw_fee` 为 USDT 计价的固定金额，不是费率。调用时按 OpenAPI 要求提供 `x-perp-device-type`。

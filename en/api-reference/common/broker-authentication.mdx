@@ -1,0 +1,90 @@
+---
+title: "Broker API Key and signing"
+description: "Authenticate private DexBuilder Platform, Prediction Markets, and Event Contracts REST requests."
+---
+
+Use the Broker API Key assigned to your Broker to call private REST endpoints from your server. An end user's personal API Key cannot replace it. PerpDEX does not currently support Broker API. Private WebSocket subscriptions use the authentication method in their product documentation.
+
+## Key, secret, and permissions
+
+- Put the Broker API Key in the KEY request header.
+- Use the Secret Key on your server to generate SIGN. Never send the Secret Key.
+- Enable the product and read or read-write permissions required by the endpoint. DexBuilder Platform endpoints also require dex_builder permission.
+- If your Key has an IP allowlist, send requests from an allowed server egress IP.
+
+The product team provides the process for requesting, changing, and rotating Broker API Keys.
+
+## Required headers
+
+| Header | Requirement |
+| --- | --- |
+| KEY | Broker API Key on every private REST request |
+| Timestamp | Unix seconds, within 60 seconds of server time |
+| SIGN | Hexadecimal HMAC-SHA512 signature generated with the Secret Key |
+| sub_user_wallet_addr | Required on user-level endpoints; see [Access on behalf of a user](/en/api-reference/common/sub-user-wallet) |
+
+## Signature string
+
+Join these five values with a single newline character between each pair:
+
+~~~text
+HTTP_METHOD
+REQUEST_PATH
+QUERY_STRING
+HexEncode(SHA512(REQUEST_BODY))
+TIMESTAMP
+~~~
+
+Then calculate SIGN = HexEncode(HMAC_SHA512(Secret Key, signature string)).
+
+- HTTP_METHOD is uppercase, such as GET or POST.
+- REQUEST_PATH is the external path with the /api/v4 prefix, without the domain or query string. For example: /api/v4/broker/prediction/positions.
+- QUERY_STRING keeps the order of the sent parameters and uses their unencoded values for signing. Use an empty string when there is no query.
+- REQUEST_BODY is the exact body sent. Hash the empty string for requests without a body. Changing JSON field order, whitespace, or line breaks changes the hash.
+- TIMESTAMP must equal the Timestamp header.
+- sub_user_wallet_addr is a separate header and is not included in the REST signature string.
+
+Use /api/v4/dexbuilder/... for DexBuilder Platform, /api/v4/broker/prediction/... for private Prediction Markets, and /api/v4/broker/event_contracts/... for private Event Contracts requests.
+
+## GET request example
+
+~~~python
+import hashlib
+import hmac
+import os
+import time
+
+path = "/api/v4/dexbuilder/user/info"
+timestamp = str(int(time.time()))
+payload_hash = hashlib.sha512(b"").hexdigest()
+signature_string = "\n".join(["GET", path, "", payload_hash, timestamp])
+sign = hmac.new(
+    os.environ["BROKER_API_SECRET"].encode("utf-8"),
+    signature_string.encode("utf-8"),
+    hashlib.sha512,
+).hexdigest()
+
+print("Timestamp:", timestamp)
+print("SIGN:", sign)
+~~~
+
+Use the generated Timestamp and SIGN immediately in the corresponding request. Pass the target user's wallet in sub_user_wallet_addr.
+
+~~~bash
+curl -i --request GET "https://api.dexbuilder.com/api/v4/dexbuilder/user/info" \
+  --header "KEY: <BROKER_API_KEY>" \
+  --header "SIGN: <SIGN>" \
+  --header "Timestamp: <UNIX_SECONDS>" \
+  --header "sub_user_wallet_addr: <USER_WALLET>" \
+  --header "Accept: application/json"
+~~~
+
+For a request body, finalize the exact bytes before calculating the body hash and signature.
+
+## Troubleshooting
+
+If authentication fails, check the Key's product and access permissions, IP allowlist, server clock, external path, query parameter order, and body bytes. For user-level requests, also confirm that the wallet belongs to your Broker.
+
+<Warning>
+  Keep the Secret Key on a trusted server. Do not put it in frontend code, logs, or support tickets.
+</Warning>

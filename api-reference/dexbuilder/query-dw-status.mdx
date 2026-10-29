@@ -1,0 +1,15 @@
+---
+title: "查询充提开关"
+description: "查询资产及网络的充值和提现开关。"
+openapi: "/openapi/dexbuilder.yaml GET /api/v4/dexbuilder/dw_status"
+---
+
+查询资产及网络的充值和提现开关。
+
+<Note>
+  使用 Broker API Key 调用。此接口查询 Broker 配置，无需提供 `sub_user_wallet_addr`。 认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
+</Note>
+
+## 使用说明
+
+- 未提供 `asset` 或 `network` 时，对应响应字段为空字符串；开关对应指定的资产与网络。

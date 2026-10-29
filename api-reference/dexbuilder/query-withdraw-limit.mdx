@@ -1,0 +1,15 @@
+---
+title: "查询提现限额"
+description: "查询单笔及单日提现限额。"
+openapi: "/openapi/dexbuilder.yaml GET /api/v4/dexbuilder/withdraw_limit"
+---
+
+查询单笔及单日提现限额。
+
+<Note>
+  使用 Broker API Key 调用。此接口查询 Broker 配置，无需提供 `sub_user_wallet_addr`。 认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
+</Note>
+
+## 使用说明
+
+- `once` 与 `day` 为 USDT 计价的限额。调用时按 OpenAPI 要求提供 `x-perp-device-type`。

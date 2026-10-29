@@ -1,0 +1,15 @@
+---
+title: "查询资产网络"
+description: "查询资产支持的充值和提现网络。"
+openapi: "/openapi/dexbuilder.yaml GET /api/v4/dexbuilder/networks"
+---
+
+查询资产支持的充值和提现网络。
+
+<Note>
+  使用 Broker API Key 调用。此接口查询 Broker 配置，无需提供 `sub_user_wallet_addr`。 认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
+</Note>
+
+## 使用说明
+
+- 当前主要提供 USDT 的 Ethereum 网络；`min_deposit` 和 `min_withdraw` 是可读的 token 数量，非链上最小单位。

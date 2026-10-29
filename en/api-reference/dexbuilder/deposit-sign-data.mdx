@@ -1,0 +1,17 @@
+---
+title: "Get deposit signing data"
+description: "Get the calldata and contract address needed for an onchain deposit."
+openapi: "/openapi/dexbuilder-en.yaml POST /api/v4/dexbuilder/deposit/sign_data"
+---
+
+Get the calldata and contract address needed for an onchain deposit.
+
+<Note>
+  Use a Broker API Key and pass the target user's wallet in sub_user_wallet_addr. The gateway checks that the wallet belongs to your Broker. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
+</Note>
+
+## Usage notes
+
+- You can first estimate deposit fees, then pass native_fee unchanged and convert lz_fee using six USDT decimal places.
+- A first successful call may persistently bind the user's Perp account. Repeated calls do not bind it again.
+- Use contract_address and data to build the onchain transaction. x-perp-device-type is optional and recommended for risk controls.

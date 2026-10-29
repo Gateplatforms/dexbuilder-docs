@@ -1,0 +1,46 @@
+---
+title: "代表用户访问"
+description: "Broker 私有接口中 sub_user_wallet_addr 的使用范围与钱包归属要求。"
+---
+
+Broker 代旗下用户访问私有接口时，使用 Broker API Key 证明 Broker 身份，并通过请求头 `sub_user_wallet_addr` 指定本次请求对应的终端用户钱包。平台会校验该钱包与当前 Broker 的归属关系。无需提供终端用户的个人 API Key 或用户 UID。
+
+## 何时传递钱包地址
+
+| 接口范围 | `sub_user_wallet_addr` |
+| --- | --- |
+| DexBuilder 平台的资产配置查询 | 不需要 |
+| DexBuilder 平台的用户、充值与提现接口 | 必需 |
+| 预测市场的 Broker 私有 REST 接口 | 必需 |
+| 事件合约的 Broker 私有 REST 接口 | 必需 |
+| 预测市场和事件合约的公开行情接口 | 不需要 |
+
+预测市场和事件合约的公开行情继续使用各自的公开路径；订单、持仓、账户等私有请求使用 Broker 路径。路径前缀见[API 使用说明](/api-reference/common/overview)。钱包地址未绑定到当前 Broker，或 Key 不具备相应权限时，请求会被拒绝。
+
+## DexBuilder 平台接口清单
+
+以下路径均以 `/api/v4/dexbuilder` 为前缀。所有接口都需要 Broker API Key 和签名；表中的“钱包地址”表示是否还需传递 `sub_user_wallet_addr`。
+
+| 类别 | 钱包地址 | 接口路径 |
+| --- | --- | --- |
+| 资产配置 | 不需要 | `GET /assets`、`GET /networks`、`GET /dw_status`、`GET /fee`、`GET /withdraw_limit` |
+| 用户 | 必需 | `GET /user/info`、`GET /wallet/list`、`GET /user/balance`、`GET /fund_stats` |
+| 充值 | 必需 | `POST /deposit/fee`、`POST /deposit/sign_data`、`POST /deposit/submit`、`GET /deposit/status`、`GET /deposit/history` |
+| 提现 | 必需 | `POST /withdraw/sign_data`、`POST /withdraw/submit`、`POST /withdraw/ata/check-and-build`、`GET /withdraw/status`、`GET /withdraw/history` |
+
+这 5 个资产配置接口查询当前 Broker 的配置，不指定终端用户；其余 14 个接口需要钱包地址。部分接口还有额外请求头或幂等键要求，详见对应接口页。
+
+## 发送请求
+
+例如查询用户信息时，请在签名请求中附加钱包地址：
+
+```http
+GET /api/v4/dexbuilder/user/info HTTP/1.1
+Host: api.dexbuilder.com
+KEY: <BROKER_API_KEY>
+Timestamp: <UNIX_SECONDS>
+SIGN: <SIGN>
+sub_user_wallet_addr: <USER_WALLET_ADDRESS>
+```
+
+`sub_user_wallet_addr` 不参与 REST 签名原文；签名步骤见[Broker API Key 与签名](/api-reference/common/broker-authentication)。WebSocket 私有频道的用户身份和认证方式以对应产品的 WebSocket 文档为准。

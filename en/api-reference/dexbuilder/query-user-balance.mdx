@@ -1,0 +1,16 @@
+---
+title: "Get Vault balance"
+description: "Get a user's available Vault balance."
+openapi: "/openapi/dexbuilder-en.yaml GET /api/v4/dexbuilder/user/balance"
+---
+
+Get a user's available Vault balance.
+
+<Note>
+  Use a Broker API Key and pass the target user's wallet in sub_user_wallet_addr. The gateway checks that the wallet belongs to your Broker. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
+</Note>
+
+## Usage notes
+
+- available is the Vault balance denominated in USDT.
+- Pass x-perp-device-type as specified in the OpenAPI request parameters.

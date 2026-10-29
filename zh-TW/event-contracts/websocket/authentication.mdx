@@ -1,38 +1,62 @@
 ---
-title: "認證與連接可靠性"
+title: "Broker WebSocket 認證"
 sidebarTitle: "認證"
-description: "完成事件合約私有 WebSocket 認證，並處理心跳、錯誤和斷線重連。"
+description: "使用 Broker API Key 和使用者錢包地址訂閱私有 WebSocket 頻道。"
 ---
 
-只有私有频道需要认证，公共行情频道可以直接订阅。
+公開行情頻道無需認證。訂閱私有頻道時，請使用 `broker_api_key` 認證方式，並在 `auth.wallet_address` 傳入目標使用者的錢包地址。該錢包須屬於目前 Broker。
 
-## API Key 签名
+## 私有訂閱簽名
 
-在 `auth` 中传入 API Key 和本地生成的 HMAC-SHA512 签名：
-
-```json
-{"method":"api_key","key":"YOUR_API_KEY","sign":"HEX_SIGNATURE"}
-```
-
-直接订阅私有频道时，签名原文为：
+請求中的 `t` 是 Unix 毫秒時間戳。簽名原文的 `time` 使用 `floor(t / 1000)`。錢包地址按 URL Query 規則編碼，欄位順序固定：
 
 ```text
-channel=ec.orders&event=subscribe&time=1720000000123
+channel=ec.orders&event=subscribe&time=<Unix 秒>&wallet_address=<URL 編碼的錢包地址>
 ```
 
-使用 API Secret 作为 HMAC-SHA512 密钥并输出十六进制摘要。API Secret 不能发送到服务端。
+使用 Broker API Secret 計算 `HexEncode(HMAC_SHA512(Secret, UTF8(簽名原文)))`。WebSocket 簽名包含錢包地址，與 REST 請求簽名規則不同。請勿傳送 API Secret。
 
-## 私有订阅示例
+## 訂閱示例
 
 ```json
 {
   "t": 1720000000123,
-  "id": "private-1",
+  "id": "broker-private-1",
   "op": "subscribe",
   "ch": "ec.orders",
   "payload": {"all": true},
-  "auth": {"method":"api_key","key":"YOUR_API_KEY","sign":"HEX_SIGNATURE"}
+  "auth": {
+    "method": "broker_api_key",
+    "key": "YOUR_BROKER_API_KEY",
+    "sign": "HEX_SIGNATURE",
+    "wallet_address": "<USER_WALLET>"
+  }
 }
 ```
 
-`ec.usertrades`、`ec.positions` 和 `ec.settlements` 使用相同的 API Key 认证方式。
+此示例的簽名時間 `time` 為 `1720000000`。訂閱其他私有頻道時，請使用實際頻道名稱重新簽名。簽名使用的錢包地址須與 `auth.wallet_address` 完全一致。
+
+## 連線預先認證（可選）
+
+也可以先使用 `server.sign` 認證連線。此時請另行簽名，不能重用訂閱簽名：
+
+```text
+channel=server.sign&event=auth&time=1720000000&wallet_address=<URL 編碼的錢包地址>
+```
+
+```json
+{
+  "t": 1720000000123,
+  "id": "broker-auth-1",
+  "op": "auth",
+  "ch": "server.sign",
+  "payload": {
+    "method": "broker_api_key",
+    "key": "YOUR_BROKER_API_KEY",
+    "sign": "HEX_SIGNATURE",
+    "wallet_address": "<USER_WALLET>"
+  }
+}
+```
+
+連線認證成功後，後續私有訂閱及取消訂閱可省略 `auth`。一條連線只綁定一個使用者；切換使用者需建立新連線，斷線重連後需重新認證。請在 WebSocket 訊息中提供錢包地址；握手時無需傳遞 REST 的 `sub_user_wallet_addr` Header。REST 簽名規則見 [Broker API Key 與簽名](/api-reference/common/broker-authentication)。

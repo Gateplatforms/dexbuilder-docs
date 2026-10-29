@@ -1,0 +1,103 @@
+---
+title: "Broker API Key 與簽名"
+description: "DexBuilder 平台、預測市場和事件合約 Broker 私有 REST 介面的認證方法。"
+---
+
+本頁適用於 DexBuilder 平台、預測市場和事件合約的 **Broker 私有 REST 介面**。Broker 使用分配給自身的 Broker API Key 在服務端呼叫介面。終端使用者的個人 API Key 不能代替 Broker API Key。
+
+<Note>
+  PerpDEX 目前不支持 Broker API，其 API Key 和簽名規則見[PerpDEX 認證與簽名](/zh-TW/api-reference/perpdex/authentication)。WebSocket 私有頻道的認證以對應產品的 WebSocket 文檔為準。
+</Note>
+
+## Key、Secret 與權限
+
+- `Key` 用於標識 Broker，放入請求頭 `KEY`。
+- `Secret Key` 僅用於在 Broker 服務端生成簽名，不隨請求發送。
+- 呼叫前確認 Key 已開通目標產品及介面權限。只讀權限用於查詢；提交類操作需要讀寫權限。DexBuilder 平台介面還需要 `dex_builder` 權限。
+- 如果當前 Key 配置了 IP 白名單，應從已允許的服務端出口 IP 發起請求。
+
+Broker API Key 的申請、變更與輪換流程由產品方提供。
+
+## 請求頭
+
+| Header | 要求 |
+| --- | --- |
+| `KEY` | Broker API Key，私有 REST 請求必傳 |
+| `Timestamp` | Unix 秒級時間戳，私有 REST 請求必傳；與服務端時間差不超過 60 秒 |
+| `SIGN` | 使用 Secret Key 計算的 HMAC-SHA512 十六進制簽名，私有 REST 請求必傳 |
+| `sub_user_wallet_addr` | 使用者級介面必傳；適用範圍見[代表使用者存取](/zh-TW/api-reference/common/sub-user-wallet) |
+
+## 簽名原文
+
+按以下順序連接五段內容，段與段之間使用一個換行符 `\n`：
+
+```text
+HTTP_METHOD
+REQUEST_PATH
+QUERY_STRING
+HexEncode(SHA512(REQUEST_BODY))
+TIMESTAMP
+```
+
+然後計算：
+
+```text
+SIGN = HexEncode(HMAC_SHA512(Secret Key, 簽名原文))
+```
+
+- `HTTP_METHOD` 使用大寫方法名，例如 `GET`、`POST`。
+- `REQUEST_PATH` 是實際請求的外部路徑，包含 `/api/v4` 前綴，不包含域名和 Query。例如 `/api/v4/broker/prediction/positions`。
+- `QUERY_STRING` 與實際請求參數的順序一致；簽名時使用未 URL 編碼的參數串。沒有 Query 時使用空字符串。
+- `REQUEST_BODY` 使用實際發送的請求體原文。沒有請求體時，對空字符串計算 SHA512。JSON 序列化後的欄位順序、空格和換行變化會改變摘要。
+- `TIMESTAMP` 必須與請求頭 `Timestamp` 的值完全一致。
+- `sub_user_wallet_addr` 是單獨的請求頭，不拼入上述簽名原文。
+
+簽名時必須使用實際存取的外部路徑：DexBuilder 平台為 `/api/v4/dexbuilder/...`，預測市場 Broker 私有介面為 `/api/v4/broker/prediction/...`，事件合約 Broker 私有介面為 `/api/v4/broker/event_contracts/...`。
+
+## GET 請求示例
+
+下面的 Python 示例生成查詢使用者資訊所需的 `SIGN`。將 Broker 憑據保存在服務端環境變量中，生成的 `Timestamp` 和 `SIGN` 用於緊接著發送的同一請求。
+
+```python
+import hashlib
+import hmac
+import os
+import time
+
+path = "/api/v4/dexbuilder/user/info"
+timestamp = str(int(time.time()))
+payload_hash = hashlib.sha512(b"").hexdigest()
+signature_string = "\n".join(["GET", path, "", payload_hash, timestamp])
+sign = hmac.new(
+    os.environ["BROKER_API_SECRET"].encode("utf-8"),
+    signature_string.encode("utf-8"),
+    hashlib.sha512,
+).hexdigest()
+
+print("Timestamp:", timestamp)
+print("SIGN:", sign)
+```
+
+以下示例查詢使用者資訊。先生成 `SIGN`，再發送請求；`sub_user_wallet_addr` 為目標使用者的錢包地址。
+
+```bash
+BASE_URL="https://api.dexbuilder.com"
+API_PATH="/api/v4/dexbuilder/user/info"
+
+curl -i --request GET "${BASE_URL}${API_PATH}" \
+  --header "KEY: ${BROKER_API_KEY}" \
+  --header "SIGN: ${SIGN}" \
+  --header "Timestamp: ${TIMESTAMP}" \
+  --header "sub_user_wallet_addr: ${WALLET}" \
+  --header "Accept: application/json"
+```
+
+對帶請求體的操作，應先確定最終發送的請求體字節，再據此計算摘要和簽名。不要在簽名後改變請求路徑、Query 或 Body。
+
+## 認證問題排查
+
+認證失敗時，請依次核對 Key 的產品與讀寫權限、IP 白名單、服務器時間、外部路徑、Query 參數順序，以及 Body 是否與計算摘要時完全一致。使用者級請求還需確認錢包地址屬於當前 Broker。錯誤回應的具體欄位以對應產品文檔為準。
+
+<Warning>
+  Secret Key 只應保存在可信服務端。不要將其寫入前端代碼、日誌或工單；排查問題時也應避免記錄完整認證請求。
+</Warning>

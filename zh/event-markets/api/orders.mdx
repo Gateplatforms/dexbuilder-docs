@@ -21,8 +21,8 @@ POST /api/v4/prediction/orders
 | `price` | string | 限价价格 |
 | `size` | string | 下单数量 |
 | `total_cost` | string | 指定模式下使用的总成本 |
-| `order_type` | string | 订单类型 |
-| `order_mode` | string | 有效方式 / 执行模式 |
+| `order_type` | string | 订单有效方式：`GTC`、`GTD`、`FOK` 或 `FAK` |
+| `order_mode` | string | 下单模式：`LIMIT` 或 `MARKET` |
 | `client_order_id` | string | 客户端自定义订单 ID |
 | `post_only` | boolean | 是否仅作为 Maker |
 | `sell_all` | boolean | 是否卖出全部可用持仓 |
@@ -31,7 +31,7 @@ POST /api/v4/prediction/orders
 ```bash
 curl -X POST 'https://api.dexbuilder.com/api/v4/prediction/orders' \
   -H 'Content-Type: application/json' \
-  -d '{"token_id":"token-yes","side":"BUY","price":"0.4200","size":"10","order_type":"LIMIT","order_mode":"GTC","client_order_id":"client-123","post_only":false,"expire_time":0}'
+  -d '{"token_id":"token-yes","side":"BUY","price":"0.4200","size":"10","order_type":"GTC","order_mode":"LIMIT","client_order_id":"client-123","post_only":false,"expire_time":0}'
 ```
 
 成功受理后返回 `order_id`、`client_order_id`、`status` 和 `created_at`。受理成功不代表已经成交。
@@ -42,7 +42,7 @@ curl -X POST 'https://api.dexbuilder.com/api/v4/prediction/orders' \
 GET /api/v4/prediction/orders
 ```
 
-支持按 `status`、`condition_id`、`event_id`、`order_id`、`client_order_id`、`from`、`to`、`sort_type`、`limit` 和 `cursor` 筛选。
+`status` 使用小写值 `processing`、`open`、`matched`、`canceled` 或 `failed`。支持按 `status`、`condition_id`、`event_id`、`order_id`、`client_order_id`、`from`、`to`、`sort_type`、`limit` 和 `cursor` 筛选。
 
 订单记录通常包含：
 

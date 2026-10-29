@@ -1,0 +1,16 @@
+---
+title: "Get deposit status"
+description: "Look up the state of a deposit by its transaction hash."
+openapi: "/openapi/dexbuilder-en.yaml GET /api/v4/dexbuilder/deposit/status"
+---
+
+Look up the state of a deposit by its transaction hash.
+
+<Note>
+  Use a Broker API Key and pass the target user's wallet in sub_user_wallet_addr. The gateway checks that the wallet belongs to your Broker. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
+</Note>
+
+## Usage notes
+
+- Status values: 0 not found, 10 confirming, 20 successful, 30 failed. Values 20 and 30 are terminal states.
+- While processing, you may poll every 3 to 10 seconds.

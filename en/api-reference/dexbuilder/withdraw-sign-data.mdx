@@ -1,0 +1,16 @@
+---
+title: "Get withdrawal signing data"
+description: "Get the data a user must sign to request a withdrawal."
+openapi: "/openapi/dexbuilder-en.yaml POST /api/v4/dexbuilder/withdraw/sign_data"
+---
+
+Get the data a user must sign to request a withdrawal.
+
+<Note>
+  Use a Broker API Key and pass the target user's wallet in sub_user_wallet_addr. The gateway checks that the wallet belongs to your Broker. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
+</Note>
+
+## Usage notes
+
+- address is the user's bound signing wallet; to_address may be a third-party destination.
+- After the user signs data, pass the signature components and the unchanged timestamp to Submit a withdrawal.

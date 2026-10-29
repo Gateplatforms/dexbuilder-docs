@@ -1,0 +1,35 @@
+---
+title: "API conventions"
+description: "Base URL, route prefixes, authentication scope, and shared request conventions for DexBuilder APIs."
+---
+
+This page describes the shared conventions for the DexBuilder Platform, Prediction Markets, and Event Contracts APIs. Follow each endpoint page for its exact parameters and response model.
+
+## Base URL and routes
+
+The production Base URL is https://api.dexbuilder.com.
+
+| API | Path prefix | Authentication |
+| --- | --- | --- |
+| DexBuilder Platform | /api/v4/dexbuilder/... | Broker API Key; user-level endpoints also require sub_user_wallet_addr |
+| Prediction Markets public data | /api/v4/prediction/... | No Broker API Key |
+| Prediction Markets private | /api/v4/broker/prediction/... | Broker API Key and sub_user_wallet_addr |
+| Event Contracts public data | /api/v4/event_contracts/... | No Broker API Key |
+| Event Contracts private | /api/v4/broker/event_contracts/... | Broker API Key and sub_user_wallet_addr |
+
+The five DexBuilder asset-configuration queries require a Broker API Key but no user wallet. See [Access on behalf of a user](/en/api-reference/common/sub-user-wallet).
+
+<Note>
+  PerpDEX does not currently support Broker API. Its API Key and authentication rules are separate.
+</Note>
+
+## Request conventions
+
+- Sign private REST requests using the method, external path, query string, body, and Timestamp you actually send. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
+- Timestamp is a Unix timestamp in seconds. Business-field time units vary; use the field description on each endpoint.
+- Keep query parameter order and body bytes unchanged after signing.
+- Follow each endpoint's pagination and response model. Use decimal arithmetic for monetary values where precision matters.
+
+## Responses and errors
+
+Response and error shapes differ by product. Check the HTTP status and the product-specific response body. If a submission times out or its result is uncertain, query its status before deciding whether to retry. Supply Idempotency-Key where the endpoint requires it.

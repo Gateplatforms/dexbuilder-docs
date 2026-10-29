@@ -1,0 +1,16 @@
+---
+title: "Get withdrawal status"
+description: "Look up the state of a withdrawal by its event ID."
+openapi: "/openapi/dexbuilder-en.yaml GET /api/v4/dexbuilder/withdraw/status"
+---
+
+Look up the state of a withdrawal by its event ID.
+
+<Note>
+  Use a Broker API Key and pass the target user's wallet in sub_user_wallet_addr. The gateway checks that the wallet belongs to your Broker. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
+</Note>
+
+## Usage notes
+
+- Status values: 0 not found, 10 pending withdrawal, 11 confirming, 20 successful, 30 failed. Values 20 and 30 are terminal states.
+- tx_hash is empty before the transaction is submitted onchain. While processing, you may poll every 3 to 10 seconds.

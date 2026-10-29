@@ -4,7 +4,7 @@ sidebarTitle: "Account Activity"
 description: "Query Prediction Markets positions, trades, and related activity for the currently authenticated account."
 ---
 
-The Prediction Markets API provides positions and trade records for the currently authenticated account. These are private endpoints and require authentication.
+The Broker API returns positions and trades for the user identified by `sub_user_wallet_addr`. These private endpoints require a Broker API Key. See [Broker API Key and signing](/api-reference/common/broker-authentication).
 
 Production Base URL:
 
@@ -15,8 +15,11 @@ https://api.dexbuilder.com
 ## List Positions
 
 ```bash cURL
-curl -G "https://api.dexbuilder.com/api/v4/prediction/positions" \
-  -H "<authentication-header>: <authentication-value>" \
+curl -G "https://api.dexbuilder.com/api/v4/broker/prediction/positions" \
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${USER_WALLET}" \
   --data-urlencode "event_id=<event_id>" \
   --data-urlencode "condition_id=<condition_id>" \
   --data-urlencode "settlement_status=OPEN" \
@@ -45,15 +48,21 @@ Use the returned `next_cursor` as `cursor` for the next page.
 ## Get a Position
 
 ```bash cURL
-curl "https://api.dexbuilder.com/api/v4/prediction/positions/<position_id>" \
-  -H "<authentication-header>: <authentication-value>"
+curl "https://api.dexbuilder.com/api/v4/broker/prediction/positions/<position_id>" \
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${USER_WALLET}"
 ```
 
 ## List User Trades
 
 ```bash cURL
-curl -G "https://api.dexbuilder.com/api/v4/prediction/usertrades" \
-  -H "<authentication-header>: <authentication-value>" \
+curl -G "https://api.dexbuilder.com/api/v4/broker/prediction/usertrades" \
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${USER_WALLET}" \
   --data-urlencode "condition_id=<condition_id>" \
   --data-urlencode "token_id=<token_id>" \
   --data-urlencode "limit=20"

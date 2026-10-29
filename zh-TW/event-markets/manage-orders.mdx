@@ -13,9 +13,12 @@ https://api.dexbuilder.com
 ## 查詢訂單清單
 
 ```bash cURL
-curl -G "https://api.dexbuilder.com/api/v4/prediction/orders" \
-  -H "<authentication-header>: <authentication-value>" \
-  --data-urlencode "status=OPEN" \
+curl -G "https://api.dexbuilder.com/api/v4/broker/prediction/orders" \
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${USER_WALLET}" \
+  --data-urlencode "status=open" \
   --data-urlencode "condition_id=<condition_id>" \
   --data-urlencode "limit=20"
 ```
@@ -41,9 +44,9 @@ curl -G "https://api.dexbuilder.com/api/v4/prediction/orders" \
       "size": "10",
       "size_matched": "4",
       "size_left": "6",
-      "order_type": "LIMIT",
-      "order_mode": "GTC",
-      "status": "OPEN",
+      "order_type": "GTC",
+      "order_mode": "LIMIT",
+      "status": "open",
       "created_at": 1782753357,
       "updated_at": 1782753357
     }
@@ -57,8 +60,11 @@ curl -G "https://api.dexbuilder.com/api/v4/prediction/orders" \
 ## 查詢單個訂單
 
 ```bash cURL
-curl "https://api.dexbuilder.com/api/v4/prediction/orders/<order_id>" \
-  -H "<authentication-header>: <authentication-value>"
+curl "https://api.dexbuilder.com/api/v4/broker/prediction/orders/<order_id>" \
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${USER_WALLET}"
 ```
 
 詳情響應包含清單中的訂單標識、價格、數量、成交進度與狀態等欄位，並可能包含訂單服務回傳的 `error_code`。
@@ -66,33 +72,39 @@ curl "https://api.dexbuilder.com/api/v4/prediction/orders/<order_id>" \
 ## 取消單個訂單
 
 ```bash cURL
-curl -X DELETE "https://api.dexbuilder.com/api/v4/prediction/orders/<order_id>" \
-  -H "<authentication-header>: <authentication-value>"
+curl -X DELETE "https://api.dexbuilder.com/api/v4/broker/prediction/orders/<order_id>" \
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${USER_WALLET}"
 ```
 
 ```json
 {
   "order_id": "order-123",
-  "status": "ACCEPTED",
-  "cancel_status": "PENDING"
+  "status": "processing",
+  "cancel_status": "accepted"
 }
 ```
 
 ## 按 Condition 取消訂單
 
 ```bash cURL
-curl -X DELETE "https://api.dexbuilder.com/api/v4/prediction/orders?condition_id=<condition_id>" \
-  -H "<authentication-header>: <authentication-value>"
+curl -X DELETE "https://api.dexbuilder.com/api/v4/broker/prediction/orders?condition_id=<condition_id>" \
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${USER_WALLET}"
 ```
 
 ```json
 {
   "batch_id": "batch-123",
-  "status": "ACCEPTED",
+  "status": "accepted",
   "total_orders": 3
 }
 ```
 
 <Note>
-文檔中的認證 Header 為佔位寫法，正式接入應使用最終對外認證方案。內部網關注入的身份欄位不屬於外部客戶端請求參數。
+  請使用 Broker API Key，並在 `sub_user_wallet_addr` 中指定屬於當前 Broker 的使用者錢包地址。`SIGN` 須依實際請求方法、路徑、查詢參數和請求主體計算。詳見 [Broker API Key 與簽名](/api-reference/common/broker-authentication) 及 [代表使用者存取](/api-reference/common/sub-user-wallet)。
 </Note>

@@ -1,0 +1,15 @@
+---
+title: "查询支持资产"
+description: "查询当前 Broker 可用的充值和提现资产。"
+openapi: "/openapi/dexbuilder.yaml GET /api/v4/dexbuilder/assets"
+---
+
+查询当前 Broker 可用的充值和提现资产。
+
+<Note>
+  使用 Broker API Key 调用。此接口查询 Broker 配置，无需提供 `sub_user_wallet_addr`。 认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
+</Note>
+
+## 使用说明
+
+- 当前资产名称为英文静态展示名，不按请求语言切换。

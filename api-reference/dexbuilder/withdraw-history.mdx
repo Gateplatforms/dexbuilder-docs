@@ -1,0 +1,15 @@
+---
+title: "查询提现历史"
+description: "查询终端用户的提现历史。"
+openapi: "/openapi/dexbuilder.yaml GET /api/v4/dexbuilder/withdraw/history"
+---
+
+查询终端用户的提现历史。
+
+<Note>
+  使用 Broker API Key 调用，并在请求头提供 `sub_user_wallet_addr`。网关会校验钱包与 Broker 的归属关系。 认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
+</Note>
+
+## 使用说明
+
+- 当前历史记录不返回创建或更新时间；如需展示时间线，请在接入方系统中记录提交时间。

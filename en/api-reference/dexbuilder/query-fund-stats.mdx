@@ -1,0 +1,16 @@
+---
+title: "Get fund statistics"
+description: "Get a user's cumulative deposits and withdrawals by chain."
+openapi: "/openapi/dexbuilder-en.yaml GET /api/v4/dexbuilder/fund_stats"
+---
+
+Get a user's cumulative deposits and withdrawals by chain.
+
+<Note>
+  Use a Broker API Key and pass the target user's wallet in sub_user_wallet_addr. The gateway checks that the wallet belongs to your Broker. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
+</Note>
+
+## Usage notes
+
+- deposit and withdraw are cumulative amounts denominated in USDT.
+- Pass x-perp-device-type as specified in the OpenAPI request parameters.

@@ -1,0 +1,17 @@
+---
+title: "Submit a withdrawal"
+description: "Submit a user's signed withdrawal request."
+openapi: "/openapi/dexbuilder-en.yaml POST /api/v4/dexbuilder/withdraw/submit"
+---
+
+Submit a user's signed withdrawal request.
+
+<Note>
+  Use a Broker API Key and pass the target user's wallet in sub_user_wallet_addr. The gateway checks that the wallet belongs to your Broker. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
+</Note>
+
+## Usage notes
+
+- r, v, and s are the user's signature components. timestamp must equal the value returned by Get withdrawal signing data.
+- Idempotency-Key is required. Retrying with the same key for the same user and endpoint returns the first successful response.
+- success=true means the request was accepted. Query withdrawal status for the final state.

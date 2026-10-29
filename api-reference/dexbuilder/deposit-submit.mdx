@@ -1,0 +1,16 @@
+---
+title: "提交充值回执"
+description: "提交已广播充值交易的回执。"
+openapi: "/openapi/dexbuilder.yaml POST /api/v4/dexbuilder/deposit/submit"
+---
+
+提交已广播充值交易的回执。
+
+<Note>
+  使用 Broker API Key 调用，并在请求头提供 `sub_user_wallet_addr`。网关会校验钱包与 Broker 的归属关系。 认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
+</Note>
+
+## 使用说明
+
+- 用户完成链上签名与广播后，提交交易哈希。`Idempotency-Key` 必填，同一用户在此接口内重试相同 Key 时回放首次成功响应；不同请求不要复用 Key。
+- `success=true` 表示请求已受理，不表示链上充值完成；最终状态通过[查询充值状态](/api-reference/dexbuilder/deposit-status)获取。

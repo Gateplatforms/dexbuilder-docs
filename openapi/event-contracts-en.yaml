@@ -905,7 +905,7 @@
         ]
       }
     },
-    "/api/v4/event_contracts/orders": {
+    "/api/v4/broker/event_contracts/orders": {
       "post": {
         "summary": "Place Order",
         "description": "Place Order.",
@@ -983,10 +983,22 @@
                     "type": "string"
                   },
                   "order_type": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "GTC",
+                      "GTD",
+                      "FOK",
+                      "FAK"
+                    ],
+                    "description": "Time-in-force: GTC, GTD, FOK, or FAK"
                   },
                   "order_mode": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "LIMIT",
+                      "MARKET"
+                    ],
+                    "description": "Execution mode: LIMIT or MARKET"
                   },
                   "client_order_id": {
                     "type": "string"
@@ -1058,7 +1070,15 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "processing",
+                "open",
+                "matched",
+                "canceled",
+                "failed"
+              ],
+              "description": "Lowercase REST order status"
             }
           },
           {
@@ -1193,7 +1213,7 @@
         ]
       }
     },
-    "/api/v4/event_contracts/orders/{order_id}": {
+    "/api/v4/broker/event_contracts/orders/{order_id}": {
       "get": {
         "summary": "Get Order",
         "description": "Get Order.",
@@ -1309,7 +1329,7 @@
         ]
       }
     },
-    "/api/v4/event_contracts/positions": {
+    "/api/v4/broker/event_contracts/positions": {
       "get": {
         "summary": "List Positions",
         "description": "List Positions.",
@@ -1400,7 +1420,7 @@
         ]
       }
     },
-    "/api/v4/event_contracts/usertrades": {
+    "/api/v4/broker/event_contracts/usertrades": {
       "get": {
         "summary": "List User Trades",
         "description": "List User Trades.",
@@ -1515,7 +1535,7 @@
         ]
       }
     },
-    "/api/v4/event_contracts/assets": {
+    "/api/v4/broker/event_contracts/assets": {
       "get": {
         "summary": "Get Account Assets",
         "description": "Get Account Assets.",
@@ -1564,7 +1584,7 @@
         }
       }
     },
-    "/api/v4/event_contracts/account_book": {
+    "/api/v4/broker/event_contracts/account_book": {
       "get": {
         "summary": "Get Account Book",
         "description": "Get Account Book.",
@@ -1786,7 +1806,7 @@
         ]
       }
     },
-    "/api/v4/event_contracts/positions/settled": {
+    "/api/v4/broker/event_contracts/positions/settled": {
       "get": {
         "summary": "List Settled Positions",
         "description": "List settled Event Contract positions.",
@@ -1869,7 +1889,7 @@
         ]
       }
     },
-    "/api/v4/event_contracts/balance": {
+    "/api/v4/broker/event_contracts/balance": {
       "get": {
         "summary": "Get Account Balance",
         "description": "Get the Event Contract account balance for the current user.",
@@ -1908,7 +1928,7 @@
         }
       }
     },
-    "/api/v4/event_contracts/fund_flows": {
+    "/api/v4/broker/event_contracts/fund_flows": {
       "get": {
         "summary": "List Fund Flows",
         "description": "List fund flows with type, time-range, and cursor filters.",
@@ -2007,7 +2027,7 @@
         ]
       }
     },
-    "/api/v4/event_contracts/fee/current": {
+    "/api/v4/broker/event_contracts/fee/current": {
       "get": {
         "summary": "Get Current Fee",
         "description": "Get the current fee configuration.",
@@ -2066,7 +2086,7 @@
         ]
       }
     },
-    "/api/v4/event_contracts/transfer": {
+    "/api/v4/broker/event_contracts/transfer": {
       "post": {
         "summary": "Transfer Event Contract Funds",
         "description": "Transfer USDT between the spot account and the Event Contract sub-account.",
@@ -2815,7 +2835,10 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "accepted"
+            ]
           },
           "total_orders": {
             "type": "integer"
@@ -2827,7 +2850,10 @@
         "type": "object",
         "properties": {
           "cancel_status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "accepted"
+            ]
           },
           "order_id": {
             "type": "string"
@@ -2917,10 +2943,22 @@
             "type": "string"
           },
           "order_mode": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "LIMIT",
+              "MARKET"
+            ],
+            "description": "Execution mode: LIMIT or MARKET"
           },
           "order_type": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "GTC",
+              "GTD",
+              "FOK",
+              "FAK"
+            ],
+            "description": "Time-in-force: GTC, GTD, FOK, or FAK"
           },
           "outcome": {
             "type": "string"
@@ -2941,7 +2979,15 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "processing",
+              "open",
+              "matched",
+              "canceled",
+              "failed"
+            ],
+            "description": "Lowercase REST order status"
           },
           "token_id": {
             "type": "string"
@@ -2977,10 +3023,22 @@
             "type": "string"
           },
           "order_mode": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "LIMIT",
+              "MARKET"
+            ],
+            "description": "Execution mode: LIMIT or MARKET"
           },
           "order_type": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "GTC",
+              "GTD",
+              "FOK",
+              "FAK"
+            ],
+            "description": "Time-in-force: GTC, GTD, FOK, or FAK"
           },
           "outcome": {
             "type": "string"
@@ -3001,7 +3059,15 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "processing",
+              "open",
+              "matched",
+              "canceled",
+              "failed"
+            ],
+            "description": "Lowercase REST order status"
           },
           "token_id": {
             "type": "string"
@@ -3025,7 +3091,10 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "processing"
+            ]
           }
         },
         "description": "Response object."

@@ -1,0 +1,15 @@
+---
+title: "估算充值手续费"
+description: "估算终端用户的充值手续费。"
+openapi: "/openapi/dexbuilder.yaml POST /api/v4/dexbuilder/deposit/fee"
+---
+
+估算终端用户的充值手续费。
+
+<Note>
+  使用 Broker API Key 调用，并在请求头提供 `sub_user_wallet_addr`。网关会校验钱包与 Broker 的归属关系。 认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
+</Note>
+
+## 使用说明
+
+- 请求体中的 `address` 须为目标用户已绑定的钱包。`lz_fee` 返回 USDT 十进制字符串；传入[获取充值签名数据](/api-reference/dexbuilder/deposit-sign-data)时需按 6 位小数转换为整数，例如 `0.5` 转为 `500000`。`native_fee` 为链原生代币最小单位整数，直接传入。

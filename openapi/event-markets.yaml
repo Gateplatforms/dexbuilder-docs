@@ -905,7 +905,7 @@
         ]
       }
     },
-    "/api/v4/prediction/orders": {
+    "/api/v4/broker/prediction/orders": {
       "post": {
         "summary": "提交订单",
         "description": "提交订单",
@@ -950,6 +950,9 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "requestBody": {
@@ -983,10 +986,22 @@
                     "type": "string"
                   },
                   "order_type": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "GTC",
+                      "GTD",
+                      "FOK",
+                      "FAK"
+                    ],
+                    "description": "订单有效方式：GTC、GTD、FOK 或 FAK"
                   },
                   "order_mode": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "LIMIT",
+                      "MARKET"
+                    ],
+                    "description": "下单模式：LIMIT 或 MARKET"
                   },
                   "client_order_id": {
                     "type": "string"
@@ -1004,7 +1019,41 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sub_user_wallet_addr",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
       },
       "get": {
         "summary": "查询订单列表",
@@ -1050,15 +1099,53 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sub_user_wallet_addr",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "status",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "processing",
+                "open",
+                "matched",
+                "canceled",
+                "failed"
+              ],
+              "description": "REST 订单状态，使用小写值"
             }
           },
           {
@@ -1133,6 +1220,11 @@
               "type": "integer"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       },
       "delete": {
@@ -1179,9 +1271,39 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sub_user_wallet_addr",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "condition_id",
             "in": "query",
@@ -1190,10 +1312,15 @@
               "type": "string"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/prediction/orders/{order_id}": {
+    "/api/v4/broker/prediction/orders/{order_id}": {
       "get": {
         "summary": "查询单个订单",
         "description": "查询单个订单",
@@ -1238,9 +1365,39 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sub_user_wallet_addr",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "order_id",
             "in": "path",
@@ -1248,6 +1405,11 @@
             "schema": {
               "type": "string"
             }
+          }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
           }
         ]
       },
@@ -1295,9 +1457,39 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sub_user_wallet_addr",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "order_id",
             "in": "path",
@@ -1306,10 +1498,15 @@
               "type": "string"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/prediction/positions": {
+    "/api/v4/broker/prediction/positions": {
       "get": {
         "summary": "查询持仓列表",
         "description": "查询持仓列表",
@@ -1354,9 +1551,39 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sub_user_wallet_addr",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "event_id",
             "in": "query",
@@ -1397,10 +1624,15 @@
               "type": "integer"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/prediction/positions/{position_id}": {
+    "/api/v4/broker/prediction/positions/{position_id}": {
       "get": {
         "summary": "查询持仓详情",
         "description": "查询持仓详情",
@@ -1445,9 +1677,39 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sub_user_wallet_addr",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "position_id",
             "in": "path",
@@ -1456,10 +1718,15 @@
               "type": "string"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/prediction/positions/{position_id}/close": {
+    "/api/v4/broker/prediction/positions/{position_id}/close": {
       "post": {
         "summary": "平仓",
         "description": "平仓",
@@ -1504,9 +1771,39 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sub_user_wallet_addr",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "position_id",
             "in": "path",
@@ -1515,10 +1812,15 @@
               "type": "string"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/prediction/usertrades": {
+    "/api/v4/broker/prediction/usertrades": {
       "get": {
         "summary": "查询个人成交",
         "description": "查询个人成交",
@@ -1563,9 +1865,39 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sub_user_wallet_addr",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "condition_id",
             "in": "query",
@@ -1630,10 +1962,15 @@
               "type": "integer"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/prediction/assets": {
+    "/api/v4/broker/prediction/assets": {
       "get": {
         "summary": "查询账户资产",
         "description": "查询账户资产",
@@ -1678,11 +2015,48 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
-        }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sub_user_wallet_addr",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
       }
     },
-    "/api/v4/prediction/account_book": {
+    "/api/v4/broker/prediction/account_book": {
       "get": {
         "summary": "查询资金流水",
         "description": "查询资金流水",
@@ -1727,9 +2101,39 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sub_user_wallet_addr",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "limit",
             "in": "query",
@@ -1746,10 +2150,15 @@
               "type": "string"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/prediction/fee": {
+    "/api/v4/broker/prediction/fee": {
       "get": {
         "summary": "查询手续费",
         "description": "查询手续费",
@@ -1794,9 +2203,39 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sub_user_wallet_addr",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "fee_type",
             "in": "query",
@@ -1805,10 +2244,15 @@
               "type": "string"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/prediction/claims/available": {
+    "/api/v4/broker/prediction/claims/available": {
       "get": {
         "summary": "查询全部可领取资产",
         "description": "查询全部可领取资产",
@@ -1853,11 +2297,48 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
-        }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sub_user_wallet_addr",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
       }
     },
-    "/api/v4/prediction/claims/available/{token_id}": {
+    "/api/v4/broker/prediction/claims/available/{token_id}": {
       "get": {
         "summary": "查询 Token 可领取资产",
         "description": "查询 Token 可领取资产",
@@ -1902,9 +2383,39 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sub_user_wallet_addr",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "token_id",
             "in": "path",
@@ -1913,10 +2424,15 @@
               "type": "string"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/prediction/claims": {
+    "/api/v4/broker/prediction/claims": {
       "post": {
         "summary": "发起领取",
         "description": "发起领取",
@@ -1961,6 +2477,9 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "requestBody": {
@@ -1977,10 +2496,44 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sub_user_wallet_addr",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
       }
     },
-    "/api/v4/prediction/claims/{record_id}": {
+    "/api/v4/broker/prediction/claims/{record_id}": {
       "get": {
         "summary": "查询领取结果",
         "description": "查询领取结果",
@@ -2025,9 +2578,39 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sub_user_wallet_addr",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "record_id",
             "in": "path",
@@ -2035,6 +2618,11 @@
             "schema": {
               "type": "string"
             }
+          }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
           }
         ]
       }
@@ -2766,7 +3354,10 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "accepted"
+            ]
           },
           "total_orders": {
             "type": "integer"
@@ -2778,7 +3369,10 @@
         "type": "object",
         "properties": {
           "cancel_status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "accepted"
+            ]
           },
           "order_id": {
             "type": "string"
@@ -2931,10 +3525,22 @@
             "type": "string"
           },
           "order_mode": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "LIMIT",
+              "MARKET"
+            ],
+            "description": "下单模式：LIMIT 或 MARKET"
           },
           "order_type": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "GTC",
+              "GTD",
+              "FOK",
+              "FAK"
+            ],
+            "description": "订单有效方式：GTC、GTD、FOK 或 FAK"
           },
           "outcome": {
             "type": "string"
@@ -2955,7 +3561,15 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "processing",
+              "open",
+              "matched",
+              "canceled",
+              "failed"
+            ],
+            "description": "REST 订单状态，使用小写值"
           },
           "token_id": {
             "type": "string"
@@ -2991,10 +3605,22 @@
             "type": "string"
           },
           "order_mode": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "LIMIT",
+              "MARKET"
+            ],
+            "description": "下单模式：LIMIT 或 MARKET"
           },
           "order_type": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "GTC",
+              "GTD",
+              "FOK",
+              "FAK"
+            ],
+            "description": "订单有效方式：GTC、GTD、FOK 或 FAK"
           },
           "outcome": {
             "type": "string"
@@ -3015,7 +3641,15 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "processing",
+              "open",
+              "matched",
+              "canceled",
+              "failed"
+            ],
+            "description": "REST 订单状态，使用小写值"
           },
           "token_id": {
             "type": "string"
@@ -3039,7 +3673,10 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "processing"
+            ]
           }
         },
         "description": "响应对象。"
@@ -3452,6 +4089,14 @@
         "items": {
           "$ref": "#/components/schemas/LegacyTrade"
         }
+      }
+    },
+    "securitySchemes": {
+      "BrokerAPIKey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "KEY",
+        "description": "Broker API Key（由项目方管理流程创建）"
       }
     }
   }

@@ -57,7 +57,7 @@
                 ]
               },
               {
-                "group": "事件市场",
+                "group": "预测市场",
                 "pages": [
                   {
                     "group": "快速开始",
@@ -196,6 +196,65 @@
             "tab": "API Reference",
             "menu": [
               {
+                "item": "接入与通用规则",
+                "groups": [
+                  {
+                    "group": "通用说明",
+                    "pages": [
+                      "api-reference/common/overview",
+                      "api-reference/common/broker-authentication",
+                      "api-reference/common/sub-user-wallet"
+                    ]
+                  }
+                ]
+              },
+              {
+                "item": "DexBuilder 平台 API",
+                "pages": [
+                  "api-reference/dexbuilder/overview",
+                  "api-reference/dexbuilder/authentication",
+                  {
+                    "group": "资产配置",
+                    "pages": [
+                      "api-reference/dexbuilder/query-assets",
+                      "api-reference/dexbuilder/query-networks",
+                      "api-reference/dexbuilder/query-dw-status",
+                      "api-reference/dexbuilder/query-fee",
+                      "api-reference/dexbuilder/query-withdraw-limit"
+                    ]
+                  },
+                  {
+                    "group": "用户",
+                    "pages": [
+                      "api-reference/dexbuilder/query-user-info",
+                      "api-reference/dexbuilder/query-wallet-list",
+                      "api-reference/dexbuilder/query-user-balance",
+                      "api-reference/dexbuilder/query-fund-stats"
+                    ]
+                  },
+                  {
+                    "group": "充值",
+                    "pages": [
+                      "api-reference/dexbuilder/deposit-fee",
+                      "api-reference/dexbuilder/deposit-sign-data",
+                      "api-reference/dexbuilder/deposit-submit",
+                      "api-reference/dexbuilder/deposit-status",
+                      "api-reference/dexbuilder/deposit-history"
+                    ]
+                  },
+                  {
+                    "group": "提现",
+                    "pages": [
+                      "api-reference/dexbuilder/withdraw-sign-data",
+                      "api-reference/dexbuilder/withdraw-submit",
+                      "api-reference/dexbuilder/withdraw-status",
+                      "api-reference/dexbuilder/withdraw-history",
+                      "api-reference/dexbuilder/withdraw-ata-check-and-build"
+                    ]
+                  }
+                ]
+              },
+              {
                 "item": "PerpDEX",
                 "pages": [
                   {
@@ -302,6 +361,7 @@
                     "group": "事件市场 API",
                     "pages": [
                       "zh/event-markets/api/overview",
+                      "zh/event-markets/api/broker-authentication",
                       "zh/event-markets/apis",
                       "zh/event-markets/error-codes",
                       {
@@ -310,6 +370,7 @@
                           "zh/event-markets/rest/query-events",
                           "zh/event-markets/rest/query-event",
                           "zh/event-markets/rest/query-event-by-slug",
+                          "zh/event-markets/rest/query-event-reference-price",
                           "zh/event-markets/rest/query-markets",
                           "zh/event-markets/rest/query-market",
                           "zh/event-markets/rest/query-market-by-slug",
@@ -362,6 +423,7 @@
                     "group": "事件合约 API",
                     "pages": [
                       "zh/event-contracts/api/overview",
+                      "zh/event-contracts/api/broker-authentication",
                       "zh/event-contracts/apis",
                       "zh/event-contracts/error-codes",
                       {
@@ -822,6 +884,70 @@
                     ]
                   }
                 ]
+              },
+              {
+                "item": "DexBuilder Platform API",
+                "groups": [
+                  {
+                    "group": "DexBuilder API",
+                    "pages": [
+                      "en/api-reference/dexbuilder/overview",
+                      "en/api-reference/dexbuilder/authentication",
+                      {
+                        "group": "Asset configuration",
+                        "pages": [
+                          "en/api-reference/dexbuilder/query-assets",
+                          "en/api-reference/dexbuilder/query-networks",
+                          "en/api-reference/dexbuilder/query-dw-status",
+                          "en/api-reference/dexbuilder/query-fee",
+                          "en/api-reference/dexbuilder/query-withdraw-limit"
+                        ]
+                      },
+                      {
+                        "group": "User",
+                        "pages": [
+                          "en/api-reference/dexbuilder/query-user-info",
+                          "en/api-reference/dexbuilder/query-wallet-list",
+                          "en/api-reference/dexbuilder/query-user-balance",
+                          "en/api-reference/dexbuilder/query-fund-stats"
+                        ]
+                      },
+                      {
+                        "group": "Deposit",
+                        "pages": [
+                          "en/api-reference/dexbuilder/deposit-fee",
+                          "en/api-reference/dexbuilder/deposit-sign-data",
+                          "en/api-reference/dexbuilder/deposit-submit",
+                          "en/api-reference/dexbuilder/deposit-status",
+                          "en/api-reference/dexbuilder/deposit-history"
+                        ]
+                      },
+                      {
+                        "group": "Withdrawal",
+                        "pages": [
+                          "en/api-reference/dexbuilder/withdraw-sign-data",
+                          "en/api-reference/dexbuilder/withdraw-submit",
+                          "en/api-reference/dexbuilder/withdraw-status",
+                          "en/api-reference/dexbuilder/withdraw-history",
+                          "en/api-reference/dexbuilder/withdraw-ata-check-and-build"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "item": "Access and conventions",
+                "groups": [
+                  {
+                    "group": "Shared API guides",
+                    "pages": [
+                      "en/api-reference/common/overview",
+                      "en/api-reference/common/broker-authentication",
+                      "en/api-reference/common/sub-user-wallet"
+                    ]
+                  }
+                ]
               }
             ]
           }
@@ -1228,6 +1354,70 @@
                           "zh-TW/event-contracts/websocket/authentication"
                         ]
                       }
+                    ]
+                  }
+                ]
+              },
+              {
+                "item": "DexBuilder 平台 API",
+                "groups": [
+                  {
+                    "group": "DexBuilder API",
+                    "pages": [
+                      "zh-TW/api-reference/dexbuilder/overview",
+                      "zh-TW/api-reference/dexbuilder/authentication",
+                      {
+                        "group": "資產配置",
+                        "pages": [
+                          "zh-TW/api-reference/dexbuilder/query-assets",
+                          "zh-TW/api-reference/dexbuilder/query-networks",
+                          "zh-TW/api-reference/dexbuilder/query-dw-status",
+                          "zh-TW/api-reference/dexbuilder/query-fee",
+                          "zh-TW/api-reference/dexbuilder/query-withdraw-limit"
+                        ]
+                      },
+                      {
+                        "group": "使用者",
+                        "pages": [
+                          "zh-TW/api-reference/dexbuilder/query-user-info",
+                          "zh-TW/api-reference/dexbuilder/query-wallet-list",
+                          "zh-TW/api-reference/dexbuilder/query-user-balance",
+                          "zh-TW/api-reference/dexbuilder/query-fund-stats"
+                        ]
+                      },
+                      {
+                        "group": "充值",
+                        "pages": [
+                          "zh-TW/api-reference/dexbuilder/deposit-fee",
+                          "zh-TW/api-reference/dexbuilder/deposit-sign-data",
+                          "zh-TW/api-reference/dexbuilder/deposit-submit",
+                          "zh-TW/api-reference/dexbuilder/deposit-status",
+                          "zh-TW/api-reference/dexbuilder/deposit-history"
+                        ]
+                      },
+                      {
+                        "group": "提現",
+                        "pages": [
+                          "zh-TW/api-reference/dexbuilder/withdraw-sign-data",
+                          "zh-TW/api-reference/dexbuilder/withdraw-submit",
+                          "zh-TW/api-reference/dexbuilder/withdraw-status",
+                          "zh-TW/api-reference/dexbuilder/withdraw-history",
+                          "zh-TW/api-reference/dexbuilder/withdraw-ata-check-and-build"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "item": "接入與通用規則",
+                "groups": [
+                  {
+                    "group": "通用說明",
+                    "pages": [
+                      "zh-TW/api-reference/common/overview",
+                      "zh-TW/api-reference/common/broker-authentication",
+                      "zh-TW/api-reference/common/sub-user-wallet"
                     ]
                   }
                 ]

@@ -1,0 +1,30 @@
+---
+title: "预测市场 Broker 认证"
+description: "预测市场 Broker 私有 REST 接口的路径、认证和钱包地址要求。"
+---
+
+预测市场公开行情使用 `/api/v4/prediction/...`，无需 Broker API Key。Broker 代旗下用户访问订单、持仓和账户等私有 REST 接口时，使用 `/api/v4/broker/prediction/...`。
+
+私有请求须使用已开通预测市场权限的 Broker API Key，在请求头携带 `KEY`、`Timestamp`、`SIGN` 和 `sub_user_wallet_addr`。钱包地址必须对应当前 Broker 旗下用户。终端用户个人 API Key 不能代替 Broker API Key。
+
+- [Broker API Key 与签名](/api-reference/common/broker-authentication)：Key 用途、请求头和签名步骤。
+- [代表用户访问](/api-reference/common/sub-user-wallet)：钱包地址与归属要求。
+- [API 使用说明](/api-reference/common/overview)：接入地址和公开、私有路径。
+
+## 请求示例
+
+签名时使用实际访问的外部路径 `/api/v4/broker/prediction/positions`：
+
+```bash
+BASE_URL="https://api.dexbuilder.com"
+API_PATH="/api/v4/broker/prediction/positions"
+
+curl -i --request GET "${BASE_URL}${API_PATH}" \
+  --header "KEY: ${BROKER_API_KEY}" \
+  --header "SIGN: ${SIGN}" \
+  --header "Timestamp: ${TIMESTAMP}" \
+  --header "sub_user_wallet_addr: ${WALLET}" \
+  --header 'Accept: application/json'
+```
+
+WebSocket 私有频道使用其专属认证方式，详见[预测市场 WebSocket 认证](/zh/event-markets/websocket/authentication)。

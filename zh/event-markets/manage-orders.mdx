@@ -4,6 +4,10 @@ sidebarTitle: "管理订单"
 description: "通过 Prediction API 查询和取消预测市场私有订单。"
 ---
 
+<Note>
+  以下私有接口示例使用 Broker API Key。每次请求都需携带 `KEY`、`Timestamp`、`SIGN` 和 `sub_user_wallet_addr`；签名使用实际外部请求路径、Query String 和 Body。 [Broker API 认证与签名](/zh/event-markets/api/broker-authentication)。
+</Note>
+
 订单查询与撤单都属于私有操作，需要认证。生产环境 Base URL：
 
 ```text
@@ -13,9 +17,12 @@ https://api.dexbuilder.com
 ## 查询订单列表
 
 ```bash cURL
-curl -G "https://api.dexbuilder.com/api/v4/prediction/orders" \
-  -H "<authentication-header>: <authentication-value>" \
-  --data-urlencode "status=OPEN" \
+curl -G "https://api.dexbuilder.com/api/v4/broker/prediction/orders" \
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${WALLET}" \
+  --data-urlencode "status=open" \
   --data-urlencode "condition_id=<condition_id>" \
   --data-urlencode "limit=20"
 ```
@@ -41,9 +48,9 @@ curl -G "https://api.dexbuilder.com/api/v4/prediction/orders" \
       "size": "10",
       "size_matched": "4",
       "size_left": "6",
-      "order_type": "LIMIT",
-      "order_mode": "GTC",
-      "status": "OPEN",
+      "order_type": "GTC",
+      "order_mode": "LIMIT",
+      "status": "open",
       "created_at": 1782753357,
       "updated_at": 1782753357
     }
@@ -57,8 +64,11 @@ curl -G "https://api.dexbuilder.com/api/v4/prediction/orders" \
 ## 查询单个订单
 
 ```bash cURL
-curl "https://api.dexbuilder.com/api/v4/prediction/orders/<order_id>" \
-  -H "<authentication-header>: <authentication-value>"
+curl "https://api.dexbuilder.com/api/v4/broker/prediction/orders/<order_id>" \
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${WALLET}"
 ```
 
 详情响应包含列表中的订单标识、价格、数量、成交进度与状态等字段，并可能包含订单服务返回的 `error_code`。
@@ -66,33 +76,35 @@ curl "https://api.dexbuilder.com/api/v4/prediction/orders/<order_id>" \
 ## 取消单个订单
 
 ```bash cURL
-curl -X DELETE "https://api.dexbuilder.com/api/v4/prediction/orders/<order_id>" \
-  -H "<authentication-header>: <authentication-value>"
+curl -X DELETE "https://api.dexbuilder.com/api/v4/broker/prediction/orders/<order_id>" \
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${WALLET}"
 ```
 
 ```json
 {
   "order_id": "order-123",
-  "status": "ACCEPTED",
-  "cancel_status": "PENDING"
+  "status": "processing",
+  "cancel_status": "accepted"
 }
 ```
 
 ## 按 Condition 取消订单
 
 ```bash cURL
-curl -X DELETE "https://api.dexbuilder.com/api/v4/prediction/orders?condition_id=<condition_id>" \
-  -H "<authentication-header>: <authentication-value>"
+curl -X DELETE "https://api.dexbuilder.com/api/v4/broker/prediction/orders?condition_id=<condition_id>" \
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${WALLET}"
 ```
 
 ```json
 {
   "batch_id": "batch-123",
-  "status": "ACCEPTED",
+  "status": "accepted",
   "total_orders": 3
 }
 ```
-
-<Note>
-文档中的认证 Header 为占位写法，正式接入应使用最终对外认证方案。内部网关注入的身份字段不属于外部客户端请求参数。
-</Note>

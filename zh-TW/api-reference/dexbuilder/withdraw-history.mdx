@@ -1,0 +1,15 @@
+---
+title: "查詢提現歷史"
+description: "查詢終端使用者的提現歷史。"
+openapi: "/openapi/dexbuilder-zh-TW.yaml GET /api/v4/dexbuilder/withdraw/history"
+---
+
+查詢終端使用者的提現歷史。
+
+<Note>
+  使用 Broker API Key 呼叫，並在請求頭提供 `sub_user_wallet_addr`。網關會校驗錢包與 Broker 的歸屬關係。 認證規則見[Broker API 認證與簽名](/zh-TW/api-reference/common/broker-authentication)。
+</Note>
+
+## 使用說明
+
+- 當前歷史記錄不回傳創建或更新時間；如需展示時間線，請在接入方系統中記錄提交時間。

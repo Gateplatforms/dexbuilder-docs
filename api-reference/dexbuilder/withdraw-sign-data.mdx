@@ -1,0 +1,15 @@
+---
+title: "获取提现签名数据"
+description: "构建提现交易的签名数据。"
+openapi: "/openapi/dexbuilder.yaml POST /api/v4/dexbuilder/withdraw/sign_data"
+---
+
+构建提现交易的签名数据。
+
+<Note>
+  使用 Broker API Key 调用，并在请求头提供 `sub_user_wallet_addr`。网关会校验钱包与 Broker 的归属关系。 认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
+</Note>
+
+## 使用说明
+
+- `address` 为用户已绑定的签名钱包；`to_address` 可为第三方到账地址。用户对返回的 `data` 签名后，将签名分量和原样 `timestamp` 用于[提交提现](/api-reference/dexbuilder/withdraw-submit)。

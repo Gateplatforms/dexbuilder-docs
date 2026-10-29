@@ -1,0 +1,16 @@
+---
+title: "提交提現"
+description: "提交已簽名的提現請求。"
+openapi: "/openapi/dexbuilder-zh-TW.yaml POST /api/v4/dexbuilder/withdraw/submit"
+---
+
+提交已簽名的提現請求。
+
+<Note>
+  使用 Broker API Key 呼叫，並在請求頭提供 `sub_user_wallet_addr`。網關會校驗錢包與 Broker 的歸屬關係。 認證規則見[Broker API 認證與簽名](/zh-TW/api-reference/common/broker-authentication)。
+</Note>
+
+## 使用說明
+
+- `r`、`v`、`s` 為使用者對簽名資料的簽名分量；`timestamp` 必須與[獲取提現簽名資料](/zh-TW/api-reference/dexbuilder/withdraw-sign-data)的回傳值一致。
+- `Idempotency-Key` 必填，同一使用者在此介面內重試相同 Key 時回放首次成功回應。`success=true` 表示請求已受理；最終狀態通過[查詢提現狀態](/zh-TW/api-reference/dexbuilder/withdraw-status)獲取。

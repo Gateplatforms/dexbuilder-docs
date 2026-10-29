@@ -1,0 +1,16 @@
+---
+title: "獲取充值簽名資料"
+description: "構建鏈上充值所需的簽名資料。"
+openapi: "/openapi/dexbuilder-zh-TW.yaml POST /api/v4/dexbuilder/deposit/sign_data"
+---
+
+構建鏈上充值所需的簽名資料。
+
+<Note>
+  使用 Broker API Key 呼叫，並在請求頭提供 `sub_user_wallet_addr`。網關會校驗錢包與 Broker 的歸屬關係。 認證規則見[Broker API 認證與簽名](/zh-TW/api-reference/common/broker-authentication)。
+</Note>
+
+## 使用說明
+
+- 建議先呼叫[估算充值手續費](/zh-TW/api-reference/dexbuilder/deposit-fee)，將 `native_fee` 原樣傳入，並將 `lz_fee` 按 USDT 6 位小數轉換為整數。
+- 首次成功呼叫可能為使用者持久綁定 Perp 賬戶；重復呼叫不會重復綁定。回傳的 `contract_address` 與 `data` 用於構造鏈上交易。`x-perp-device-type` 可選，建議用於風控。
