@@ -3,7 +3,7 @@ title: "Private Channels"
 description: "Authenticated Prediction Markets API WebSocket channels."
 ---
 
-Private channels require an API Key signature. Do not send the API Secret over the network. See [WebSocket Authentication](./authentication).
+Private channels use a Broker API Key and identify a user wallet in `auth.wallet_address`. Keep the API Secret local. See [Broker WebSocket authentication](/en/event-markets/websocket/authentication).
 
 ## Subscribe
 
@@ -23,14 +23,15 @@ Use the channel prefix `pred`. A single item can be subscribed with `items`, or 
     ]
   },
   "auth": {
-    "method": "api_key",
-    "key": "YOUR_API_KEY",
-    "sign": "SIGNATURE"
+    "method": "broker_api_key",
+    "key": "YOUR_BROKER_API_KEY",
+    "sign": "HEX_SIGNATURE",
+    "wallet_address": "<USER_WALLET>"
   }
 }
 ```
 
-Use the same payload shape with `op: "unsubscribe"`. Private subscriptions do not expose internal user headers or broker identifiers.
+Use the same payload shape with `op: "unsubscribe"`. If the connection has been authenticated with `server.sign`, later subscriptions and unsubscriptions can omit `auth`.
 
 ## `pred.orders`
 
