@@ -1313,10 +1313,22 @@
                 ]
               },
               {
-                "item": "DexBuilder 平台 API"
+                "item": "DexBuilder 平台 API",
+                "groups": [
+                  {
+                    "group": "DexBuilder API",
+                    "pages": []
+                  }
+                ]
               },
               {
-                "item": "通用說明"
+                "item": "接入與通用規則",
+                "groups": [
+                  {
+                    "group": "通用說明",
+                    "pages": []
+                  }
+                ]
               }
             ]
           }
