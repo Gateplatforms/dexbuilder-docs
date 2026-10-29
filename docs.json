@@ -18,11 +18,11 @@
               {
                 "group": "入门",
                 "pages": [
-                  "untitled-page",
-                  "untitled-page-2",
-                  "untitled-page-3",
-                  "untitled-page-4",
-                  "untitled-page-5"
+                  "getting-started/what-is-dexbuilder",
+                  "getting-started/product-suite",
+                  "getting-started/core-capabilities",
+                  "getting-started/platform-architecture",
+                  "getting-started/accounts"
                 ]
               },
               {
@@ -31,27 +31,27 @@
                   {
                     "group": "交易",
                     "pages": [
-                      "untitled-page-6",
-                      "untitled-page-7",
-                      "untitled-page-8",
-                      "untitled-page-9",
-                      "untitled-page-10",
-                      "untitled-page-11",
-                      "untitled-page-12",
-                      "untitled-page-13"
+                      "perpdex/trading/spot-trading",
+                      "perpdex/trading/order-book",
+                      "perpdex/trading/order-types",
+                      "perpdex/trading/advanced-orders",
+                      "perpdex/trading/cross-and-isolated-margin",
+                      "perpdex/trading/margin",
+                      "perpdex/trading/liquidation",
+                      "perpdex/trading/mark-price"
                     ]
                   },
                   {
                     "group": "风险机制",
                     "pages": [
-                      "untitled-page-17",
-                      "untitled-page-16"
+                      "perpdex/risk-mechanisms/insurance-fund",
+                      "perpdex/risk-mechanisms/auto-deleveraging-adl"
                     ]
                   },
                   {
                     "group": "费率",
                     "pages": [
-                      "untitled-page-14"
+                      "perpdex/fees/funding-rate"
                     ]
                   }
                 ]
@@ -427,11 +427,11 @@
               {
                 "group": "Getting Started",
                 "pages": [
-                  "en/untitled-page",
-                  "en/untitled-page-2",
-                  "en/untitled-page-3",
-                  "en/untitled-page-4",
-                  "en/untitled-page-5"
+                  "en/getting-started/what-is-dexbuilder",
+                  "en/getting-started/product-suite",
+                  "en/getting-started/core-capabilities",
+                  "en/getting-started/platform-architecture",
+                  "en/getting-started/accounts"
                 ]
               },
               {
@@ -440,27 +440,27 @@
                   {
                     "group": "Trading",
                     "pages": [
-                      "en/untitled-page-6",
-                      "en/untitled-page-7",
-                      "en/untitled-page-8",
-                      "en/untitled-page-9",
-                      "en/untitled-page-10",
-                      "en/untitled-page-11",
-                      "en/untitled-page-12",
-                      "en/untitled-page-13"
+                      "en/perpdex/trading/spot-trading",
+                      "en/perpdex/trading/order-book",
+                      "en/perpdex/trading/order-types",
+                      "en/perpdex/trading/advanced-orders",
+                      "en/perpdex/trading/cross-and-isolated-margin",
+                      "en/perpdex/trading/margin",
+                      "en/perpdex/trading/liquidation",
+                      "en/perpdex/trading/mark-price"
                     ]
                   },
                   {
                     "group": "Risk Mechanisms",
                     "pages": [
-                      "en/untitled-page-17",
-                      "en/untitled-page-16"
+                      "en/perpdex/risk-mechanisms/insurance-fund",
+                      "en/perpdex/risk-mechanisms/auto-deleveraging-adl"
                     ]
                   },
                   {
                     "group": "Fees",
                     "pages": [
-                      "en/untitled-page-14"
+                      "en/perpdex/fees/funding-rate"
                     ]
                   }
                 ]
@@ -836,11 +836,11 @@
               {
                 "group": "入門",
                 "pages": [
-                  "zh-TW/untitled-page",
-                  "zh-TW/untitled-page-2",
-                  "zh-TW/untitled-page-3",
-                  "zh-TW/untitled-page-4",
-                  "zh-TW/untitled-page-5"
+                  "zh-TW/getting-started/what-is-dexbuilder",
+                  "zh-TW/getting-started/product-suite",
+                  "zh-TW/getting-started/core-capabilities",
+                  "zh-TW/getting-started/platform-architecture",
+                  "zh-TW/getting-started/accounts"
                 ]
               },
               {
@@ -849,27 +849,27 @@
                   {
                     "group": "交易",
                     "pages": [
-                      "zh-TW/untitled-page-6",
-                      "zh-TW/untitled-page-7",
-                      "zh-TW/untitled-page-8",
-                      "zh-TW/untitled-page-9",
-                      "zh-TW/untitled-page-10",
-                      "zh-TW/untitled-page-11",
-                      "zh-TW/untitled-page-12",
-                      "zh-TW/untitled-page-13"
+                      "zh-TW/perpdex/trading/spot-trading",
+                      "zh-TW/perpdex/trading/order-book",
+                      "zh-TW/perpdex/trading/order-types",
+                      "zh-TW/perpdex/trading/advanced-orders",
+                      "zh-TW/perpdex/trading/cross-and-isolated-margin",
+                      "zh-TW/perpdex/trading/margin",
+                      "zh-TW/perpdex/trading/liquidation",
+                      "zh-TW/perpdex/trading/mark-price"
                     ]
                   },
                   {
                     "group": "風險機制",
                     "pages": [
-                      "zh-TW/untitled-page-17",
-                      "zh-TW/untitled-page-16"
+                      "zh-TW/perpdex/risk-mechanisms/insurance-fund",
+                      "zh-TW/perpdex/risk-mechanisms/auto-deleveraging-adl"
                     ]
                   },
                   {
                     "group": "費率",
                     "pages": [
-                      "zh-TW/untitled-page-14"
+                      "zh-TW/perpdex/fees/funding-rate"
                     ]
                   }
                 ]
@@ -1276,8 +1276,248 @@
   "redirects": [
     {
       "source": "/",
-      "destination": "/untitled-page",
+      "destination": "/getting-started/what-is-dexbuilder",
       "permanent": false
+    },
+    {
+      "source": "/untitled-page",
+      "destination": "/getting-started/what-is-dexbuilder",
+      "permanent": true
+    },
+    {
+      "source": "/untitled-page-2",
+      "destination": "/getting-started/product-suite",
+      "permanent": true
+    },
+    {
+      "source": "/untitled-page-3",
+      "destination": "/getting-started/core-capabilities",
+      "permanent": true
+    },
+    {
+      "source": "/untitled-page-4",
+      "destination": "/getting-started/platform-architecture",
+      "permanent": true
+    },
+    {
+      "source": "/untitled-page-5",
+      "destination": "/getting-started/accounts",
+      "permanent": true
+    },
+    {
+      "source": "/untitled-page-6",
+      "destination": "/perpdex/trading/spot-trading",
+      "permanent": true
+    },
+    {
+      "source": "/untitled-page-7",
+      "destination": "/perpdex/trading/order-book",
+      "permanent": true
+    },
+    {
+      "source": "/untitled-page-8",
+      "destination": "/perpdex/trading/order-types",
+      "permanent": true
+    },
+    {
+      "source": "/untitled-page-9",
+      "destination": "/perpdex/trading/advanced-orders",
+      "permanent": true
+    },
+    {
+      "source": "/untitled-page-10",
+      "destination": "/perpdex/trading/cross-and-isolated-margin",
+      "permanent": true
+    },
+    {
+      "source": "/untitled-page-11",
+      "destination": "/perpdex/trading/margin",
+      "permanent": true
+    },
+    {
+      "source": "/untitled-page-12",
+      "destination": "/perpdex/trading/liquidation",
+      "permanent": true
+    },
+    {
+      "source": "/untitled-page-13",
+      "destination": "/perpdex/trading/mark-price",
+      "permanent": true
+    },
+    {
+      "source": "/untitled-page-17",
+      "destination": "/perpdex/risk-mechanisms/insurance-fund",
+      "permanent": true
+    },
+    {
+      "source": "/untitled-page-16",
+      "destination": "/perpdex/risk-mechanisms/auto-deleveraging-adl",
+      "permanent": true
+    },
+    {
+      "source": "/untitled-page-14",
+      "destination": "/perpdex/fees/funding-rate",
+      "permanent": true
+    },
+    {
+      "source": "/en/untitled-page",
+      "destination": "/en/getting-started/what-is-dexbuilder",
+      "permanent": true
+    },
+    {
+      "source": "/en/untitled-page-2",
+      "destination": "/en/getting-started/product-suite",
+      "permanent": true
+    },
+    {
+      "source": "/en/untitled-page-3",
+      "destination": "/en/getting-started/core-capabilities",
+      "permanent": true
+    },
+    {
+      "source": "/en/untitled-page-4",
+      "destination": "/en/getting-started/platform-architecture",
+      "permanent": true
+    },
+    {
+      "source": "/en/untitled-page-5",
+      "destination": "/en/getting-started/accounts",
+      "permanent": true
+    },
+    {
+      "source": "/en/untitled-page-6",
+      "destination": "/en/perpdex/trading/spot-trading",
+      "permanent": true
+    },
+    {
+      "source": "/en/untitled-page-7",
+      "destination": "/en/perpdex/trading/order-book",
+      "permanent": true
+    },
+    {
+      "source": "/en/untitled-page-8",
+      "destination": "/en/perpdex/trading/order-types",
+      "permanent": true
+    },
+    {
+      "source": "/en/untitled-page-9",
+      "destination": "/en/perpdex/trading/advanced-orders",
+      "permanent": true
+    },
+    {
+      "source": "/en/untitled-page-10",
+      "destination": "/en/perpdex/trading/cross-and-isolated-margin",
+      "permanent": true
+    },
+    {
+      "source": "/en/untitled-page-11",
+      "destination": "/en/perpdex/trading/margin",
+      "permanent": true
+    },
+    {
+      "source": "/en/untitled-page-12",
+      "destination": "/en/perpdex/trading/liquidation",
+      "permanent": true
+    },
+    {
+      "source": "/en/untitled-page-13",
+      "destination": "/en/perpdex/trading/mark-price",
+      "permanent": true
+    },
+    {
+      "source": "/en/untitled-page-17",
+      "destination": "/en/perpdex/risk-mechanisms/insurance-fund",
+      "permanent": true
+    },
+    {
+      "source": "/en/untitled-page-16",
+      "destination": "/en/perpdex/risk-mechanisms/auto-deleveraging-adl",
+      "permanent": true
+    },
+    {
+      "source": "/en/untitled-page-14",
+      "destination": "/en/perpdex/fees/funding-rate",
+      "permanent": true
+    },
+    {
+      "source": "/zh-TW/untitled-page",
+      "destination": "/zh-TW/getting-started/what-is-dexbuilder",
+      "permanent": true
+    },
+    {
+      "source": "/zh-TW/untitled-page-2",
+      "destination": "/zh-TW/getting-started/product-suite",
+      "permanent": true
+    },
+    {
+      "source": "/zh-TW/untitled-page-3",
+      "destination": "/zh-TW/getting-started/core-capabilities",
+      "permanent": true
+    },
+    {
+      "source": "/zh-TW/untitled-page-4",
+      "destination": "/zh-TW/getting-started/platform-architecture",
+      "permanent": true
+    },
+    {
+      "source": "/zh-TW/untitled-page-5",
+      "destination": "/zh-TW/getting-started/accounts",
+      "permanent": true
+    },
+    {
+      "source": "/zh-TW/untitled-page-6",
+      "destination": "/zh-TW/perpdex/trading/spot-trading",
+      "permanent": true
+    },
+    {
+      "source": "/zh-TW/untitled-page-7",
+      "destination": "/zh-TW/perpdex/trading/order-book",
+      "permanent": true
+    },
+    {
+      "source": "/zh-TW/untitled-page-8",
+      "destination": "/zh-TW/perpdex/trading/order-types",
+      "permanent": true
+    },
+    {
+      "source": "/zh-TW/untitled-page-9",
+      "destination": "/zh-TW/perpdex/trading/advanced-orders",
+      "permanent": true
+    },
+    {
+      "source": "/zh-TW/untitled-page-10",
+      "destination": "/zh-TW/perpdex/trading/cross-and-isolated-margin",
+      "permanent": true
+    },
+    {
+      "source": "/zh-TW/untitled-page-11",
+      "destination": "/zh-TW/perpdex/trading/margin",
+      "permanent": true
+    },
+    {
+      "source": "/zh-TW/untitled-page-12",
+      "destination": "/zh-TW/perpdex/trading/liquidation",
+      "permanent": true
+    },
+    {
+      "source": "/zh-TW/untitled-page-13",
+      "destination": "/zh-TW/perpdex/trading/mark-price",
+      "permanent": true
+    },
+    {
+      "source": "/zh-TW/untitled-page-17",
+      "destination": "/zh-TW/perpdex/risk-mechanisms/insurance-fund",
+      "permanent": true
+    },
+    {
+      "source": "/zh-TW/untitled-page-16",
+      "destination": "/zh-TW/perpdex/risk-mechanisms/auto-deleveraging-adl",
+      "permanent": true
+    },
+    {
+      "source": "/zh-TW/untitled-page-14",
+      "destination": "/zh-TW/perpdex/fees/funding-rate",
+      "permanent": true
     }
   ],
   "appearance": {
