@@ -4,7 +4,7 @@ sidebarTitle: "私有頻道"
 description: "訂閱目前認證使用者的訂單、成交、持倉和結算更新。"
 ---
 
-私有頻道需要 API Key 簽名認證。API Secret 只在本地用於簽名，不能透過網路傳送。詳見 [WebSocket 認證](./authentication)。
+私有頻道使用 Broker API Key 認證，並以 `auth.wallet_address` 指定當前 Broker 旗下的使用者。API Secret 只在本地用於簽名。詳見 [Broker WebSocket 認證](/zh-TW/event-contracts/websocket/authentication)。
 
 ## 訂閱
 
@@ -24,14 +24,15 @@ description: "訂閱目前認證使用者的訂單、成交、持倉和結算更
     ]
   },
   "auth": {
-    "method": "api_key",
-    "key": "YOUR_API_KEY",
-    "sign": "SIGNATURE"
+    "method": "broker_api_key",
+    "key": "YOUR_BROKER_API_KEY",
+    "sign": "HEX_SIGNATURE",
+    "wallet_address": "<USER_WALLET>"
   }
 }
 ```
 
-取消訂閱時使用相同的 payload，並將 `op` 設定為 `unsubscribe`。文件不暴露內部使用者 Header 或 broker 標識。
+取消訂閱時使用相同的 payload，並將 `op` 設定為 `unsubscribe`。如已透過 `server.sign` 認證連線，後續訂閱和取消訂閱可省略 `auth`。
 
 ## `ec.orders`
 
