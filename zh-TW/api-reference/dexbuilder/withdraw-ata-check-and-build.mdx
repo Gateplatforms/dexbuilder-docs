@@ -1,0 +1,16 @@
+---
+title: "Solana ATA 檢測與構建"
+description: "檢測 Solana ATA 並構建創建交易。"
+openapi: "/openapi/dexbuilder-zh-TW.yaml POST /api/v4/dexbuilder/withdraw/ata/check-and-build"
+---
+
+檢測 Solana ATA 並構建創建交易。
+
+<Note>
+  使用 Broker API Key 呼叫，並在請求頭提供 `sub_user_wallet_addr`。網關會校驗錢包與 Broker 的歸屬關係。 認證規則見[Broker API 認證與簽名](/zh-TW/api-reference/common/broker-authentication)。
+</Note>
+
+## 使用說明
+
+- `payer_address` 為使用者已綁定的 Solana 錢包，承擔鏈上 rent 和手續費；`target_address` 為 ATA 所屬 owner。
+- 當 `status=0` 時，使用者簽名並廣播回傳的 base64 `tx_data` 後再提現；當 `status=1` 時，ATA 已存在，`tx_data` 為空。失敗後可重新查詢和構建。

@@ -1,0 +1,15 @@
+---
+title: "查詢充值狀態"
+description: "按交易哈希查詢充值狀態。"
+openapi: "/openapi/dexbuilder-zh-TW.yaml GET /api/v4/dexbuilder/deposit/status"
+---
+
+按交易哈希查詢充值狀態。
+
+<Note>
+  使用 Broker API Key 呼叫，並在請求頭提供 `sub_user_wallet_addr`。網關會校驗錢包與 Broker 的歸屬關係。 認證規則見[Broker API 認證與簽名](/zh-TW/api-reference/common/broker-authentication)。
+</Note>
+
+## 使用說明
+
+- 狀態 `0` 表示未查詢到，`10` 表示確認中，`20` 表示成功，`30` 表示失敗。`20` 和 `30` 為終態；處理中可每 3–10 秒查詢一次。

@@ -1,0 +1,16 @@
+---
+title: "提交充值回執"
+description: "提交已廣播充值交易的回執。"
+openapi: "/openapi/dexbuilder-zh-TW.yaml POST /api/v4/dexbuilder/deposit/submit"
+---
+
+提交已廣播充值交易的回執。
+
+<Note>
+  使用 Broker API Key 呼叫，並在請求頭提供 `sub_user_wallet_addr`。網關會校驗錢包與 Broker 的歸屬關係。 認證規則見[Broker API 認證與簽名](/zh-TW/api-reference/common/broker-authentication)。
+</Note>
+
+## 使用說明
+
+- 使用者完成鏈上簽名與廣播後，提交交易哈希。`Idempotency-Key` 必填，同一使用者在此介面內重試相同 Key 時回放首次成功回應；不同請求不要復用 Key。
+- `success=true` 表示請求已受理，不表示鏈上充值完成；最終狀態通過[查詢充值狀態](/zh-TW/api-reference/dexbuilder/deposit-status)獲取。

@@ -1389,12 +1389,21 @@
                         "group": "充值",
                         "pages": [
                           "zh-TW/api-reference/dexbuilder/deposit-fee",
-                          "zh-TW/api-reference/dexbuilder/deposit-sign-data"
+                          "zh-TW/api-reference/dexbuilder/deposit-sign-data",
+                          "zh-TW/api-reference/dexbuilder/deposit-status",
+                          "zh-TW/api-reference/dexbuilder/deposit-submit",
+                          "zh-TW/api-reference/dexbuilder/deposit-history"
                         ]
                       },
                       {
                         "group": "提現",
-                        "pages": []
+                        "pages": [
+                          "zh-TW/api-reference/dexbuilder/withdraw-sign-data",
+                          "zh-TW/api-reference/dexbuilder/withdraw-submit",
+                          "zh-TW/api-reference/dexbuilder/withdraw-status",
+                          "zh-TW/api-reference/dexbuilder/withdraw-history",
+                          "zh-TW/api-reference/dexbuilder/withdraw-ata-check-and-build"
+                        ]
                       }
                     ]
                   }
