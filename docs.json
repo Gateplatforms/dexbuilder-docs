@@ -886,10 +886,22 @@
                 ]
               },
               {
-                "item": "DexBuilder Platform API"
+                "item": "DexBuilder Platform API",
+                "groups": [
+                  {
+                    "group": "DexBuilder API",
+                    "pages": []
+                  }
+                ]
               },
               {
-                "item": "Shared API guides"
+                "item": "Access and conventions",
+                "groups": [
+                  {
+                    "group": "Shared API guides",
+                    "pages": []
+                  }
+                ]
               }
             ]
           }
