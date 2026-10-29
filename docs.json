@@ -1390,8 +1390,8 @@
                         "pages": [
                           "zh-TW/api-reference/dexbuilder/deposit-fee",
                           "zh-TW/api-reference/dexbuilder/deposit-sign-data",
-                          "zh-TW/api-reference/dexbuilder/deposit-status",
                           "zh-TW/api-reference/dexbuilder/deposit-submit",
+                          "zh-TW/api-reference/dexbuilder/deposit-status",
                           "zh-TW/api-reference/dexbuilder/deposit-history"
                         ]
                       },
