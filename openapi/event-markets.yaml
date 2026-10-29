@@ -986,10 +986,22 @@
                     "type": "string"
                   },
                   "order_type": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "GTC",
+                      "GTD",
+                      "FOK",
+                      "FAK"
+                    ],
+                    "description": "订单有效方式：GTC、GTD、FOK 或 FAK"
                   },
                   "order_mode": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "LIMIT",
+                      "MARKET"
+                    ],
+                    "description": "下单模式：LIMIT 或 MARKET"
                   },
                   "client_order_id": {
                     "type": "string"
@@ -1010,9 +1022,7 @@
         },
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ]
+            "BrokerAPIKey": []
           }
         ],
         "parameters": [
@@ -1127,7 +1137,15 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "processing",
+                "open",
+                "matched",
+                "canceled",
+                "failed"
+              ],
+              "description": "REST 订单状态，使用小写值"
             }
           },
           {
@@ -1205,9 +1223,7 @@
         ],
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ]
+            "BrokerAPIKey": []
           }
         ]
       },
@@ -1299,9 +1315,7 @@
         ],
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ]
+            "BrokerAPIKey": []
           }
         ]
       }
@@ -1395,9 +1409,7 @@
         ],
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ]
+            "BrokerAPIKey": []
           }
         ]
       },
@@ -1489,9 +1501,7 @@
         ],
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ]
+            "BrokerAPIKey": []
           }
         ]
       }
@@ -1617,9 +1627,7 @@
         ],
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ]
+            "BrokerAPIKey": []
           }
         ]
       }
@@ -1713,9 +1721,7 @@
         ],
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ]
+            "BrokerAPIKey": []
           }
         ]
       }
@@ -1809,9 +1815,7 @@
         ],
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ]
+            "BrokerAPIKey": []
           }
         ]
       }
@@ -1961,9 +1965,7 @@
         ],
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ]
+            "BrokerAPIKey": []
           }
         ]
       }
@@ -2020,9 +2022,7 @@
         },
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ]
+            "BrokerAPIKey": []
           }
         ],
         "parameters": [
@@ -2153,9 +2153,7 @@
         ],
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ]
+            "BrokerAPIKey": []
           }
         ]
       }
@@ -2249,9 +2247,7 @@
         ],
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ]
+            "BrokerAPIKey": []
           }
         ]
       }
@@ -2308,9 +2304,7 @@
         },
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ]
+            "BrokerAPIKey": []
           }
         ],
         "parameters": [
@@ -2433,9 +2427,7 @@
         ],
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ]
+            "BrokerAPIKey": []
           }
         ]
       }
@@ -2507,9 +2499,7 @@
         },
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ]
+            "BrokerAPIKey": []
           }
         ],
         "parameters": [
@@ -2632,9 +2622,7 @@
         ],
         "security": [
           {
-            "BrokerAPIKey": [
-
-            ]
+            "BrokerAPIKey": []
           }
         ]
       }
@@ -3366,7 +3354,10 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "accepted"
+            ]
           },
           "total_orders": {
             "type": "integer"
@@ -3378,7 +3369,10 @@
         "type": "object",
         "properties": {
           "cancel_status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "accepted"
+            ]
           },
           "order_id": {
             "type": "string"
@@ -3531,10 +3525,22 @@
             "type": "string"
           },
           "order_mode": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "LIMIT",
+              "MARKET"
+            ],
+            "description": "下单模式：LIMIT 或 MARKET"
           },
           "order_type": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "GTC",
+              "GTD",
+              "FOK",
+              "FAK"
+            ],
+            "description": "订单有效方式：GTC、GTD、FOK 或 FAK"
           },
           "outcome": {
             "type": "string"
@@ -3555,7 +3561,15 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "processing",
+              "open",
+              "matched",
+              "canceled",
+              "failed"
+            ],
+            "description": "REST 订单状态，使用小写值"
           },
           "token_id": {
             "type": "string"
@@ -3591,10 +3605,22 @@
             "type": "string"
           },
           "order_mode": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "LIMIT",
+              "MARKET"
+            ],
+            "description": "下单模式：LIMIT 或 MARKET"
           },
           "order_type": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "GTC",
+              "GTD",
+              "FOK",
+              "FAK"
+            ],
+            "description": "订单有效方式：GTC、GTD、FOK 或 FAK"
           },
           "outcome": {
             "type": "string"
@@ -3615,7 +3641,15 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "processing",
+              "open",
+              "matched",
+              "canceled",
+              "failed"
+            ],
+            "description": "REST 订单状态，使用小写值"
           },
           "token_id": {
             "type": "string"
@@ -3639,7 +3673,10 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "processing"
+            ]
           }
         },
         "description": "响应对象。"
@@ -3905,8 +3942,7 @@
           "status": {
             "type": "string"
           },
-          "tags": {
-          },
+          "tags": {},
           "title": {
             "type": "string"
           },
