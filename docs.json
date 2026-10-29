@@ -164,7 +164,7 @@
             "tab": "在 DexBuilder 上构建",
             "pages": [
               "builder/architecture",
-              "untitled-page-22",
+              "builder/start-building",
               {
                 "group": "构建你的 DEX",
                 "pages": [
@@ -573,7 +573,7 @@
             "tab": "Build on DexBuilder",
             "pages": [
               "en/builder/architecture",
-              "en/untitled-page-22",
+              "en/builder/start-building",
               {
                 "group": "Build Your DEX",
                 "pages": [
@@ -982,7 +982,7 @@
             "tab": "在 DexBuilder 上構建",
             "pages": [
               "zh-TW/builder/architecture",
-              "zh-TW/untitled-page-22",
+              "zh-TW/builder/start-building",
               {
                 "group": "構建你的 DEX",
                 "pages": [
@@ -1517,6 +1517,21 @@
     {
       "source": "/zh-TW/untitled-page-14",
       "destination": "/zh-TW/perpdex/fees/funding-rate",
+      "permanent": true
+    },
+    {
+      "source": "/untitled-page-22",
+      "destination": "/builder/start-building",
+      "permanent": true
+    },
+    {
+      "source": "/en/untitled-page-22",
+      "destination": "/en/builder/start-building",
+      "permanent": true
+    },
+    {
+      "source": "/zh-TW/untitled-page-22",
+      "destination": "/zh-TW/builder/start-building",
       "permanent": true
     }
   ],
