@@ -1,0 +1,15 @@
+---
+title: "查詢資金統計"
+description: "查詢終端使用者按鏈累計的充值和提現金額。"
+openapi: "/openapi/dexbuilder-zh-TW.yaml GET /api/v4/dexbuilder/fund_stats"
+---
+
+查詢終端使用者按鏈累計的充值和提現金額。
+
+<Note>
+  使用 Broker API Key 呼叫，並在請求頭提供 `sub_user_wallet_addr`。網關會校驗錢包與 Broker 的歸屬關係。 認證規則見[Broker API 認證與簽名](/zh-TW/api-reference/common/broker-authentication)。
+</Note>
+
+## 使用說明
+
+- `deposit` 與 `withdraw` 為 USDT 計價的按鏈累計金額。呼叫時按 OpenAPI 要求提供 `x-perp-device-type`。

@@ -1380,12 +1380,17 @@
                         "group": "使用者",
                         "pages": [
                           "zh-TW/api-reference/dexbuilder/query-user-info",
-                          "zh-TW/api-reference/dexbuilder/query-wallet-list"
+                          "zh-TW/api-reference/dexbuilder/query-wallet-list",
+                          "zh-TW/api-reference/dexbuilder/query-user-balance",
+                          "zh-TW/api-reference/dexbuilder/query-fund-stats"
                         ]
                       },
                       {
                         "group": "充值",
-                        "pages": []
+                        "pages": [
+                          "zh-TW/api-reference/dexbuilder/deposit-fee",
+                          "zh-TW/api-reference/dexbuilder/deposit-sign-data"
+                        ]
                       },
                       {
                         "group": "提現",
