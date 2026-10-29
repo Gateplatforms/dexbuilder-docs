@@ -33,7 +33,10 @@ curl "https://api.dexbuilder.com/api/v4/event_contracts/tokens/<token_id>/order_
 ```bash cURL
 curl -X POST "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders" \
   -H "Content-Type: application/json" \
-  -H "<authentication-header>: <authentication-value>" \
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${USER_WALLET}" \
   --data '{
     "token_id": "<token_id>",
     "side": "BUY",
@@ -50,7 +53,7 @@ curl -X POST "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders" \
 ```
 
 <Note>
-  上例認證 Header 僅用於表示介面需要認證，實際公開認證方案以正式認證文檔為準。不要把內部網關身份 Header 用作客戶端認證參數。
+  請使用 Broker API Key，並在 `sub_user_wallet_addr` 中指定屬於當前 Broker 的使用者錢包地址。`SIGN` 須依實際請求方法、路徑、查詢參數和請求主體計算。詳見 [Broker API Key 與簽名](/api-reference/common/broker-authentication) 及 [代表使用者存取](/api-reference/common/sub-user-wallet)。
 </Note>
 
 ## 請求欄位

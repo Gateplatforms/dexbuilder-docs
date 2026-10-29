@@ -33,7 +33,10 @@ Before submitting an order, validate quantity and price against `min_order_size`
 ```bash cURL
 curl -X POST "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders" \
   -H "Content-Type: application/json" \
-  -H "<authentication-header>: <authentication-value>" \
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${USER_WALLET}" \
   --data '{
     "token_id": "<token_id>",
     "side": "BUY",
@@ -50,7 +53,7 @@ curl -X POST "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders" \
 ```
 
 <Note>
-The authentication Header above only indicates that the endpoint requires authentication. Use the official public authentication scheme for actual integration. Do not use internal gateway identity Headers as client authentication parameters.
+Use a Broker API Key and pass a wallet address that belongs to your Broker in `sub_user_wallet_addr`. Calculate `SIGN` from the actual request method, path, query string, and body. See [Broker API key and signing](/api-reference/common/broker-authentication) and [Access on behalf of a user](/api-reference/common/sub-user-wallet).
 </Note>
 
 ## Request Fields

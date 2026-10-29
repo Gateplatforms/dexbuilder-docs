@@ -14,7 +14,10 @@ https://api.dexbuilder.com
 
 ```bash cURL
 curl -G "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders" \
-  -H "<authentication-header>: <authentication-value>" \
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${USER_WALLET}" \
   --data-urlencode "status=open" \
   --data-urlencode "condition_id=<condition_id>" \
   --data-urlencode "limit=20"
@@ -58,7 +61,10 @@ Pass `next_cursor` unchanged as `cursor` for the next page.
 
 ```bash cURL
 curl "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders/<order_id>" \
-  -H "<authentication-header>: <authentication-value>"
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${USER_WALLET}"
 ```
 
 The detail response includes the order identifiers, price, quantity, fill progress, and status from the list response and may also include an `error_code` returned by the order service.
@@ -67,7 +73,10 @@ The detail response includes the order identifiers, price, quantity, fill progre
 
 ```bash cURL
 curl -X DELETE "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders/<order_id>" \
-  -H "<authentication-header>: <authentication-value>"
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${USER_WALLET}"
 ```
 
 ```json
@@ -82,7 +91,10 @@ curl -X DELETE "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders/
 
 ```bash cURL
 curl -X DELETE "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders?condition_id=<condition_id>" \
-  -H "<authentication-header>: <authentication-value>"
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${USER_WALLET}"
 ```
 
 ```json
@@ -94,5 +106,5 @@ curl -X DELETE "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders?
 ```
 
 <Note>
-  Authentication Headers in this documentation are placeholders. Production integrations should use the final public authentication scheme. Identity fields injected by internal gateways are not external client request parameters.
+  Use a Broker API Key and pass a wallet address that belongs to your Broker in `sub_user_wallet_addr`. Calculate `SIGN` from the actual request method, path, query string, and body. See [Broker API key and signing](/api-reference/common/broker-authentication) and [Access on behalf of a user](/api-reference/common/sub-user-wallet).
 </Note>
