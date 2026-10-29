@@ -1,0 +1,2570 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "DexBuilder 平台 Broker API",
+    "version": "1.0.0",
+    "description": "DexBuilder 平台的 19 個 Broker 業務介面。認證和使用者錢包校驗見本站統一網關說明。"
+  },
+  "servers": [
+    {
+      "url": "https://api.dexbuilder.com"
+    }
+  ],
+  "paths": {
+    "/api/v4/dexbuilder/assets": {
+      "get": {
+        "tags": [
+          "資產配置"
+        ],
+        "summary": "查詢支持資產",
+        "description": "回傳當前 Broker 可用的充值與提現資產列表。",
+        "operationId": "listDexBuilderAssets",
+        "responses": {
+          "200": {
+            "description": "查詢成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeArrayOfAsset"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Broker API Key 或簽名無效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    },
+    "/api/v4/dexbuilder/networks": {
+      "get": {
+        "tags": [
+          "資產配置"
+        ],
+        "summary": "查詢資產網路",
+        "description": "按資產查詢可用的鏈/網路配置（token 地址、vault、最小充提等）。",
+        "operationId": "listDexBuilderNetworks",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AssetQuery"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查詢成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeArrayOfNetwork"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Broker API Key 或簽名無效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    },
+    "/api/v4/dexbuilder/dw_status": {
+      "get": {
+        "tags": [
+          "資產配置"
+        ],
+        "summary": "查詢充提開關",
+        "description": "查詢指定資產與網路的充值/提現是否開啓。",
+        "operationId": "getDexBuilderDwStatus",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AssetQuery"
+          },
+          {
+            "$ref": "#/components/parameters/NetworkQuery"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查詢成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeDwStatus"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Broker API Key 或簽名無效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    },
+    "/api/v4/dexbuilder/fee": {
+      "get": {
+        "tags": [
+          "資產配置"
+        ],
+        "summary": "查詢費率",
+        "description": "查詢按網路配置的固定充值和提現手續費，金額以 USDT 計價。",
+        "operationId": "getDexBuilderFee",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/DeviceType"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查詢成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopePerpQueryFee"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Broker API Key 或簽名無效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    },
+    "/api/v4/dexbuilder/withdraw_limit": {
+      "get": {
+        "tags": [
+          "資產配置"
+        ],
+        "summary": "查詢提現限額",
+        "description": "查詢當前 Broker 提現限制。",
+        "operationId": "getDexBuilderWithdrawLimit",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/DeviceType"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查詢成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopePerpWithdrawLimit"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Broker API Key 或簽名無效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    },
+    "/api/v4/dexbuilder/user/info": {
+      "get": {
+        "tags": [
+          "使用者"
+        ],
+        "summary": "查詢使用者資訊",
+        "description": "查詢專案下終端使用者 ID 與已綁定錢包列表。",
+        "operationId": "getDexBuilderUserInfo",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查詢成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeUserInfo"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/UserNotFound",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Broker API Key 或簽名無效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    },
+    "/api/v4/dexbuilder/wallet/list": {
+      "get": {
+        "tags": [
+          "使用者"
+        ],
+        "summary": "查詢錢包列表",
+        "description": "分頁式錢包列表（當前回傳使用者全部綁定錢包）。",
+        "operationId": "listDexBuilderWallets",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查詢成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeWalletList"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Broker API Key 或簽名無效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    },
+    "/api/v4/dexbuilder/user/balance": {
+      "get": {
+        "tags": [
+          "使用者"
+        ],
+        "summary": "查詢 Vault 餘額",
+        "description": "查詢使用者在 PerpDEX Vault 中的餘額。",
+        "operationId": "getDexBuilderUserVaultBalance",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          },
+          {
+            "$ref": "#/components/parameters/DeviceType"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查詢成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopePerpUserVaultBalance"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Broker API Key 或簽名無效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    },
+    "/api/v4/dexbuilder/fund_stats": {
+      "get": {
+        "tags": [
+          "使用者"
+        ],
+        "summary": "查詢資金統計",
+        "description": "查詢使用者資金統計。",
+        "operationId": "getDexBuilderFundStats",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          },
+          {
+            "$ref": "#/components/parameters/DeviceType"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查詢成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopePerpFundStats"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Broker API Key 或簽名無效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    },
+    "/api/v4/dexbuilder/deposit/fee": {
+      "post": {
+        "tags": [
+          "充值"
+        ],
+        "summary": "估算充值手續費",
+        "operationId": "estimateDexBuilderDepositFee",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DepositRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "查詢成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeDepositFee"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Broker API Key 或簽名無效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ],
+        "description": ""
+      }
+    },
+    "/api/v4/dexbuilder/deposit/sign_data": {
+      "post": {
+        "tags": [
+          "充值"
+        ],
+        "summary": "獲取充值簽名資料",
+        "description": "回傳鏈上充值所需的 calldata 與 Vault 合約地址。若使用者在該鏈尚未綁定 Perp 賬戶，首次成功呼叫會完成綁定；重復呼叫不會重復綁定。",
+        "operationId": "dexBuilderDepositSignData",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          },
+          {
+            "name": "x-perp-device-type",
+            "in": "header",
+            "required": false,
+            "description": "設備類型（1/2/3/4），風控使用，建議填寫",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "2",
+                "3",
+                "4"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PerpDepositSignDataRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeDepositSignData"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Broker API Key 或簽名無效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    },
+    "/api/v4/dexbuilder/deposit/submit": {
+      "post": {
+        "tags": [
+          "充值"
+        ],
+        "summary": "提交充值回執",
+        "description": "鏈上交易完成後上報 tx_hash；支持 Idempotency-Key 冪等。",
+        "operationId": "dexBuilderDepositSubmit",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          },
+          {
+            "$ref": "#/components/parameters/DeviceType"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PerpDepositPostProcessRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "受理成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeDepositSubmit"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Broker API Key 或簽名無效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    },
+    "/api/v4/dexbuilder/deposit/status": {
+      "get": {
+        "tags": [
+          "充值"
+        ],
+        "summary": "查詢充值狀態",
+        "operationId": "getDexBuilderDepositStatus",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          },
+          {
+            "name": "tx_hash",
+            "in": "query",
+            "required": true,
+            "description": "EVM 或 Solana 交易哈希",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查詢成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeDepositStatus"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Broker API Key 或簽名無效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ],
+        "description": ""
+      }
+    },
+    "/api/v4/dexbuilder/deposit/history": {
+      "get": {
+        "tags": [
+          "充值"
+        ],
+        "summary": "查詢充值歷史",
+        "operationId": "listDexBuilderDepositHistory",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          },
+          {
+            "$ref": "#/components/parameters/Page"
+          },
+          {
+            "$ref": "#/components/parameters/PageSize"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查詢成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeDepositHistory"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Broker API Key 或簽名無效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ],
+        "description": ""
+      }
+    },
+    "/api/v4/dexbuilder/withdraw/sign_data": {
+      "post": {
+        "tags": [
+          "提現"
+        ],
+        "summary": "獲取提現簽名資料",
+        "operationId": "dexBuilderWithdrawSignData",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PerpWithdrawSignDataRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeWithdrawSignData"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Broker API Key 或簽名無效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ],
+        "description": ""
+      }
+    },
+    "/api/v4/dexbuilder/withdraw/submit": {
+      "post": {
+        "tags": [
+          "提現"
+        ],
+        "summary": "提交提現",
+        "description": "提交已簽名的提現請求；支持 Idempotency-Key 冪等。",
+        "operationId": "dexBuilderWithdrawSubmit",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          },
+          {
+            "$ref": "#/components/parameters/DeviceType"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PerpWithdrawSubmitRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "受理成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeWithdrawSubmit"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Broker API Key 或簽名無效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    },
+    "/api/v4/dexbuilder/withdraw/status": {
+      "get": {
+        "tags": [
+          "提現"
+        ],
+        "summary": "查詢提現狀態",
+        "operationId": "getDexBuilderWithdrawStatus",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          },
+          {
+            "name": "event_id",
+            "in": "query",
+            "required": true,
+            "description": "提現 submit 回傳的 UUID",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查詢成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeWithdrawStatus"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Broker API Key 或簽名無效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ],
+        "description": ""
+      }
+    },
+    "/api/v4/dexbuilder/withdraw/history": {
+      "get": {
+        "tags": [
+          "提現"
+        ],
+        "summary": "查詢提現歷史",
+        "operationId": "listDexBuilderWithdrawHistory",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          },
+          {
+            "$ref": "#/components/parameters/Page"
+          },
+          {
+            "$ref": "#/components/parameters/PageSize"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "查詢成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeWithdrawHistory"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Broker API Key 或簽名無效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ],
+        "description": ""
+      }
+    },
+    "/api/v4/dexbuilder/withdraw/ata/check-and-build": {
+      "post": {
+        "tags": [
+          "提現"
+        ],
+        "summary": "Solana ATA 檢測與構建",
+        "description": "檢測目標 SPL 賬戶是否存在；不存在時回傳待簽名 base64 交易。",
+        "operationId": "dexBuilderWithdrawATACheckAndBuild",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PerpWithdrawATACheckRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeWithdrawATACheck"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Broker API Key 或簽名無效",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BrokerAPIKey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "KEY",
+        "description": "Broker API Key"
+      },
+      "Timestamp": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Timestamp",
+        "description": "Unix 秒級時間戳"
+      },
+      "Signature": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "SIGN",
+        "description": "使用 Broker Secret Key 生成的 HMAC-SHA512 十六進制簽名"
+      }
+    },
+    "parameters": {
+      "AssetQuery": {
+        "name": "asset",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "example": "USDT",
+        "description": "資產符號過濾，如 USDT"
+      },
+      "NetworkQuery": {
+        "name": "network",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "example": "ethereum",
+        "description": "網路標識，如 ethereum"
+      },
+      "Page": {
+        "name": "page",
+        "in": "query",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1
+        },
+        "description": "頁碼，從 1 開始"
+      },
+      "PageSize": {
+        "name": "page_size",
+        "in": "query",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 20
+        },
+        "description": "每頁條數，最大 100"
+      },
+      "SubUserWalletAddr": {
+        "name": "sub_user_wallet_addr",
+        "in": "header",
+        "required": true,
+        "description": "目標終端使用者錢包地址。網關校驗該錢包對應的使用者屬於當前 Broker。",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "DeviceType": {
+        "name": "x-perp-device-type",
+        "in": "header",
+        "required": true,
+        "description": "設備類型：1 Android、2 iOS、3 WEB、4 H5。僅在標明必填的介面中要求傳遞。",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "1",
+            "2",
+            "3",
+            "4"
+          ]
+        }
+      },
+      "IdempotencyKey": {
+        "name": "Idempotency-Key",
+        "in": "header",
+        "required": true,
+        "description": "冪等鍵，最長 128 字符，建議使用 UUID。同一使用者在同一提交介面使用相同 Key 重試時，服務端回傳首次成功請求的回應；網路超時後可使用原 Key 重試。不同請求不得復用 Key。",
+        "schema": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "example": "7c9e6679-7425-40de-944b-e07fc1f90ae7"
+      }
+    },
+    "responses": {
+      "OpenAPIBadRequest": {
+        "description": "請求無效（參數、請求體、使用者身份或業務校驗）",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorEnvelope"
+            },
+            "examples": {
+              "invalidArgument": {
+                "summary": "參數無效",
+                "value": {
+                  "label": "INVALID_ARGUMENT",
+                  "message": "invalid argument"
+                }
+              },
+              "userNotFound": {
+                "summary": "使用者不存在",
+                "value": {
+                  "label": "USER_NOT_FOUND",
+                  "message": "User not found"
+                }
+              },
+              "missingHeader": {
+                "summary": "缺少必要請求頭",
+                "value": {
+                  "label": "MISSING_REQUIRED_HEADER",
+                  "message": "invalid headers"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ProjectAccessDenied": {
+        "description": "專案未綁定或 Broker/API Key 不匹配",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorEnvelope"
+            },
+            "example": {
+              "code": 40300801,
+              "reason": "P_DEX_BUILDER_IN_PROJECT_ACCESS_DENIED",
+              "label": "PROJECT_ACCESS_DENIED",
+              "message": "project access denied",
+              "data": null
+            }
+          }
+        }
+      },
+      "UserNotFound": {
+        "description": "使用者不存在或未綁定錢包",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorEnvelope"
+            },
+            "example": {
+              "code": 405007,
+              "reason": "P_DEX_BUILDER_IN_USER_NOT_FOUND",
+              "label": "USER_NOT_FOUND",
+              "message": "User not found",
+              "data": null
+            }
+          }
+        }
+      },
+      "GatewayUnauthorized": {
+        "description": "Broker API Key、簽名或時間戳無效",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorEnvelope"
+            },
+            "examples": {
+              "invalidKey": {
+                "summary": "無效 API Key",
+                "value": {
+                  "label": "INVALID_KEY",
+                  "message": "Invalid key provided",
+                  "code": 401,
+                  "trace_id": "abc123"
+                }
+              },
+              "invalidSignature": {
+                "summary": "簽名錯誤",
+                "value": {
+                  "label": "INVALID_SIGNATURE",
+                  "message": "Invalid signature",
+                  "code": 401,
+                  "trace_id": "abc123"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "ErrorEnvelope": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "required": [
+              "label"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "description": "穩定的機器可讀錯誤標識"
+              },
+              "data": {
+                "nullable": true,
+                "description": "錯誤時一般為 null"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeBase": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "example": 0,
+            "description": "業務碼，`0` 表示成功"
+          },
+          "message": {
+            "type": "string",
+            "example": "success",
+            "description": "人類可讀說明，成功時為 success"
+          },
+          "reason": {
+            "type": "string",
+            "description": "錯誤原因標識；成功時通常為空字符串"
+          },
+          "trace_id": {
+            "type": "string",
+            "description": "鏈路追蹤 ID，排障時提供"
+          }
+        }
+      },
+      "EnvelopeArrayOfAsset": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Asset"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeArrayOfNetwork": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Network"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeDwStatus": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/DwStatus"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeUserInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/UserInfo"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeWalletList": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "object",
+                "properties": {
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/WalletItem"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeDepositFee": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/PerpDepositFeeResponse"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeDepositSignData": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/PerpDepositSignDataResponse"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeDepositSubmit": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/PerpDepositPostProcessResponse"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeDepositStatus": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/PerpDepositStatusResponse"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeDepositHistory": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/DepositHistoryPage"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeWithdrawSignData": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/PerpWithdrawSignDataResponse"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeWithdrawSubmit": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/PerpWithdrawSubmitResponse"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeWithdrawStatus": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/PerpWithdrawStatusResponse"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeWithdrawHistory": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/WithdrawHistoryPage"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeWithdrawATACheck": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/PerpWithdrawATACheckResponse"
+              }
+            }
+          }
+        ]
+      },
+      "Asset": {
+        "type": "object",
+        "properties": {
+          "asset": {
+            "type": "string",
+            "example": "USDT",
+            "description": "資產符號，如 USDT"
+          },
+          "name": {
+            "type": "string",
+            "example": "Tether USD",
+            "description": "資產展示名稱"
+          }
+        }
+      },
+      "Network": {
+        "type": "object",
+        "properties": {
+          "asset": {
+            "type": "string",
+            "description": "資產符號"
+          },
+          "network": {
+            "type": "string",
+            "description": "網路標識，與 chain 參數一致（如 ethereum、bsc、solana）"
+          },
+          "chain_id": {
+            "type": "string",
+            "description": "鏈 ID，十進制字符串"
+          },
+          "vm": {
+            "type": "string",
+            "enum": [
+              "evm",
+              "solana"
+            ],
+            "description": "虛擬機：`evm` 或 `solana`"
+          },
+          "token_address": {
+            "type": "string",
+            "description": "代幣合約地址；EVM 為 0x 前綴 hex，Solana 為 mint base58"
+          },
+          "vault_address": {
+            "type": "string",
+            "description": "Perp Vault 合約地址"
+          },
+          "decimals": {
+            "type": "integer",
+            "description": "代幣精度（整數）"
+          },
+          "deposit_enabled": {
+            "type": "boolean",
+            "description": "該網路是否開放充值"
+          },
+          "withdraw_enabled": {
+            "type": "boolean",
+            "description": "該網路是否開放提現"
+          },
+          "min_deposit": {
+            "type": "string",
+            "description": "最小充值數量，十進制字符串，單位為 token 最小展示單位"
+          },
+          "min_withdraw": {
+            "type": "string",
+            "description": "最小提現數量，十進制字符串，單位為 token 最小展示單位"
+          }
+        }
+      },
+      "DwStatus": {
+        "type": "object",
+        "properties": {
+          "asset": {
+            "type": "string",
+            "description": "資產符號"
+          },
+          "network": {
+            "type": "string",
+            "description": "網路標識"
+          },
+          "deposit_enabled": {
+            "type": "boolean",
+            "description": "充值開關"
+          },
+          "withdraw_enabled": {
+            "type": "boolean",
+            "description": "提現開關"
+          }
+        }
+      },
+      "UserInfo": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "終端使用者 ID（專案方映射）"
+          },
+          "project_id": {
+            "type": "string",
+            "description": "DexBuilder 專案 ID"
+          },
+          "status": {
+            "type": "string",
+            "example": "active",
+            "description": "使用者狀態，如 active"
+          },
+          "wallets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserInfoWallet"
+            },
+            "description": "已綁定錢包列表"
+          }
+        }
+      },
+      "WalletItem": {
+        "type": "object",
+        "properties": {
+          "wallet_id": {
+            "type": "string",
+            "description": "錢包記錄 ID"
+          },
+          "chain": {
+            "type": "string",
+            "description": "鏈標識"
+          },
+          "address": {
+            "type": "string",
+            "description": "錢包地址，須與 sub_user_wallet_addr 匹配時方可代表該使用者"
+          },
+          "status": {
+            "type": "string",
+            "description": "綁定狀態"
+          },
+          "is_primary": {
+            "type": "boolean",
+            "description": "是否主錢包"
+          },
+          "bound_at": {
+            "type": "integer",
+            "format": "int64",
+            "description": "綁定時間，Unix 毫秒時間戳"
+          }
+        }
+      },
+      "HistoryPage": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "page": {
+            "type": "integer"
+          },
+          "page_size": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "DepositRequest": {
+        "type": "object",
+        "required": [
+          "address",
+          "chain",
+          "token_address",
+          "token_amount",
+          "token_symbol"
+        ],
+        "properties": {
+          "address": {
+            "type": "string",
+            "description": "發起充值的使用者錢包，須為已綁定錢包；EVM 0x hex 或 Solana base58"
+          },
+          "chain": {
+            "type": "string",
+            "description": "鏈標識，須與 token 所在網路一致"
+          },
+          "token_address": {
+            "type": "string",
+            "description": "代幣合約；原生幣用鏈約定零地址"
+          },
+          "token_amount": {
+            "type": "string",
+            "description": "充值數量，十進制字符串"
+          },
+          "token_symbol": {
+            "type": "string",
+            "description": "代幣符號，如 USDT"
+          }
+        }
+      },
+      "PerpDepositSignDataRequest": {
+        "type": "object",
+        "required": [
+          "address",
+          "chain",
+          "token_address",
+          "token_amount",
+          "token_symbol"
+        ],
+        "properties": {
+          "address": {
+            "type": "string",
+            "description": "使用者錢包，須已綁定；與 sub_user_wallet_addr 一致"
+          },
+          "chain": {
+            "type": "string",
+            "description": "鏈標識"
+          },
+          "token_address": {
+            "type": "string",
+            "description": "代幣合約地址"
+          },
+          "token_amount": {
+            "type": "string",
+            "description": "充值數量，十進制字符串"
+          },
+          "token_symbol": {
+            "type": "string",
+            "description": "代幣符號"
+          },
+          "native_fee": {
+            "type": "integer",
+            "format": "int64",
+            "description": "來自 POST /deposit/fee 的 native_fee（int64，鏈原生幣最小單位）"
+          },
+          "lz_fee": {
+            "type": "integer",
+            "format": "int64",
+            "description": "來自 POST /deposit/fee：USDT 6 位小數轉 int64（如 lz_fee 字符串 \"0.5\" → 500000）；native_fee 原樣 int64"
+          }
+        }
+      },
+      "PerpDepositSignDataResponse": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Perp 賬戶 ID"
+          },
+          "broker_hash": {
+            "type": "string",
+            "description": "Broker 哈希（鏈上參數）"
+          },
+          "token_hash": {
+            "type": "string",
+            "description": "代幣哈希（鏈上參數）"
+          },
+          "token_amount": {
+            "type": "string",
+            "description": "充值數量，十進制字符串"
+          },
+          "contract_address": {
+            "type": "string",
+            "description": "Vault 合約地址，與 data 組裝交易"
+          },
+          "data": {
+            "type": "string",
+            "description": "ABI calldata（0x hex）"
+          }
+        }
+      },
+      "PerpDepositPostProcessRequest": {
+        "type": "object",
+        "required": [
+          "chain",
+          "address",
+          "token_address",
+          "txn_hash",
+          "token_amount"
+        ],
+        "properties": {
+          "chain": {
+            "type": "string",
+            "description": "鏈標識"
+          },
+          "address": {
+            "type": "string",
+            "description": "充值發起錢包，須已綁定"
+          },
+          "token_address": {
+            "type": "string",
+            "description": "代幣合約"
+          },
+          "txn_hash": {
+            "type": "string",
+            "description": "鏈上充值交易哈希"
+          },
+          "token_amount": {
+            "type": "string",
+            "description": "充值數量，須與 sign_data 一致"
+          }
+        }
+      },
+      "PerpDepositPostProcessResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "是否受理成功（非鏈上最終態，最終態查 /deposit/status）"
+          }
+        }
+      },
+      "PerpDepositFeeResponse": {
+        "type": "object",
+        "properties": {
+          "deposit_fee": {
+            "type": "string",
+            "description": "平台充值費，USDT 十進制字符串"
+          },
+          "lz_fee": {
+            "type": "string",
+            "description": "LayerZero 跨鏈費，USDT 十進制字符串（sign_data 需轉為 int64）"
+          },
+          "native_fee": {
+            "type": "integer",
+            "format": "int64",
+            "description": "鏈原生代幣費用，最小單位整數（如 wei）"
+          },
+          "fee_source": {
+            "type": "integer",
+            "description": "費用來源標識；0 表示默認。"
+          }
+        }
+      },
+      "PerpDepositStatusResponse": {
+        "type": "object",
+        "properties": {
+          "tx_hash": {
+            "type": "string",
+            "description": "查詢的交易哈希"
+          },
+          "status": {
+            "type": "integer",
+            "description": "0 未查詢到；10 確認中；20 成功；30 失敗"
+          }
+        }
+      },
+      "PerpWithdrawSignDataRequest": {
+        "type": "object",
+        "properties": {
+          "chain": {
+            "type": "string",
+            "description": "鏈標識"
+          },
+          "token_symbol": {
+            "type": "string",
+            "description": "代幣符號"
+          },
+          "token_address": {
+            "type": "string",
+            "description": "代幣合約"
+          },
+          "token_amount": {
+            "type": "string",
+            "description": "提現數量，十進制字符串"
+          },
+          "to_address": {
+            "type": "string",
+            "description": "到賬地址，可為第三方地址；EVM/Solana 格式須匹配 chain"
+          },
+          "address": {
+            "type": "string",
+            "description": "使用者已綁定錢包（簽名主體），須與 sub_user_wallet_addr 一致"
+          }
+        },
+        "required": [
+          "chain",
+          "token_symbol",
+          "token_address",
+          "token_amount",
+          "to_address",
+          "address"
+        ]
+      },
+      "PerpWithdrawSignDataResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "description": "待使用者 EIP-712 / 鏈約定格式簽名的 payload（0x hex）"
+          },
+          "contract_address": {
+            "type": "string",
+            "description": "Vault 合約"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "description": "簽名時間戳（秒），提交 withdraw/submit 時必須原樣帶回"
+          }
+        }
+      },
+      "PerpWithdrawSubmitRequest": {
+        "type": "object",
+        "properties": {
+          "r": {
+            "type": "string",
+            "description": "對 sign_data.data 簽名的 r（0x hex）"
+          },
+          "v": {
+            "type": "integer",
+            "description": "簽名 v，整數（如 27/28）"
+          },
+          "s": {
+            "type": "string",
+            "description": "簽名 s（0x hex）"
+          },
+          "chain": {
+            "type": "string",
+            "description": "鏈標識"
+          },
+          "token_address": {
+            "type": "string",
+            "description": "代幣合約"
+          },
+          "address": {
+            "type": "string",
+            "description": "使用者錢包，須與 sign_data 請求一致"
+          },
+          "token_amount": {
+            "type": "string",
+            "description": "提現數量"
+          },
+          "to_address": {
+            "type": "string",
+            "description": "到賬地址，須與 sign_data 請求一致"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "description": "須等於 sign_data 回應中的 timestamp"
+          },
+          "token_symbol": {
+            "type": "string",
+            "description": "代幣符號"
+          }
+        },
+        "required": [
+          "r",
+          "v",
+          "s",
+          "timestamp",
+          "chain",
+          "token_address",
+          "address",
+          "token_amount",
+          "to_address",
+          "token_symbol"
+        ]
+      },
+      "PerpWithdrawSubmitResponse": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": "string",
+            "description": "提現事件 UUID，用於 GET /withdraw/status"
+          },
+          "success": {
+            "type": "boolean",
+            "description": "是否受理成功"
+          }
+        }
+      },
+      "PerpWithdrawStatusResponse": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": "string",
+            "description": "提現事件 ID"
+          },
+          "tx_hash": {
+            "type": "string",
+            "description": "鏈上交易哈希，未上鏈時為空"
+          },
+          "status": {
+            "type": "integer",
+            "description": "0 未查詢到；10 待提現；11 確認中；20 成功；30 失敗"
+          }
+        }
+      },
+      "PerpWithdrawATACheckRequest": {
+        "type": "object",
+        "required": [
+          "payer_address",
+          "target_address"
+        ],
+        "properties": {
+          "payer_address": {
+            "type": "string",
+            "description": "Solana 使用者錢包（base58），須為已綁定錢包"
+          },
+          "target_address": {
+            "type": "string",
+            "description": "待檢測 ATA 的 owner 地址（base58）"
+          }
+        }
+      },
+      "PerpWithdrawATACheckResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "description": "0=需創建 ATA；1=已存在"
+          },
+          "tx_data": {
+            "type": "string",
+            "description": "base64 交易，status=0 時有值"
+          }
+        }
+      },
+      "UserInfoWallet": {
+        "type": "object",
+        "properties": {
+          "chain": {
+            "type": "string",
+            "description": "鏈標識"
+          },
+          "address": {
+            "type": "string",
+            "description": "已綁定錢包地址"
+          },
+          "status": {
+            "type": "string",
+            "description": "綁定狀態，如 bound"
+          }
+        }
+      },
+      "PerpQueryFeeItem": {
+        "type": "object",
+        "properties": {
+          "chain": {
+            "type": "string",
+            "description": "鏈標識"
+          },
+          "deposit_fee": {
+            "type": "string",
+            "description": "充值固定手續費（非比例），USDT 計價十進制字符串，如 0 表示免費",
+            "example": "0"
+          },
+          "withdraw_fee": {
+            "type": "string",
+            "description": "提現固定手續費（非比例），USDT 計價十進制字符串",
+            "example": "1.5"
+          }
+        }
+      },
+      "PerpQueryFeeResponse": {
+        "type": "object",
+        "properties": {
+          "list": {
+            "type": "array",
+            "description": "按鏈列出的費率",
+            "items": {
+              "$ref": "#/components/schemas/PerpQueryFeeItem"
+            }
+          }
+        }
+      },
+      "EnvelopePerpQueryFee": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/PerpQueryFeeResponse"
+              }
+            }
+          }
+        ]
+      },
+      "PerpWithdrawLimitResponse": {
+        "type": "object",
+        "properties": {
+          "once": {
+            "type": "string",
+            "description": "單筆提現上限，USDT 計價十進制字符串",
+            "example": "50000"
+          },
+          "day": {
+            "type": "string",
+            "description": "自然日累計提現上限，USDT 計價十進制字符串",
+            "example": "100000"
+          }
+        }
+      },
+      "EnvelopePerpWithdrawLimit": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/PerpWithdrawLimitResponse"
+              }
+            }
+          }
+        ]
+      },
+      "PerpUserVaultBalanceResponse": {
+        "type": "object",
+        "properties": {
+          "available": {
+            "type": "string",
+            "description": "Vault 可用餘額，USDT 計價十進制字符串",
+            "example": "100.5"
+          }
+        }
+      },
+      "EnvelopePerpUserVaultBalance": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/PerpUserVaultBalanceResponse"
+              }
+            }
+          }
+        ]
+      },
+      "PerpQueryFundStatItem": {
+        "type": "object",
+        "properties": {
+          "chain": {
+            "type": "string",
+            "description": "鏈標識"
+          },
+          "deposit": {
+            "type": "string",
+            "description": "累計充值量，USDT 計價十進制字符串"
+          },
+          "withdraw": {
+            "type": "string",
+            "description": "累計提現量，USDT 計價十進制字符串"
+          }
+        }
+      },
+      "PerpQueryFundStatsResponse": {
+        "type": "object",
+        "properties": {
+          "list": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PerpQueryFundStatItem"
+            }
+          }
+        }
+      },
+      "EnvelopePerpFundStats": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/PerpQueryFundStatsResponse"
+              }
+            }
+          }
+        ]
+      },
+      "DepositHistoryItem": {
+        "type": "object",
+        "properties": {
+          "tx_hash": {
+            "type": "string",
+            "description": "鏈上充值交易哈希"
+          },
+          "status": {
+            "type": "integer",
+            "description": "0 未查詢到；10 確認中；20 成功；30 失敗"
+          },
+          "amount": {
+            "type": "string",
+            "description": "充值數量，十進制字符串（token 單位）"
+          },
+          "network": {
+            "type": "string",
+            "description": "網路標識"
+          },
+          "asset": {
+            "type": "string",
+            "description": "資產符號"
+          }
+        }
+      },
+      "WithdrawHistoryItem": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": "string",
+            "description": "提現事件 UUID"
+          },
+          "tx_hash": {
+            "type": "string",
+            "description": "鏈上哈希，未上鏈時為空串"
+          },
+          "status": {
+            "type": "integer",
+            "description": "0 未查詢到；10 待提現；11 確認中；20 成功；30 失敗"
+          },
+          "amount": {
+            "type": "string",
+            "description": "提現數量，十進制字符串（token 單位）"
+          },
+          "asset": {
+            "type": "string",
+            "description": "資產符號"
+          },
+          "network": {
+            "type": "string",
+            "description": "網路標識"
+          }
+        }
+      },
+      "DepositHistoryPage": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DepositHistoryItem"
+            }
+          },
+          "page": {
+            "type": "integer",
+            "description": "當前頁碼"
+          },
+          "page_size": {
+            "type": "integer",
+            "description": "本頁大小"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int64",
+            "description": "符合條件的總記錄數（非僅當前頁）"
+          }
+        }
+      },
+      "WithdrawHistoryPage": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WithdrawHistoryItem"
+            }
+          },
+          "page": {
+            "type": "integer",
+            "description": "當前頁碼"
+          },
+          "page_size": {
+            "type": "integer",
+            "description": "本頁大小"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int64",
+            "description": "符合條件的總記錄數（非僅當前頁）"
+          }
+        }
+      }
+    }
+  }
+}

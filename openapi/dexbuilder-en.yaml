@@ -1,0 +1,2570 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "DexBuilder Platform Broker API",
+    "version": "1.0.0",
+    "description": "19 Broker business endpoints for DexBuilder. See the shared gateway documentation for authentication and user wallet verification."
+  },
+  "servers": [
+    {
+      "url": "https://api.dexbuilder.com"
+    }
+  ],
+  "paths": {
+    "/api/v4/dexbuilder/assets": {
+      "get": {
+        "tags": [
+          "Asset configuration"
+        ],
+        "summary": "List supported assets",
+        "description": "Return the deposit and withdrawal assets available to the current Broker.",
+        "operationId": "listDexBuilderAssets",
+        "responses": {
+          "200": {
+            "description": "Query successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeArrayOfAsset"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Broker API Key or signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    },
+    "/api/v4/dexbuilder/networks": {
+      "get": {
+        "tags": [
+          "Asset configuration"
+        ],
+        "summary": "List asset networks",
+        "description": "List the available chains and networks for an asset, including token addresses, Vault addresses, and minimum deposit and withdrawal amounts.",
+        "operationId": "listDexBuilderNetworks",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AssetQuery"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Query successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeArrayOfNetwork"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Broker API Key or signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    },
+    "/api/v4/dexbuilder/dw_status": {
+      "get": {
+        "tags": [
+          "Asset configuration"
+        ],
+        "summary": "Get deposit and withdrawal availability",
+        "description": "Check whether deposits and withdrawals are enabled for the specified asset and network.",
+        "operationId": "getDexBuilderDwStatus",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/AssetQuery"
+          },
+          {
+            "$ref": "#/components/parameters/NetworkQuery"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Query successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeDwStatus"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Broker API Key or signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    },
+    "/api/v4/dexbuilder/fee": {
+      "get": {
+        "tags": [
+          "Asset configuration"
+        ],
+        "summary": "Get fixed deposit and withdrawal fees",
+        "description": "Return fixed deposit and withdrawal fees configured by network, denominated in USDT.",
+        "operationId": "getDexBuilderFee",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/DeviceType"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Query successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopePerpQueryFee"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Broker API Key or signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    },
+    "/api/v4/dexbuilder/withdraw_limit": {
+      "get": {
+        "tags": [
+          "Asset configuration"
+        ],
+        "summary": "Get withdrawal limits",
+        "description": "Return the withdrawal limits for the current Broker.",
+        "operationId": "getDexBuilderWithdrawLimit",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/DeviceType"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Query successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopePerpWithdrawLimit"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Broker API Key or signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    },
+    "/api/v4/dexbuilder/user/info": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get user information",
+        "description": "Return the end user's ID and bound wallets within the project.",
+        "operationId": "getDexBuilderUserInfo",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Query successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeUserInfo"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/UserNotFound",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Broker API Key or signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    },
+    "/api/v4/dexbuilder/wallet/list": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "List wallets",
+        "description": "Return all wallets currently bound to the user.",
+        "operationId": "listDexBuilderWallets",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Query successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeWalletList"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Broker API Key or signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    },
+    "/api/v4/dexbuilder/user/balance": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get Vault balance",
+        "description": "Return the user's available balance in the PerpDEX Vault.",
+        "operationId": "getDexBuilderUserVaultBalance",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          },
+          {
+            "$ref": "#/components/parameters/DeviceType"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Query successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopePerpUserVaultBalance"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Broker API Key or signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    },
+    "/api/v4/dexbuilder/fund_stats": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get fund statistics",
+        "description": "Return the user's fund statistics.",
+        "operationId": "getDexBuilderFundStats",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          },
+          {
+            "$ref": "#/components/parameters/DeviceType"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Query successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopePerpFundStats"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Broker API Key or signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    },
+    "/api/v4/dexbuilder/deposit/fee": {
+      "post": {
+        "tags": [
+          "Deposit"
+        ],
+        "summary": "Estimate deposit fees",
+        "operationId": "estimateDexBuilderDepositFee",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DepositRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Query successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeDepositFee"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Broker API Key or signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ],
+        "description": ""
+      }
+    },
+    "/api/v4/dexbuilder/deposit/sign_data": {
+      "post": {
+        "tags": [
+          "Deposit"
+        ],
+        "summary": "Get deposit signing data",
+        "description": "Return the calldata and Vault contract address needed for an onchain deposit. A first successful call may persistently bind the user's Perp account to the wallet; repeated calls do not create another binding.",
+        "operationId": "dexBuilderDepositSignData",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          },
+          {
+            "name": "x-perp-device-type",
+            "in": "header",
+            "required": false,
+            "description": "Device type (1/2/3/4). Recommended for risk controls.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "2",
+                "3",
+                "4"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PerpDepositSignDataRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeDepositSignData"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Broker API Key or signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    },
+    "/api/v4/dexbuilder/deposit/submit": {
+      "post": {
+        "tags": [
+          "Deposit"
+        ],
+        "summary": "Submit a deposit transaction",
+        "description": "Report the transaction hash after broadcasting an onchain deposit. Supports Idempotency-Key.",
+        "operationId": "dexBuilderDepositSubmit",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          },
+          {
+            "$ref": "#/components/parameters/DeviceType"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PerpDepositPostProcessRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeDepositSubmit"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Broker API Key or signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    },
+    "/api/v4/dexbuilder/deposit/status": {
+      "get": {
+        "tags": [
+          "Deposit"
+        ],
+        "summary": "Get deposit status",
+        "operationId": "getDexBuilderDepositStatus",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          },
+          {
+            "name": "tx_hash",
+            "in": "query",
+            "required": true,
+            "description": "EVM or Solana transaction hash",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Query successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeDepositStatus"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Broker API Key or signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ],
+        "description": ""
+      }
+    },
+    "/api/v4/dexbuilder/deposit/history": {
+      "get": {
+        "tags": [
+          "Deposit"
+        ],
+        "summary": "Get deposit history",
+        "operationId": "listDexBuilderDepositHistory",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          },
+          {
+            "$ref": "#/components/parameters/Page"
+          },
+          {
+            "$ref": "#/components/parameters/PageSize"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Query successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeDepositHistory"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Broker API Key or signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ],
+        "description": ""
+      }
+    },
+    "/api/v4/dexbuilder/withdraw/sign_data": {
+      "post": {
+        "tags": [
+          "Withdrawal"
+        ],
+        "summary": "Get withdrawal signing data",
+        "operationId": "dexBuilderWithdrawSignData",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PerpWithdrawSignDataRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeWithdrawSignData"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Broker API Key or signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ],
+        "description": ""
+      }
+    },
+    "/api/v4/dexbuilder/withdraw/submit": {
+      "post": {
+        "tags": [
+          "Withdrawal"
+        ],
+        "summary": "Submit a withdrawal",
+        "description": "Submit a signed withdrawal request. Supports Idempotency-Key.",
+        "operationId": "dexBuilderWithdrawSubmit",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          },
+          {
+            "$ref": "#/components/parameters/IdempotencyKey"
+          },
+          {
+            "$ref": "#/components/parameters/DeviceType"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PerpWithdrawSubmitRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeWithdrawSubmit"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Broker API Key or signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    },
+    "/api/v4/dexbuilder/withdraw/status": {
+      "get": {
+        "tags": [
+          "Withdrawal"
+        ],
+        "summary": "Get withdrawal status",
+        "operationId": "getDexBuilderWithdrawStatus",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          },
+          {
+            "name": "event_id",
+            "in": "query",
+            "required": true,
+            "description": "UUID returned by the withdrawal submit endpoint",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Query successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeWithdrawStatus"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Broker API Key or signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ],
+        "description": ""
+      }
+    },
+    "/api/v4/dexbuilder/withdraw/history": {
+      "get": {
+        "tags": [
+          "Withdrawal"
+        ],
+        "summary": "Get withdrawal history",
+        "operationId": "listDexBuilderWithdrawHistory",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          },
+          {
+            "$ref": "#/components/parameters/Page"
+          },
+          {
+            "$ref": "#/components/parameters/PageSize"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Query successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeWithdrawHistory"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Broker API Key or signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ],
+        "description": ""
+      }
+    },
+    "/api/v4/dexbuilder/withdraw/ata/check-and-build": {
+      "post": {
+        "tags": [
+          "Withdrawal"
+        ],
+        "summary": "Check and build a Solana ATA",
+        "description": "Check whether the target SPL account exists. If it does not, return a base64 transaction to sign.",
+        "operationId": "dexBuilderWithdrawATACheckAndBuild",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/SubUserWalletAddr"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PerpWithdrawATACheckRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeWithdrawATACheck"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid Broker API Key or signature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/OpenAPIBadRequest",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BrokerAPIKey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "KEY",
+        "description": "Broker API Key"
+      },
+      "Timestamp": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Timestamp",
+        "description": "Unix timestamp in seconds"
+      },
+      "Signature": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "SIGN",
+        "description": "Hexadecimal HMAC-SHA512 signature generated with the Broker Secret Key"
+      }
+    },
+    "parameters": {
+      "AssetQuery": {
+        "name": "asset",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "example": "USDT",
+        "description": "Filter by asset symbol, such as USDT"
+      },
+      "NetworkQuery": {
+        "name": "network",
+        "in": "query",
+        "required": false,
+        "schema": {
+          "type": "string"
+        },
+        "example": "ethereum",
+        "description": "Network identifier, such as ethereum"
+      },
+      "Page": {
+        "name": "page",
+        "in": "query",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "default": 1
+        },
+        "description": "Page number, starting at 1"
+      },
+      "PageSize": {
+        "name": "page_size",
+        "in": "query",
+        "schema": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 20
+        },
+        "description": "Number of records per page, maximum 100"
+      },
+      "SubUserWalletAddr": {
+        "name": "sub_user_wallet_addr",
+        "in": "header",
+        "required": true,
+        "description": "Target user's wallet address. The gateway verifies that the user belongs to the current Broker.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "DeviceType": {
+        "name": "x-perp-device-type",
+        "in": "header",
+        "required": true,
+        "description": "Device type: 1 Android, 2 iOS, 3 WEB, 4 H5. Required only on endpoints that mark it as required.",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "1",
+            "2",
+            "3",
+            "4"
+          ]
+        }
+      },
+      "IdempotencyKey": {
+        "name": "Idempotency-Key",
+        "in": "header",
+        "required": true,
+        "description": "Idempotency key, maximum 128 characters; UUID recommended. Retrying the same submit endpoint for the same user with the same key returns the first successful response. Reuse the key after a network timeout, but never reuse it for a different request.",
+        "schema": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "example": "7c9e6679-7425-40de-944b-e07fc1f90ae7"
+      }
+    },
+    "responses": {
+      "OpenAPIBadRequest": {
+        "description": "Invalid request: parameters, body, user identity, or business validation",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorEnvelope"
+            },
+            "examples": {
+              "invalidArgument": {
+                "summary": "Invalid parameter",
+                "value": {
+                  "label": "INVALID_ARGUMENT",
+                  "message": "invalid argument"
+                }
+              },
+              "userNotFound": {
+                "summary": "User not found",
+                "value": {
+                  "label": "USER_NOT_FOUND",
+                  "message": "User not found"
+                }
+              },
+              "missingHeader": {
+                "summary": "Missing required header",
+                "value": {
+                  "label": "MISSING_REQUIRED_HEADER",
+                  "message": "invalid headers"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ProjectAccessDenied": {
+        "description": "Project not bound, or Broker and API Key do not match",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorEnvelope"
+            },
+            "example": {
+              "code": 40300801,
+              "reason": "P_DEX_BUILDER_IN_PROJECT_ACCESS_DENIED",
+              "label": "PROJECT_ACCESS_DENIED",
+              "message": "project access denied",
+              "data": null
+            }
+          }
+        }
+      },
+      "UserNotFound": {
+        "description": "User not found or no wallet bound",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorEnvelope"
+            },
+            "example": {
+              "code": 405007,
+              "reason": "P_DEX_BUILDER_IN_USER_NOT_FOUND",
+              "label": "USER_NOT_FOUND",
+              "message": "User not found",
+              "data": null
+            }
+          }
+        }
+      },
+      "GatewayUnauthorized": {
+        "description": "Invalid Broker API Key, signature, or timestamp",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorEnvelope"
+            },
+            "examples": {
+              "invalidKey": {
+                "summary": "Invalid API Key",
+                "value": {
+                  "label": "INVALID_KEY",
+                  "message": "Invalid key provided",
+                  "code": 401,
+                  "trace_id": "abc123"
+                }
+              },
+              "invalidSignature": {
+                "summary": "Invalid signature",
+                "value": {
+                  "label": "INVALID_SIGNATURE",
+                  "message": "Invalid signature",
+                  "code": 401,
+                  "trace_id": "abc123"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "ErrorEnvelope": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "required": [
+              "label"
+            ],
+            "properties": {
+              "label": {
+                "type": "string",
+                "description": "Stable machine-readable error label"
+              },
+              "data": {
+                "nullable": true,
+                "description": "Usually null on error"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeBase": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "integer",
+            "example": 0,
+            "description": "Business code; 0 indicates success"
+          },
+          "message": {
+            "type": "string",
+            "example": "success",
+            "description": "Human-readable message; success responses use success"
+          },
+          "reason": {
+            "type": "string",
+            "description": "Error reason identifier; usually empty on success"
+          },
+          "trace_id": {
+            "type": "string",
+            "description": "Trace ID to provide when requesting support"
+          }
+        }
+      },
+      "EnvelopeArrayOfAsset": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Asset"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeArrayOfNetwork": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Network"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeDwStatus": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/DwStatus"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeUserInfo": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/UserInfo"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeWalletList": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "object",
+                "properties": {
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/WalletItem"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeDepositFee": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/PerpDepositFeeResponse"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeDepositSignData": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/PerpDepositSignDataResponse"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeDepositSubmit": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/PerpDepositPostProcessResponse"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeDepositStatus": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/PerpDepositStatusResponse"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeDepositHistory": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/DepositHistoryPage"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeWithdrawSignData": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/PerpWithdrawSignDataResponse"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeWithdrawSubmit": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/PerpWithdrawSubmitResponse"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeWithdrawStatus": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/PerpWithdrawStatusResponse"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeWithdrawHistory": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/WithdrawHistoryPage"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeWithdrawATACheck": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/PerpWithdrawATACheckResponse"
+              }
+            }
+          }
+        ]
+      },
+      "Asset": {
+        "type": "object",
+        "properties": {
+          "asset": {
+            "type": "string",
+            "example": "USDT",
+            "description": "Asset symbol, such as USDT"
+          },
+          "name": {
+            "type": "string",
+            "example": "Tether USD",
+            "description": "Display name of the asset"
+          }
+        }
+      },
+      "Network": {
+        "type": "object",
+        "properties": {
+          "asset": {
+            "type": "string",
+            "description": "Asset symbol"
+          },
+          "network": {
+            "type": "string",
+            "description": "Network identifier matching the chain parameter, such as ethereum, bsc, or solana"
+          },
+          "chain_id": {
+            "type": "string",
+            "description": "Chain ID as a decimal string"
+          },
+          "vm": {
+            "type": "string",
+            "enum": [
+              "evm",
+              "solana"
+            ],
+            "description": "Virtual machine: evm or solana"
+          },
+          "token_address": {
+            "type": "string",
+            "description": "Token contract address: 0x-prefixed hex for EVM, mint base58 for Solana"
+          },
+          "vault_address": {
+            "type": "string",
+            "description": "Perp Vault contract address"
+          },
+          "decimals": {
+            "type": "integer",
+            "description": "Token decimals as an integer"
+          },
+          "deposit_enabled": {
+            "type": "boolean",
+            "description": "Whether deposits are enabled on this network"
+          },
+          "withdraw_enabled": {
+            "type": "boolean",
+            "description": "Whether withdrawals are enabled on this network"
+          },
+          "min_deposit": {
+            "type": "string",
+            "description": "Minimum deposit amount as a decimal string in display token units"
+          },
+          "min_withdraw": {
+            "type": "string",
+            "description": "Minimum withdrawal amount as a decimal string in display token units"
+          }
+        }
+      },
+      "DwStatus": {
+        "type": "object",
+        "properties": {
+          "asset": {
+            "type": "string",
+            "description": "Asset symbol"
+          },
+          "network": {
+            "type": "string",
+            "description": "Network identifier"
+          },
+          "deposit_enabled": {
+            "type": "boolean",
+            "description": "Deposit availability"
+          },
+          "withdraw_enabled": {
+            "type": "boolean",
+            "description": "Withdrawal availability"
+          }
+        }
+      },
+      "UserInfo": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "End-user ID mapped by the project"
+          },
+          "project_id": {
+            "type": "string",
+            "description": "DexBuilder project ID"
+          },
+          "status": {
+            "type": "string",
+            "example": "active",
+            "description": "User status, such as active"
+          },
+          "wallets": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserInfoWallet"
+            },
+            "description": "List of bound wallets"
+          }
+        }
+      },
+      "WalletItem": {
+        "type": "object",
+        "properties": {
+          "wallet_id": {
+            "type": "string",
+            "description": "Wallet record ID"
+          },
+          "chain": {
+            "type": "string",
+            "description": "Chain identifier"
+          },
+          "address": {
+            "type": "string",
+            "description": "Wallet address; it must match sub_user_wallet_addr to act on behalf of this user"
+          },
+          "status": {
+            "type": "string",
+            "description": "Binding status"
+          },
+          "is_primary": {
+            "type": "boolean",
+            "description": "Whether this is the primary wallet"
+          },
+          "bound_at": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Binding time as a Unix millisecond timestamp"
+          }
+        }
+      },
+      "HistoryPage": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true
+            }
+          },
+          "page": {
+            "type": "integer"
+          },
+          "page_size": {
+            "type": "integer"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int64"
+          }
+        }
+      },
+      "DepositRequest": {
+        "type": "object",
+        "required": [
+          "address",
+          "chain",
+          "token_address",
+          "token_amount",
+          "token_symbol"
+        ],
+        "properties": {
+          "address": {
+            "type": "string",
+            "description": "Bound wallet initiating the deposit; EVM 0x hex or Solana base58"
+          },
+          "chain": {
+            "type": "string",
+            "description": "Chain identifier; must match the token's network"
+          },
+          "token_address": {
+            "type": "string",
+            "description": "Token contract; use the chain's designated zero address for a native token"
+          },
+          "token_amount": {
+            "type": "string",
+            "description": "Deposit amount as a decimal string"
+          },
+          "token_symbol": {
+            "type": "string",
+            "description": "Token symbol, such as USDT"
+          }
+        }
+      },
+      "PerpDepositSignDataRequest": {
+        "type": "object",
+        "required": [
+          "address",
+          "chain",
+          "token_address",
+          "token_amount",
+          "token_symbol"
+        ],
+        "properties": {
+          "address": {
+            "type": "string",
+            "description": "Bound user wallet; must match sub_user_wallet_addr"
+          },
+          "chain": {
+            "type": "string",
+            "description": "Chain identifier"
+          },
+          "token_address": {
+            "type": "string",
+            "description": "Token contract address"
+          },
+          "token_amount": {
+            "type": "string",
+            "description": "Deposit amount as a decimal string"
+          },
+          "token_symbol": {
+            "type": "string",
+            "description": "Token symbol"
+          },
+          "native_fee": {
+            "type": "integer",
+            "format": "int64",
+            "description": "native_fee from POST /deposit/fee, in the chain's smallest native unit as int64"
+          },
+          "lz_fee": {
+            "type": "integer",
+            "format": "int64",
+            "description": "From POST /deposit/fee: convert the USDT decimal lz_fee to int64 with six decimal places (for example, 0.5 to 500000); pass native_fee unchanged as int64"
+          }
+        }
+      },
+      "PerpDepositSignDataResponse": {
+        "type": "object",
+        "properties": {
+          "account_id": {
+            "type": "string",
+            "description": "Perp account ID"
+          },
+          "broker_hash": {
+            "type": "string",
+            "description": "Broker hash used onchain"
+          },
+          "token_hash": {
+            "type": "string",
+            "description": "Token hash used onchain"
+          },
+          "token_amount": {
+            "type": "string",
+            "description": "Deposit amount as a decimal string"
+          },
+          "contract_address": {
+            "type": "string",
+            "description": "Vault contract address used with data to build the transaction"
+          },
+          "data": {
+            "type": "string",
+            "description": "ABI calldata（0x hex）"
+          }
+        }
+      },
+      "PerpDepositPostProcessRequest": {
+        "type": "object",
+        "required": [
+          "chain",
+          "address",
+          "token_address",
+          "txn_hash",
+          "token_amount"
+        ],
+        "properties": {
+          "chain": {
+            "type": "string",
+            "description": "Chain identifier"
+          },
+          "address": {
+            "type": "string",
+            "description": "Bound wallet initiating the deposit"
+          },
+          "token_address": {
+            "type": "string",
+            "description": "Token contract"
+          },
+          "txn_hash": {
+            "type": "string",
+            "description": "Onchain deposit transaction hash"
+          },
+          "token_amount": {
+            "type": "string",
+            "description": "Deposit amount; must match sign_data"
+          }
+        }
+      },
+      "PerpDepositPostProcessResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "Whether the request was accepted; check /deposit/status for the final onchain state"
+          }
+        }
+      },
+      "PerpDepositFeeResponse": {
+        "type": "object",
+        "properties": {
+          "deposit_fee": {
+            "type": "string",
+            "description": "Platform deposit fee as a USDT decimal string"
+          },
+          "lz_fee": {
+            "type": "string",
+            "description": "LayerZero cross-chain fee as a USDT decimal string; convert to int64 for sign_data"
+          },
+          "native_fee": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Fee in the chain's native token, as an integer in its smallest unit, such as wei"
+          },
+          "fee_source": {
+            "type": "integer",
+            "description": "Fee source identifier; 0 means default."
+          }
+        }
+      },
+      "PerpDepositStatusResponse": {
+        "type": "object",
+        "properties": {
+          "tx_hash": {
+            "type": "string",
+            "description": "Queried transaction hash"
+          },
+          "status": {
+            "type": "integer",
+            "description": "0 not found; 10 confirming; 20 successful; 30 failed"
+          }
+        }
+      },
+      "PerpWithdrawSignDataRequest": {
+        "type": "object",
+        "properties": {
+          "chain": {
+            "type": "string",
+            "description": "Chain identifier"
+          },
+          "token_symbol": {
+            "type": "string",
+            "description": "Token symbol"
+          },
+          "token_address": {
+            "type": "string",
+            "description": "Token contract"
+          },
+          "token_amount": {
+            "type": "string",
+            "description": "Withdrawal amount as a decimal string"
+          },
+          "to_address": {
+            "type": "string",
+            "description": "Destination address, which may belong to a third party; format must match the EVM or Solana chain"
+          },
+          "address": {
+            "type": "string",
+            "description": "Bound user wallet that signs the request; must match sub_user_wallet_addr"
+          }
+        },
+        "required": [
+          "chain",
+          "token_symbol",
+          "token_address",
+          "token_amount",
+          "to_address",
+          "address"
+        ]
+      },
+      "PerpWithdrawSignDataResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "string",
+            "description": "Payload for user signing with EIP-712 or the chain-specific format, as 0x hex"
+          },
+          "contract_address": {
+            "type": "string",
+            "description": "Vault contract"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Signing timestamp in seconds; pass it unchanged to withdraw/submit"
+          }
+        }
+      },
+      "PerpWithdrawSubmitRequest": {
+        "type": "object",
+        "properties": {
+          "r": {
+            "type": "string",
+            "description": "r component of the signature over sign_data.data, as 0x hex"
+          },
+          "v": {
+            "type": "integer",
+            "description": "Signature v as an integer, such as 27 or 28"
+          },
+          "s": {
+            "type": "string",
+            "description": "s component of the signature, as 0x hex"
+          },
+          "chain": {
+            "type": "string",
+            "description": "Chain identifier"
+          },
+          "token_address": {
+            "type": "string",
+            "description": "Token contract"
+          },
+          "address": {
+            "type": "string",
+            "description": "User wallet; must match the sign_data request"
+          },
+          "token_amount": {
+            "type": "string",
+            "description": "Withdrawal amount"
+          },
+          "to_address": {
+            "type": "string",
+            "description": "Destination address; must match the sign_data request"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Must equal the timestamp in the sign_data response"
+          },
+          "token_symbol": {
+            "type": "string",
+            "description": "Token symbol"
+          }
+        },
+        "required": [
+          "r",
+          "v",
+          "s",
+          "timestamp",
+          "chain",
+          "token_address",
+          "address",
+          "token_amount",
+          "to_address",
+          "token_symbol"
+        ]
+      },
+      "PerpWithdrawSubmitResponse": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": "string",
+            "description": "Withdrawal event UUID for GET /withdraw/status"
+          },
+          "success": {
+            "type": "boolean",
+            "description": "Whether the request was accepted"
+          }
+        }
+      },
+      "PerpWithdrawStatusResponse": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": "string",
+            "description": "Withdrawal event ID"
+          },
+          "tx_hash": {
+            "type": "string",
+            "description": "Onchain transaction hash; empty before the transaction is submitted onchain"
+          },
+          "status": {
+            "type": "integer",
+            "description": "0 not found; 10 pending withdrawal; 11 confirming; 20 successful; 30 failed"
+          }
+        }
+      },
+      "PerpWithdrawATACheckRequest": {
+        "type": "object",
+        "required": [
+          "payer_address",
+          "target_address"
+        ],
+        "properties": {
+          "payer_address": {
+            "type": "string",
+            "description": "Bound Solana user wallet in base58"
+          },
+          "target_address": {
+            "type": "string",
+            "description": "Owner address of the ATA to check, in base58"
+          }
+        }
+      },
+      "PerpWithdrawATACheckResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "integer",
+            "description": "0 ATA must be created; 1 ATA already exists"
+          },
+          "tx_data": {
+            "type": "string",
+            "description": "Base64 transaction, populated when status is 0"
+          }
+        }
+      },
+      "UserInfoWallet": {
+        "type": "object",
+        "properties": {
+          "chain": {
+            "type": "string",
+            "description": "Chain identifier"
+          },
+          "address": {
+            "type": "string",
+            "description": "Bound wallet address"
+          },
+          "status": {
+            "type": "string",
+            "description": "Binding status, such as bound"
+          }
+        }
+      },
+      "PerpQueryFeeItem": {
+        "type": "object",
+        "properties": {
+          "chain": {
+            "type": "string",
+            "description": "Chain identifier"
+          },
+          "deposit_fee": {
+            "type": "string",
+            "description": "Fixed deposit fee, not a rate, as a USDT decimal string; 0 means free",
+            "example": "0"
+          },
+          "withdraw_fee": {
+            "type": "string",
+            "description": "Fixed withdrawal fee, not a rate, as a USDT decimal string",
+            "example": "1.5"
+          }
+        }
+      },
+      "PerpQueryFeeResponse": {
+        "type": "object",
+        "properties": {
+          "list": {
+            "type": "array",
+            "description": "Fees listed by chain",
+            "items": {
+              "$ref": "#/components/schemas/PerpQueryFeeItem"
+            }
+          }
+        }
+      },
+      "EnvelopePerpQueryFee": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/PerpQueryFeeResponse"
+              }
+            }
+          }
+        ]
+      },
+      "PerpWithdrawLimitResponse": {
+        "type": "object",
+        "properties": {
+          "once": {
+            "type": "string",
+            "description": "Maximum amount per withdrawal, as a USDT decimal string",
+            "example": "50000"
+          },
+          "day": {
+            "type": "string",
+            "description": "Maximum cumulative withdrawal amount per calendar day, as a USDT decimal string",
+            "example": "100000"
+          }
+        }
+      },
+      "EnvelopePerpWithdrawLimit": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/PerpWithdrawLimitResponse"
+              }
+            }
+          }
+        ]
+      },
+      "PerpUserVaultBalanceResponse": {
+        "type": "object",
+        "properties": {
+          "available": {
+            "type": "string",
+            "description": "Available Vault balance as a USDT decimal string",
+            "example": "100.5"
+          }
+        }
+      },
+      "EnvelopePerpUserVaultBalance": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/PerpUserVaultBalanceResponse"
+              }
+            }
+          }
+        ]
+      },
+      "PerpQueryFundStatItem": {
+        "type": "object",
+        "properties": {
+          "chain": {
+            "type": "string",
+            "description": "Chain identifier"
+          },
+          "deposit": {
+            "type": "string",
+            "description": "Cumulative deposit amount as a USDT decimal string"
+          },
+          "withdraw": {
+            "type": "string",
+            "description": "Cumulative withdrawal amount as a USDT decimal string"
+          }
+        }
+      },
+      "PerpQueryFundStatsResponse": {
+        "type": "object",
+        "properties": {
+          "list": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PerpQueryFundStatItem"
+            }
+          }
+        }
+      },
+      "EnvelopePerpFundStats": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/PerpQueryFundStatsResponse"
+              }
+            }
+          }
+        ]
+      },
+      "DepositHistoryItem": {
+        "type": "object",
+        "properties": {
+          "tx_hash": {
+            "type": "string",
+            "description": "Onchain deposit transaction hash"
+          },
+          "status": {
+            "type": "integer",
+            "description": "0 not found; 10 confirming; 20 successful; 30 failed"
+          },
+          "amount": {
+            "type": "string",
+            "description": "Deposit amount as a decimal string in token units"
+          },
+          "network": {
+            "type": "string",
+            "description": "Network identifier"
+          },
+          "asset": {
+            "type": "string",
+            "description": "Asset symbol"
+          }
+        }
+      },
+      "WithdrawHistoryItem": {
+        "type": "object",
+        "properties": {
+          "event_id": {
+            "type": "string",
+            "description": "Withdrawal event UUID"
+          },
+          "tx_hash": {
+            "type": "string",
+            "description": "Onchain transaction hash; empty before submission onchain"
+          },
+          "status": {
+            "type": "integer",
+            "description": "0 not found; 10 pending withdrawal; 11 confirming; 20 successful; 30 failed"
+          },
+          "amount": {
+            "type": "string",
+            "description": "Withdrawal amount as a decimal string in token units"
+          },
+          "asset": {
+            "type": "string",
+            "description": "Asset symbol"
+          },
+          "network": {
+            "type": "string",
+            "description": "Network identifier"
+          }
+        }
+      },
+      "DepositHistoryPage": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DepositHistoryItem"
+            }
+          },
+          "page": {
+            "type": "integer",
+            "description": "Current page number"
+          },
+          "page_size": {
+            "type": "integer",
+            "description": "Page size"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Total matching records, not just the current page"
+          }
+        }
+      },
+      "WithdrawHistoryPage": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WithdrawHistoryItem"
+            }
+          },
+          "page": {
+            "type": "integer",
+            "description": "Current page number"
+          },
+          "page_size": {
+            "type": "integer",
+            "description": "Page size"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Total matching records, not just the current page"
+          }
+        }
+      }
+    }
+  }
+}
