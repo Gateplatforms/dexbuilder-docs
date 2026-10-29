@@ -892,7 +892,23 @@
                     "group": "DexBuilder API",
                     "pages": [
                       "en/api-reference/dexbuilder/overview",
-                      "en/api-reference/dexbuilder/authentication"
+                      "en/api-reference/dexbuilder/authentication",
+                      {
+                        "group": "Asset configuration",
+                        "pages": []
+                      },
+                      {
+                        "group": "User",
+                        "pages": []
+                      },
+                      {
+                        "group": "Deposit",
+                        "pages": []
+                      },
+                      {
+                        "group": "Withdrawal",
+                        "pages": []
+                      }
                     ]
                   }
                 ]
