@@ -895,7 +895,9 @@
                       "en/api-reference/dexbuilder/authentication",
                       {
                         "group": "Asset configuration",
-                        "pages": []
+                        "pages": [
+                          "en/api-reference/dexbuilder/query-assets"
+                        ]
                       },
                       {
                         "group": "User",
@@ -1342,7 +1344,23 @@
                     "group": "DexBuilder API",
                     "pages": [
                       "zh-TW/api-reference/dexbuilder/overview",
-                      "zh-TW/api-reference/dexbuilder/authentication"
+                      "zh-TW/api-reference/dexbuilder/authentication",
+                      {
+                        "group": "資產配置",
+                        "pages": []
+                      },
+                      {
+                        "group": "使用者",
+                        "pages": []
+                      },
+                      {
+                        "group": "充值",
+                        "pages": []
+                      },
+                      {
+                        "group": "提現",
+                        "pages": []
+                      }
                     ]
                   }
                 ]
