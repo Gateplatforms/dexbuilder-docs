@@ -57,6 +57,10 @@ https://api.dexbuilder.com
 
 价格、数量、成交额、余额、手续费等金额类字段通常以字符串返回。建议使用 Decimal 精度处理，避免二进制浮点误差。
 
+## 状态字段
+
+Market 的 `status` 描述市场状态；REST 订单的 `status` 使用 `processing`、`open`、`matched`、`canceled`、`failed`。WebSocket 消息的 `type` 表示推送消息类型。请分别按市场、REST 订单和 WebSocket 频道的定义解析，不要共用一套状态枚举。
+
 ## 标准错误
 
 ```json

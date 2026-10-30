@@ -18,7 +18,7 @@ https://api.dexbuilder.com
 curl "https://api.dexbuilder.com/api/v4/prediction/tokens/<token_id>/order_book?depth=20"
 ```
 
-`depth` 可选，默认 20，范围 1–100。
+`depth` 为可选查询参数；实际返回的档位以 `bids`、`asks` 为准。
 
 ```json Example
 {
@@ -37,7 +37,6 @@ curl "https://api.dexbuilder.com/api/v4/prediction/tokens/<token_id>/order_book?
 | --- | --- |
 | `token_id` | Outcome Token ID |
 | `condition_id` | Market Condition ID |
-| `bids`, `asks` | 买卖深度，每档包含 decimal string 格式的 `price` 与 `size` |
 | `bids`, `asks` | 买卖深度，每档包含 decimal string 格式的 `price` 与 `size` |
 
 该订单簿响应不提供快照时间或 Hash。若需要判断报价是否仍适用，请重新查询订单簿；不要将 Ticker 的时间戳当作订单簿快照时间。

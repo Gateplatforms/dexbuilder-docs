@@ -18,24 +18,18 @@ https://api.dexbuilder.com
 curl "https://api.dexbuilder.com/api/v4/prediction/tokens/<token_id>/order_book?depth=20"
 ```
 
-`depth` 可選，預設 20，範圍 1–100。
+`depth` 為可選查詢參數；實際回傳的檔位以 `bids`、`asks` 為準。
 
 ```json Example
 {
   "token_id": "token-yes",
   "condition_id": "0xabc...",
-  "timestamp": 1782753357257,
-  "hash": "a1b2c3d4",
   "bids": [
     { "price": "0.48", "size": "100.00" }
   ],
   "asks": [
     { "price": "0.52", "size": "80.00" }
-  ],
-  "last_trade_price": "0.50",
-  "min_order_size": "5",
-  "tick_size": "0.01",
-  "neg_risk": false
+  ]
 }
 ```
 
@@ -44,10 +38,8 @@ curl "https://api.dexbuilder.com/api/v4/prediction/tokens/<token_id>/order_book?
 | `token_id` | Outcome Token ID |
 | `condition_id` | Market Condition ID |
 | `bids`, `asks` | 買賣深度，每檔包含 decimal string 格式的 `price` 與 `size` |
-| `timestamp` | 快照時間，Unix 毫秒 |
-| `hash` | 訂單簿快照 Hash |
-| `last_trade_price` | 最近成交價 |
-| `min_order_size`, `tick_size`, `neg_risk` | 交易限制與風險模式 |
+
+此訂單簿回應不提供快照時間或 Hash。若需要判斷報價是否仍適用，請重新查詢訂單簿；不要將 Ticker 的時間戳視為訂單簿快照時間。
 
 目前 API 沒有批量 Order Book 介面，如需多個 Token 的訂單簿，應分別請求。
 
@@ -66,7 +58,7 @@ curl "https://api.dexbuilder.com/api/v4/prediction/tokens/<token_id>/price"
 }
 ```
 
-沒有可用成交記錄時，`price` 可能為空字串。
+`price` 表示該 Outcome Token 的最新成交價，不是最佳買價或賣價。沒有可用成交記錄時，`price` 為 `""`、`side` 為 `""`，`timestamp` 為 `null`。
 
 ## Token Ticker
 
@@ -84,7 +76,7 @@ curl "https://api.dexbuilder.com/api/v4/prediction/tokens/<token_id>/ticker"
 }
 ```
 
-資料源無法提供可靠值時，對應欄位可能為 `null`。
+`last_price`、`best_bid`、`best_ask` 分別表示最新成交價、最佳買價和最佳賣價；任一資料不可用時，對應欄位為 `null`。`timestamp` 是回傳的有效價格資料中最新的來源時間；沒有可靠時間時為 `null`，不是伺服器回應時間。
 
 ## 批量 Token 價格
 
@@ -104,6 +96,8 @@ curl "https://api.dexbuilder.com/api/v4/prediction/tokens/prices?token_ids=token
 ```
 
 不存在或目前不可見的 Token 會被忽略，回傳順序保持與請求中的有效 Token 順序一致。
+
+批量介面同樣回傳最新成交價。可見 Token 尚無可用成交記錄時，該項的 `price` 為 `""`、`timestamp` 為 `null`。
 
 ## 價格歷史
 

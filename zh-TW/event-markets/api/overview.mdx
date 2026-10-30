@@ -50,6 +50,10 @@ https://api.dexbuilder.com
 
 價格、數量、成交額、餘額、手續費等金額類欄位通常以字串回傳。建議使用 Decimal 精度處理，避免二進制浮點誤差。
 
+## 狀態欄位
+
+Market 的 `status` 描述市場狀態；REST 訂單的 `status` 使用 `processing`、`open`、`matched`、`canceled`、`failed`。WebSocket 訊息的 `type` 表示推送訊息類型。請分別依市場、REST 訂單及 WebSocket 頻道的定義解析，不要共用一套狀態枚舉。
+
 ## 標準錯誤
 
 ```json
