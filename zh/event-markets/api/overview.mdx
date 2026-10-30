@@ -43,7 +43,7 @@ https://api.dexbuilder.com
 
 - 事件与市场日期字段通常使用 Unix 秒；
 - `from`、`to` 等范围参数通常使用 Unix 毫秒；
-- K 线、价格历史、订单和账户生命周期时间通常使用 Unix 毫秒。
+- 币种 K 线接口的 `start_ts`、`end_ts` 和 `history[].t` 使用 Unix 秒；Token 价格历史的 `from`、`to` 和时间字段使用 Unix 毫秒。订单和账户生命周期时间以各接口字段说明为准。
 
 ## 多语言字段
 
