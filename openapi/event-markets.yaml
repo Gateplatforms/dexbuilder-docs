@@ -233,7 +233,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LegacyMarketsResponse"
+                  "$ref": "#/components/schemas/MarketsPage"
                 }
               }
             }
@@ -346,7 +346,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LegacyMarket"
+                  "$ref": "#/components/schemas/MarketDetail"
                 }
               }
             }
@@ -444,7 +444,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LegacyTradeList"
+                  "$ref": "#/components/schemas/TradesPage"
                 }
               }
             }
@@ -656,7 +656,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LegacyOrderBook"
+                  "$ref": "#/components/schemas/OrderBookResponse"
                 }
               }
             }
@@ -2959,7 +2959,8 @@
         "type": "object",
         "properties": {
           "accepting_orders": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": true
           },
           "best_ask": {
             "type": "string"
@@ -2968,7 +2969,8 @@
             "type": "string"
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "closed": {
             "type": "boolean"
@@ -2977,22 +2979,27 @@
             "type": "string"
           },
           "description": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "enable_order_book": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": true
           },
           "end_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "event_id": {
             "type": "string"
           },
           "icon": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "image": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "last_trade_price": {
             "type": "string"
@@ -3004,10 +3011,12 @@
             "type": "string"
           },
           "min_order_size": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "neg_risk": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": true
           },
           "outcomes": {
             "type": "array",
@@ -3016,19 +3025,23 @@
             }
           },
           "question": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "resolution_source": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "resolved_at": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "slug": {
             "type": "string"
           },
           "start_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "status": {
             "type": "string"
@@ -3040,35 +3053,39 @@
             }
           },
           "tick_size": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "uma_end_date": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "uma_end_date_iso": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "uma_resolution_status": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "uma_resolution_statuses": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "volume": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "volume_24hr": {
             "type": "string"
           },
           "winning_outcome": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "winning_token_id": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         },
         "description": "响应对象。"
@@ -3083,7 +3100,8 @@
             "type": "string"
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "closed": {
             "type": "boolean"
@@ -3092,7 +3110,8 @@
             "type": "string"
           },
           "end_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "event_id": {
             "type": "string"
@@ -3113,13 +3132,15 @@
             }
           },
           "question": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "slug": {
             "type": "string"
           },
           "start_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "status": {
             "type": "string"
@@ -3132,22 +3153,23 @@
           },
           "uma_end_date": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "uma_end_date_iso": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "uma_resolution_status": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "uma_resolution_statuses": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "volume": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "volume_24hr": {
             "type": "string"
@@ -3159,7 +3181,8 @@
         "type": "object",
         "properties": {
           "outcome": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "token_id": {
             "type": "string"
@@ -3882,177 +3905,22 @@
         },
         "description": "响应对象。"
       },
-      "LegacyMarket": {
-        "type": "object",
-        "properties": {
-          "accepting_orders": {
-            "type": "boolean"
-          },
-          "best_ask": {
-            "type": "string"
-          },
-          "best_bid": {
-            "type": "string"
-          },
-          "category": {
-            "type": "string"
-          },
-          "closed": {
-            "type": "boolean"
-          },
-          "condition_id": {
-            "type": "string"
-          },
-          "enable_order_book": {
-            "type": "boolean"
-          },
-          "end_time": {
-            "type": "integer"
-          },
-          "event_icon_url": {
-            "type": "string"
-          },
-          "event_id": {
-            "type": "string"
-          },
-          "event_title": {
-            "type": "string"
-          },
-          "last_trade_price": {
-            "type": "string"
-          },
-          "liquidity": {
-            "type": "string"
-          },
-          "market_id": {
-            "type": "string"
-          },
-          "outcomes": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LegacyOutcome"
-            }
-          },
-          "slug": {
-            "type": "string"
-          },
-          "start_time": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "string"
-          },
-          "tags": {},
-          "title": {
-            "type": "string"
-          },
-          "volume": {
-            "type": "string"
-          }
-        },
-        "description": "响应对象。"
-      },
-      "LegacyMarketsResponse": {
+      "MarketsPage": {
         "type": "object",
         "properties": {
           "items": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/LegacyMarket"
+              "$ref": "#/components/schemas/MarketSummary"
             }
           },
-          "total": {
-            "type": "integer"
+          "next_cursor": {
+            "type": "string",
+            "nullable": true,
+            "description": "下一页游标；为 null 时表示没有更多结果。"
           }
         },
-        "description": "响应对象。"
-      },
-      "LegacyOrderBook": {
-        "type": "object",
-        "properties": {
-          "asks": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LegacyPriceSize"
-            }
-          },
-          "bids": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LegacyPriceSize"
-            }
-          },
-          "condition_id": {
-            "type": "string"
-          },
-          "token_id": {
-            "type": "string"
-          }
-        },
-        "description": "响应对象。"
-      },
-      "LegacyOutcome": {
-        "type": "object",
-        "properties": {
-          "clob_token_id": {
-            "type": "string"
-          },
-          "outcome": {
-            "type": "string"
-          },
-          "price": {
-            "type": "string"
-          },
-          "token_id": {
-            "type": "string"
-          }
-        },
-        "description": "响应对象。"
-      },
-      "LegacyPriceSize": {
-        "type": "object",
-        "properties": {
-          "price": {
-            "type": "string"
-          },
-          "size": {
-            "type": "string"
-          }
-        },
-        "description": "响应对象。"
-      },
-      "LegacyTrade": {
-        "type": "object",
-        "properties": {
-          "condition_id": {
-            "type": "string"
-          },
-          "created_at": {
-            "type": "integer"
-          },
-          "id": {
-            "type": "string"
-          },
-          "market_id": {
-            "type": "string"
-          },
-          "outcome": {
-            "type": "string"
-          },
-          "price": {
-            "type": "string"
-          },
-          "side": {
-            "type": "string"
-          },
-          "size": {
-            "type": "string"
-          },
-          "token_id": {
-            "type": "string"
-          }
-        },
-        "description": "响应对象。"
+        "description": "市场列表分页响应。"
       },
       "EventReferencePrice": {
         "type": "object",
@@ -4083,12 +3951,111 @@
           "$ref": "#/components/schemas/CurrencyCandlestick"
         }
       },
-      "LegacyTradeList": {
-        "type": "array",
-        "description": "列表响应。",
-        "items": {
-          "$ref": "#/components/schemas/LegacyTrade"
+      "Trade": {
+        "type": "object",
+        "properties": {
+          "trade_id": {
+            "type": "string"
+          },
+          "market_id": {
+            "type": "string"
+          },
+          "condition_id": {
+            "type": "string"
+          },
+          "token_id": {
+            "type": "string"
+          },
+          "side": {
+            "type": "string"
+          },
+          "price": {
+            "type": "string"
+          },
+          "size": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "integer"
+          }
         }
+      },
+      "TradesPage": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade"
+            }
+          },
+          "next_cursor": {
+            "type": "string",
+            "nullable": true,
+            "description": "下一页游标；为 null 时表示没有更多结果。"
+          }
+        },
+        "description": "市场成交分页响应。"
+      },
+      "OrderBookLevel": {
+        "type": "object",
+        "properties": {
+          "price": {
+            "type": "string"
+          },
+          "size": {
+            "type": "string"
+          }
+        },
+        "description": "盘口档位。"
+      },
+      "OrderBookResponse": {
+        "type": "object",
+        "properties": {
+          "condition_id": {
+            "type": "string"
+          },
+          "token_id": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "integer",
+            "nullable": true
+          },
+          "hash": {
+            "type": "string",
+            "nullable": true
+          },
+          "bids": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderBookLevel"
+            }
+          },
+          "asks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderBookLevel"
+            }
+          },
+          "min_order_size": {
+            "type": "string",
+            "nullable": true
+          },
+          "tick_size": {
+            "type": "string",
+            "nullable": true
+          },
+          "neg_risk": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "last_trade_price": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "description": "市场订单簿响应。"
       }
     },
     "securitySchemes": {
