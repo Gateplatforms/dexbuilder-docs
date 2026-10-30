@@ -7,7 +7,11 @@ This page describes the shared conventions for the DexBuilder Platform, Predicti
 
 ## Base URL and routes
 
-The production Base URL is https://api.dexbuilder.com.
+Production Base URL:
+
+```text
+https://api.dexbuilder.com
+```
 
 | API | Path prefix | Authentication |
 | --- | --- | --- |
@@ -17,7 +21,7 @@ The production Base URL is https://api.dexbuilder.com.
 | Event Contracts public data | /api/v4/event_contracts/... | No Broker API Key |
 | Event Contracts private | /api/v4/broker/event_contracts/... | Broker API Key and sub_user_wallet_addr |
 
-The five DexBuilder asset-configuration queries require a Broker API Key but no user wallet. See [Access on behalf of a user](/en/api-reference/common/sub-user-wallet).
+DexBuilder asset-configuration queries require a Broker API Key but no user wallet. See [Access on behalf of a user](/en/api-reference/common/sub-user-wallet).
 
 <Note>
   PerpDEX does not currently support Broker API. Its API Key and authentication rules are separate.

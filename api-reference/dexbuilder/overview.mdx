@@ -3,11 +3,17 @@ title: "DexBuilder 平台 API 概览"
 description: "面向 Broker 的 DexBuilder 平台 REST API，涵盖资产配置、用户、充值与提现能力。"
 ---
 
-DexBuilder 平台 API 提供资产配置、终端用户查询、Vault 余额，以及链上充值与提现能力。本节包含 19 个业务接口；入驻申请接口不在本节范围内。
+DexBuilder 平台 API 提供资产配置、终端用户查询、Vault 余额，以及链上充值与提现能力。入驻申请接口不在本节范围内。
 
 ## 接入地址
 
-生产环境 Base URL：`https://api.dexbuilder.com`。接口路径以 `/api/v4/dexbuilder` 开头，例如 `https://api.dexbuilder.com/api/v4/dexbuilder/assets`。
+生产环境 Base URL：
+
+```text
+https://api.dexbuilder.com
+```
+
+接口路径以 `/api/v4/dexbuilder` 开头，例如 `GET /api/v4/dexbuilder/assets`。
 
 使用 Broker API Key 调用。签名规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)；用户级接口须按[代表用户访问](/api-reference/common/sub-user-wallet)提供 `sub_user_wallet_addr`。平台权限和各类接口的钱包要求见[平台 API 认证](/api-reference/dexbuilder/authentication)。
 

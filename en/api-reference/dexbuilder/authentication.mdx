@@ -9,7 +9,7 @@ Your Broker API Key needs the dex_builder product permission. Read operations re
 
 ## User wallet
 
-The five asset-configuration endpoints do not require sub_user_wallet_addr. The 14 user, deposit, and withdrawal endpoints require the target user's wallet address in this header. The gateway verifies that the wallet belongs to your Broker. See [Access on behalf of a user](/en/api-reference/common/sub-user-wallet) for the full list.
+Asset-configuration endpoints do not require `sub_user_wallet_addr`. User, deposit, and withdrawal endpoints require the target user's wallet address in this header. The gateway verifies that the wallet belongs to your Broker. See [Access on behalf of a user](/en/api-reference/common/sub-user-wallet) for the full list.
 
 Deposit and withdrawal submission endpoints also require Idempotency-Key. Other headers are specified on their endpoint pages.
 

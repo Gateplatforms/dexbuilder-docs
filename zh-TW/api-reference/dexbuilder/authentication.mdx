@@ -9,7 +9,7 @@ Broker API Key 須具備 `dex_builder` 產品權限。查詢介面需要唯讀�
 
 ## 使用者錢包地址
 
-五個資產配置介面不需要 `sub_user_wallet_addr`。其餘 14 個使用者、充值和提現介面須在此請求頭提供目標使用者的錢包地址。網關會驗證該錢包所屬使用者是否屬於目前的 Broker。完整清單見[代表使用者存取](/zh-TW/api-reference/common/sub-user-wallet)。
+資產配置介面不需要 `sub_user_wallet_addr`。使用者、充值和提現介面須在此請求頭提供目標使用者的錢包地址。網關會驗證該錢包所屬使用者是否屬於目前的 Broker。完整清單見[代表使用者存取](/zh-TW/api-reference/common/sub-user-wallet)。
 
 充值和提現的提交介面還需要 `Idempotency-Key`。其他請求頭以各介面的參數說明為準。
 
