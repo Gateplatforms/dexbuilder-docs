@@ -117,13 +117,13 @@ curl "https://api.dexbuilder.com/api/v4/prediction/tokens/<token_id>/price_histo
 | `from` | 开始时间，Unix 毫秒 |
 | `to` | 结束时间，Unix 毫秒 |
 
-单次查询时间范围最多 14 天。
+`interval`、`from`、`to` 均为必填参数。单次查询时间范围最多 14 天。响应中的 `t` 为 Unix 毫秒，`p` 为价格字符串。
 
 ```json
 {
   "history": [
-    { "t": 1782666000, "p": 0.485 },
-    { "t": 1782669600, "p": 0.500 }
+    { "t": 1782666000000, "p": "0.485" },
+    { "t": 1782669600000, "p": "0.500" }
   ]
 }
 ```
