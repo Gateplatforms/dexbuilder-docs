@@ -49,6 +49,8 @@ curl "https://api.dexbuilder.com/api/v4/event_contracts/tokens/<token_id>/order_
 | `last_trade_price` | 最近成交价 |
 | `min_order_size`, `tick_size`, `neg_risk` | 交易限制与风险模式 |
 
+`timestamp`、`hash`、`last_trade_price` 和交易参数在来源无可靠数据时为 `null`；不要将服务器响应时间当作快照时间。
+
 当前 API 没有批量 Order Book 接口，如需多个 Token 的订单簿，应分别请求。
 
 ## 最新 Token 价格
