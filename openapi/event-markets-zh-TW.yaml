@@ -696,7 +696,10 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
             }
           }
         ]
@@ -751,25 +754,34 @@
           {
             "name": "interval",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "5m",
+                "15m",
+                "1h",
+                "4h",
+                "1d"
+              ]
             }
           },
           {
             "name": "from",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             }
           },
           {
             "name": "to",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             }
           }
         ]
@@ -2668,7 +2680,8 @@
             "type": "string"
           },
           "timestamp": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "token_id": {
             "type": "string"
@@ -2698,7 +2711,8 @@
             "type": "string"
           },
           "timestamp": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "token_id": {
             "type": "string"
@@ -2722,16 +2736,20 @@
         "type": "object",
         "properties": {
           "best_ask": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "best_bid": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "last_price": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "timestamp": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "token_id": {
             "type": "string"
@@ -2743,10 +2761,12 @@
         "type": "object",
         "properties": {
           "p": {
-            "type": "string"
+            "type": "string",
+            "description": "價格字串。"
           },
           "t": {
-            "type": "integer"
+            "type": "integer",
+            "description": "Unix 毫秒時間戳。"
           }
         },
         "description": "回應物件。"
@@ -3408,7 +3428,8 @@
             "type": "string"
           },
           "timestamp": {
-            "type": "integer"
+            "type": "integer",
+            "description": "成交時間，Unix 毫秒。"
           }
         }
       },
@@ -3452,11 +3473,13 @@
           },
           "timestamp": {
             "type": "integer",
-            "nullable": true
+            "nullable": true,
+            "description": "訂單簿來源快照時間，Unix 毫秒；無可靠來源時為 null。"
           },
           "hash": {
             "type": "string",
-            "nullable": true
+            "nullable": true,
+            "description": "來源完整快照的 Hash；無可靠來源時為 null。"
           },
           "bids": {
             "type": "array",
