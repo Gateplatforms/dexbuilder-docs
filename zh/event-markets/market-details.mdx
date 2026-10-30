@@ -4,7 +4,7 @@ sidebarTitle: "市场详情"
 description: "了解预测市场 Market 的结构、状态、结果代币与交易限制。"
 ---
 
-根据 Market ID 或 slug 查询公开市场数据时，请区分两种响应模型。按 ID 查询返回 `title` 字符串及 `start_time`、`end_time`；按 slug 查询可返回多语言 `question` 和交易限制等扩展字段。两种接口均无需认证。
+根据 Market ID 或 slug 查询公开市场详情时，两种接口返回同一 MarketDetail 模型，包含多语言 `question` 和 Outcome、Unix 秒级市场时间及交易参数。两种接口均无需认证。
 
 生产环境 Base URL：
 
@@ -26,46 +26,43 @@ curl "https://api.dexbuilder.com/api/v4/prediction/markets/<market_id>"
 curl "https://api.dexbuilder.com/api/v4/prediction/markets/slug/<market_slug>"
 ```
 
-## 按 ID 查询的响应
+## Market 详情响应
 
-以下示例对应 `GET /api/v4/prediction/markets/{market_id}`。`outcomes[].token_id` 可直接用于对应 Token 的价格和订单簿接口。
+按 ID 和按 slug 查询均返回 MarketDetail。以下示例展示常用字段；`outcomes[].token_id` 可直接用于对应 Token 的价格和订单簿接口。
 
 ```json Example
 {
-  "market_id": "market-123",
-  "event_id": "event-123",
+  "market_id": "ge_42_7",
+  "event_id": "ge_42",
   "slug": "example-market",
-  "title": "Will the outcome occur?",
-  "condition_id": "0xabc...",
+  "question": { "en": "Will the outcome occur?" },
+  "condition_id": "ge_condition",
   "status": "active",
   "closed": false,
   "accepting_orders": true,
   "enable_order_book": true,
-  "start_time": 1782666000,
-  "end_time": 1782752400,
+  "start_date": 1782666000,
+  "end_date": 1782752400,
   "outcomes": [
-    { "outcome": "Yes", "token_id": "token-yes", "clob_token_id": "token-yes", "price": "0.50" },
-    { "outcome": "No", "token_id": "token-no", "clob_token_id": "token-no", "price": "0.50" }
+    { "outcome": { "en": "Yes" }, "token_id": "ge_yes" },
+    { "outcome": { "en": "No" }, "token_id": "ge_no" }
   ]
 }
 ```
 
-## 字段说明
-
 | 字段 | 说明 |
 | --- | --- |
-| `market_id`、`event_id` | Market 与所属 Event 的 ID |
-| `title` | 市场标题，字符串 |
-| `condition_id` | 结算 Condition ID |
-| `outcomes` | 每项包含字符串 `outcome`、`token_id`、`clob_token_id` 和 `price` |
+| `market_id`、`event_id` | Market 与所属 Event 的 ID；后续请求应原样使用 |
+| `question` | 多语言市场问题对象 |
+| `condition_id` | Condition ID |
+| `outcomes` | 每项包含多语言 `outcome` 和 `token_id` |
 | `status`、`closed` | 市场状态 |
-| `accepting_orders`、`enable_order_book` | 交易与订单簿开关 |
+| `accepting_orders`、`enable_order_book` | 交易与订单簿状态；无值时可为 `null` |
+| `min_order_size`、`tick_size`、`neg_risk` | 交易限制；无值时可为 `null` |
 | `best_bid`、`best_ask`、`last_trade_price` | 盘口与最近成交摘要 |
-| `start_time`、`end_time` | Unix 秒级时间戳 |
+| `start_date`、`end_date` | Unix 秒级时间戳；无值时为 `null` |
 
-## 按 slug 查询的响应
-
-`GET /api/v4/prediction/markets/slug/{slug}` 使用另一种 MarketDetail 模型，可包含多语言 `question`、`min_order_size`、`tick_size`、`neg_risk`、`resolved_at` 等字段。其字段及类型以[按 Slug 查询市场](/zh/event-markets/rest/query-market-by-slug)为准，不应与按 ID 查询的响应混用。
+按 ID 查询详见[查询市场](/zh/event-markets/rest/query-market)，按 slug 查询详见[按 Slug 查询市场](/zh/event-markets/rest/query-market-by-slug)。
 
 ## 使用 Outcome Token
 

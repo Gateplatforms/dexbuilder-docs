@@ -12,7 +12,7 @@ description: "通过 Prediction API 查询公开 Event、Market 与 Tag，支持
 https://api.dexbuilder.com
 ```
 
-除接口另有说明外，Event 和 Market 的时间字段使用 Unix 秒级时间戳。Event 的 `title`、`description` 和 Tag `label` 等字段可返回多语言对象；Market 列表及按 ID 查询的 `title` 是字符串。按 slug 查询的 Market 使用另一种响应模型。
+除接口另有说明外，Event 和 Market 的时间字段使用 Unix 秒级时间戳。Event 的 `title`、`description` 和 Tag `label` 可返回多语言对象；Market 的 `question` 和 `outcomes[].outcome` 也使用多语言对象。Market 列表返回摘要，按 ID 或 slug 查询返回详情。
 
 ## Events
 
@@ -121,38 +121,36 @@ curl "https://api.dexbuilder.com/api/v4/prediction/markets/<market_id>"
 curl "https://api.dexbuilder.com/api/v4/prediction/markets/slug/<market_slug>"
 ```
 
-按 ID 查询和市场列表返回 `title` 字符串，`outcomes[].outcome` 也是字符串；`outcomes[].token_id` 可用于价格和订单簿接口。按 slug 查询使用另一种 MarketDetail 响应模型，可能包含多语言 `question`、交易限制及结算字段；请分别查看对应的 API Reference。
+市场列表返回 Market 摘要；按 ID 或 slug 查询返回 Market 详情。三者均使用多语言 `question`、多语言 `outcomes[].outcome` 和 Unix 秒级 `start_date`、`end_date`。从 `outcomes[].token_id` 获取 Token ID 后，可继续查询价格和订单簿。
 
 | 字段 | 说明 |
 | --- | --- |
-| `market_id` | Market 唯一标识 |
+| `market_id` | Market 唯一标识；后续请求应原样使用返回值 |
 | `event_id` | 所属 Event ID |
 | `slug` | Market slug |
-| `title` | 市场标题，字符串 |
+| `question` | 多语言市场问题对象 |
 | `condition_id` | Condition ID |
-| `outcomes` | Outcome 列表；每项包含字符串 `outcome`、`token_id`、`clob_token_id` 和 `price` |
-| `status`, `closed` | Market 状态 |
-| `accepting_orders` | 当前是否接受订单 |
-| `enable_order_book` | 是否启用订单簿 |
-| `best_bid`, `best_ask`, `last_trade_price` | 盘口和最近成交摘要 |
-| `start_time`, `end_time` | Market 时间，Unix 秒 |
+| `outcomes` | Outcome 列表；每项包含多语言 `outcome` 和 `token_id` |
+| `status`、`closed` | Market 状态 |
+| `best_bid`、`best_ask`、`last_trade_price` | 盘口和最近成交摘要 |
+| `start_date`、`end_date` | Market 时间，Unix 秒；无值时为 `null` |
+
+以下为 Market 摘要示例；详情还可返回交易限制和结算字段：
 
 ```json Example
 {
-  "market_id": "market-123",
-  "event_id": "event-123",
+  "market_id": "ge_42_7",
+  "event_id": "ge_42",
   "slug": "example-market",
-  "title": "Will the outcome occur?",
-  "condition_id": "0xabc...",
+  "question": { "en": "Will the outcome occur?" },
+  "condition_id": "ge_condition",
   "status": "active",
   "closed": false,
-  "accepting_orders": true,
-  "enable_order_book": true,
-  "start_time": 1782666000,
-  "end_time": 1782752400,
+  "start_date": 1782666000,
+  "end_date": 1782752400,
   "outcomes": [
-    { "outcome": "Yes", "token_id": "token-yes", "clob_token_id": "token-yes", "price": "0.50" },
-    { "outcome": "No", "token_id": "token-no", "clob_token_id": "token-no", "price": "0.50" }
+    { "outcome": { "en": "Yes" }, "token_id": "ge_yes" },
+    { "outcome": { "en": "No" }, "token_id": "ge_no" }
   ]
 }
 ```
