@@ -18,18 +18,20 @@ https://api.dexbuilder.com
 curl "https://api.dexbuilder.com/api/v4/prediction/tokens/<token_id>/order_book?depth=20"
 ```
 
-`depth` is an optional query parameter. Use the returned `bids` and `asks` arrays for the available levels.
+`depth` is optional and defaults to at most 20 levels per side. You can request 1–100 levels; the actual levels are in `bids` and `asks`.
 
 ```json Example
 {
   "token_id": "token-yes",
   "condition_id": "0xabc...",
-  "bids": [
-    { "price": "0.48", "size": "100.00" }
-  ],
-  "asks": [
-    { "price": "0.52", "size": "80.00" }
-  ]
+  "timestamp": null,
+  "hash": null,
+  "bids": [{ "price": "0.48", "size": "100.00" }],
+  "asks": [{ "price": "0.52", "size": "80.00" }],
+  "min_order_size": null,
+  "tick_size": null,
+  "neg_risk": null,
+  "last_trade_price": null
 }
 ```
 
@@ -37,9 +39,13 @@ curl "https://api.dexbuilder.com/api/v4/prediction/tokens/<token_id>/order_book?
 | --- | --- |
 | `token_id` | Outcome Token ID |
 | `condition_id` | Market Condition ID |
-| `bids`, `asks` | Bid and ask depth; each level contains decimal-string `price` and `size` values |
+| `bids`, `asks` | Bid and ask depth; each level has decimal-string `price` and `size` |
+| `timestamp` | Source-provided order-book snapshot time in Unix milliseconds; `null` when unavailable |
+| `hash` | Source-provided hash of the full snapshot; `null` when unavailable |
+| `min_order_size`, `tick_size`, `neg_risk` | Market trading parameters; `null` when unavailable |
+| `last_trade_price` | Latest trade price; `null` when unavailable |
 
-The order-book response does not include a snapshot timestamp or hash. Refresh the order book when you need a current quote; the Ticker timestamp is not an order-book snapshot time.
+The API does not fill `timestamp` or `hash` with response time or estimated values. When `depth` truncates the book, a returned `hash` still identifies the source's full snapshot.
 
 The current API does not provide a batch Order Book endpoint. If you need order books for multiple Tokens, request them separately.
 
