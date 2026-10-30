@@ -24,18 +24,12 @@ curl "https://api.dexbuilder.com/api/v4/prediction/tokens/<token_id>/order_book?
 {
   "token_id": "token-yes",
   "condition_id": "0xabc...",
-  "timestamp": 1782753357257,
-  "hash": "a1b2c3d4",
   "bids": [
     { "price": "0.48", "size": "100.00" }
   ],
   "asks": [
     { "price": "0.52", "size": "80.00" }
-  ],
-  "last_trade_price": "0.50",
-  "min_order_size": "5",
-  "tick_size": "0.01",
-  "neg_risk": false
+  ]
 }
 ```
 
@@ -44,10 +38,9 @@ curl "https://api.dexbuilder.com/api/v4/prediction/tokens/<token_id>/order_book?
 | `token_id` | Outcome Token ID |
 | `condition_id` | Market Condition ID |
 | `bids`, `asks` | 买卖深度，每档包含 decimal string 格式的 `price` 与 `size` |
-| `timestamp` | 快照时间，Unix 毫秒 |
-| `hash` | 订单簿快照 Hash |
-| `last_trade_price` | 最近成交价 |
-| `min_order_size`, `tick_size`, `neg_risk` | 交易限制与风险模式 |
+| `bids`, `asks` | 买卖深度，每档包含 decimal string 格式的 `price` 与 `size` |
+
+该订单簿响应不提供快照时间或 Hash。若需要判断报价是否仍适用，请重新查询订单簿；不要将 Ticker 的时间戳当作订单簿快照时间。
 
 当前 API 没有批量 Order Book 接口，如需多个 Token 的订单簿，应分别请求。
 
@@ -66,7 +59,7 @@ curl "https://api.dexbuilder.com/api/v4/prediction/tokens/<token_id>/price"
 }
 ```
 
-没有可用成交记录时，`price` 可能为空字符串。
+`price` 表示该 Outcome Token 的最新成交价，不是最佳买价或卖价。没有可用成交记录时，`price` 为 `""`、`side` 为 `""`，`timestamp` 为 `null`。
 
 ## Token Ticker
 
@@ -84,7 +77,7 @@ curl "https://api.dexbuilder.com/api/v4/prediction/tokens/<token_id>/ticker"
 }
 ```
 
-数据源无法提供可靠值时，对应字段可能为 `null`。
+`last_price`、`best_bid`、`best_ask` 分别表示最新成交价、最佳买价和最佳卖价；任一数据不可用时，对应字段为 `null`。`timestamp` 是返回的有效价格数据中最新的来源时间；没有可靠时间时为 `null`，不是服务器响应时间。
 
 ## 批量 Token 价格
 
@@ -104,6 +97,8 @@ curl "https://api.dexbuilder.com/api/v4/prediction/tokens/prices?token_ids=token
 ```
 
 不存在或当前不可见的 Token 会被忽略，返回顺序保持与请求中的有效 Token 顺序一致。
+
+批量接口同样返回最新成交价。可见 Token 尚无可用成交记录时，该项的 `price` 为 `""`、`timestamp` 为 `null`。
 
 ## 价格历史
 
