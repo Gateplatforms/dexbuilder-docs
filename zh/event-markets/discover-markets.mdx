@@ -12,7 +12,7 @@ description: "通过 Prediction API 查询公开 Event、Market 与 Tag，支持
 https://api.dexbuilder.com
 ```
 
-除接口另有说明外，Event 和 Market 响应中的时间字段使用 Unix 秒级时间戳。`title`、`question`、`outcome`、Tag `label` 等文本字段以多语言对象返回，实际包含哪些语言取决于源数据。
+除接口另有说明外，Event 和 Market 的时间字段使用 Unix 秒级时间戳。Event 的 `title`、`description` 和 Tag `label` 等字段可返回多语言对象；Market 列表及按 ID 查询的 `title` 是字符串。按 slug 查询的 Market 使用另一种响应模型。
 
 ## Events
 
@@ -121,38 +121,38 @@ curl "https://api.dexbuilder.com/api/v4/prediction/markets/<market_id>"
 curl "https://api.dexbuilder.com/api/v4/prediction/markets/slug/<market_slug>"
 ```
 
-Market 详情中的 `outcomes` 数组直接返回订单簿与价格接口所需的 `token_id`。
+按 ID 查询和市场列表返回 `title` 字符串，`outcomes[].outcome` 也是字符串；`outcomes[].token_id` 可用于价格和订单簿接口。按 slug 查询使用另一种 MarketDetail 响应模型，可能包含多语言 `question`、交易限制及结算字段；请分别查看对应的 API Reference。
 
 | 字段 | 说明 |
 | --- | --- |
 | `market_id` | Market 唯一标识 |
 | `event_id` | 所属 Event ID |
 | `slug` | Market slug |
-| `question` | 多语言市场问题 |
+| `title` | 市场标题，字符串 |
 | `condition_id` | Condition ID |
-| `outcomes` | Outcome 列表，包含 `token_id` 与多语言 `outcome` |
+| `outcomes` | Outcome 列表；每项包含字符串 `outcome`、`token_id`、`clob_token_id` 和 `price` |
 | `status`, `closed` | Market 状态 |
 | `accepting_orders` | 当前是否接受订单 |
 | `enable_order_book` | 是否启用订单簿 |
-| `best_bid`, `best_ask`, `last_trade_price` | 当前盘口与最近成交摘要 |
-| `min_order_size`, `tick_size`, `neg_risk` | 交易限制与 Negative Risk 标记 |
-| `start_date`, `end_date`, `resolved_at` | 生命周期时间 |
-| `winning_outcome`, `winning_token_id` | 已结算后的获胜结果 |
+| `best_bid`, `best_ask`, `last_trade_price` | 盘口和最近成交摘要 |
+| `start_time`, `end_time` | Market 时间，Unix 秒 |
 
 ```json Example
 {
   "market_id": "market-123",
   "event_id": "event-123",
   "slug": "example-market",
-  "question": { "en": "Will the outcome occur?" },
+  "title": "Will the outcome occur?",
   "condition_id": "0xabc...",
   "status": "active",
   "closed": false,
   "accepting_orders": true,
   "enable_order_book": true,
+  "start_time": 1782666000,
+  "end_time": 1782752400,
   "outcomes": [
-    { "token_id": "token-yes", "outcome": { "en": "Yes" } },
-    { "token_id": "token-no", "outcome": { "en": "No" } }
+    { "outcome": "Yes", "token_id": "token-yes", "clob_token_id": "token-yes", "price": "0.50" },
+    { "outcome": "No", "token_id": "token-no", "clob_token_id": "token-no", "price": "0.50" }
   ]
 }
 ```

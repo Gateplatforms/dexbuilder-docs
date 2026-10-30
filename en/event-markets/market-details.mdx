@@ -4,7 +4,7 @@ sidebarTitle: "Market Details"
 description: "Understand the structure, status, outcome tokens, and trading limits of a Prediction Market."
 ---
 
-After selecting a Market through Discover Markets, use the Market Detail endpoint to read its full properties. This is public market data and does not require authentication.
+Public Market lookups by ID and slug use different response models. ID lookups return a string `title` with `start_time` and `end_time`; slug lookups may include a multilingual `question` and trading-limit fields. Neither endpoint requires authentication.
 
 Production Base URL:
 
@@ -26,58 +26,46 @@ By slug:
 curl "https://api.dexbuilder.com/api/v4/prediction/markets/slug/<market_slug>"
 ```
 
-## Example Response
+## Response by Market ID
+
+This example is for `GET /api/v4/prediction/markets/{market_id}`. Use `outcomes[].token_id` to query prices and order books for that Token.
 
 ```json Example
 {
   "market_id": "market-123",
   "event_id": "event-123",
   "slug": "example-market",
-  "question": { "en": "Will the outcome occur?" },
+  "title": "Will the outcome occur?",
   "condition_id": "0xabc...",
   "status": "active",
   "closed": false,
   "accepting_orders": true,
   "enable_order_book": true,
+  "start_time": 1782666000,
+  "end_time": 1782752400,
   "outcomes": [
-    { "token_id": "token-yes", "outcome": { "en": "Yes", "cn": "是", "tw": "是" } },
-    { "token_id": "token-no", "outcome": { "en": "No", "cn": "否", "tw": "否" } }
-  ],
-  "best_bid": "0.48",
-  "best_ask": "0.52",
-  "last_trade_price": "0.50",
-  "min_order_size": "5",
-  "tick_size": "0.01",
-  "neg_risk": false,
-  "volume": "12500.50",
-  "volume_24hr": "850.25",
-  "resolution_source": "https://example.com/source"
+    { "outcome": "Yes", "token_id": "token-yes", "clob_token_id": "token-yes", "price": "0.50" },
+    { "outcome": "No", "token_id": "token-no", "clob_token_id": "token-no", "price": "0.50" }
+  ]
 }
 ```
 
-## Field Reference
+## Field reference
 
 | Field | Description |
 | --- | --- |
-| `market_id` | Unique Market identifier |
-| `event_id` | Parent Event ID |
-| `slug` | Market slug |
-| `question` | Multilingual question object |
+| `market_id`, `event_id` | Market ID and parent Event ID |
+| `title` | Market title as a string |
 | `condition_id` | Settlement Condition ID |
-| `outcomes` | Outcome array; each item contains `token_id` and `outcome` |
-| `status` | Current Market status |
-| `closed` | Whether the Market is closed |
-| `accepting_orders` | Whether the Market currently accepts orders |
-| `enable_order_book` | Whether the order book is enabled |
-| `best_bid`, `best_ask` | Current best bid and ask |
-| `last_trade_price` | Latest trade price |
-| `min_order_size` | Minimum order size |
-| `tick_size` | Minimum price increment |
-| `neg_risk` | Whether Negative Risk settlement is used |
-| `start_date`, `end_date` | Market time fields, Unix seconds |
-| `resolved_at` | Resolution time after settlement |
-| `winning_outcome`, `winning_token_id` | Winning outcome and corresponding Token ID |
-| `tags` | Tags associated with the Market |
+| `outcomes` | Each item contains string `outcome`, `token_id`, `clob_token_id`, and `price` |
+| `status`, `closed` | Market state |
+| `accepting_orders`, `enable_order_book` | Trading and order-book availability |
+| `best_bid`, `best_ask`, `last_trade_price` | Order-book and latest-trade summary |
+| `start_time`, `end_time` | Unix-second timestamps |
+
+## Response by slug
+
+`GET /api/v4/prediction/markets/slug/{slug}` uses a separate MarketDetail model. It may include a multilingual `question`, `min_order_size`, `tick_size`, `neg_risk`, and `resolved_at`. Follow the [Get Market by Slug](/en/event-markets/rest/query-market-by-slug) API Reference for its fields and types; do not mix it with the ID lookup response.
 
 ## Using Outcome Tokens
 

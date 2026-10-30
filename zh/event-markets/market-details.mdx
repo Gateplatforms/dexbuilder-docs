@@ -4,7 +4,7 @@ sidebarTitle: "市场详情"
 description: "了解预测市场 Market 的结构、状态、结果代币与交易限制。"
 ---
 
-在通过「发现市场」选定 Market 后，可以使用 Market Detail 接口读取完整属性。该接口属于公开市场数据，不需要认证。
+根据 Market ID 或 slug 查询公开市场数据时，请区分两种响应模型。按 ID 查询返回 `title` 字符串及 `start_time`、`end_time`；按 slug 查询可返回多语言 `question` 和交易限制等扩展字段。两种接口均无需认证。
 
 生产环境 Base URL：
 
@@ -26,32 +26,27 @@ curl "https://api.dexbuilder.com/api/v4/prediction/markets/<market_id>"
 curl "https://api.dexbuilder.com/api/v4/prediction/markets/slug/<market_slug>"
 ```
 
-## 响应示例
+## 按 ID 查询的响应
+
+以下示例对应 `GET /api/v4/prediction/markets/{market_id}`。`outcomes[].token_id` 可直接用于对应 Token 的价格和订单簿接口。
 
 ```json Example
 {
   "market_id": "market-123",
   "event_id": "event-123",
   "slug": "example-market",
-  "question": { "en": "Will the outcome occur?" },
+  "title": "Will the outcome occur?",
   "condition_id": "0xabc...",
   "status": "active",
   "closed": false,
   "accepting_orders": true,
   "enable_order_book": true,
+  "start_time": 1782666000,
+  "end_time": 1782752400,
   "outcomes": [
-    { "token_id": "token-yes", "outcome": { "en": "Yes", "cn": "是", "tw": "是" } },
-    { "token_id": "token-no", "outcome": { "en": "No", "cn": "否", "tw": "否" } }
-  ],
-  "best_bid": "0.48",
-  "best_ask": "0.52",
-  "last_trade_price": "0.50",
-  "min_order_size": "5",
-  "tick_size": "0.01",
-  "neg_risk": false,
-  "volume": "12500.50",
-  "volume_24hr": "850.25",
-  "resolution_source": "https://example.com/source"
+    { "outcome": "Yes", "token_id": "token-yes", "clob_token_id": "token-yes", "price": "0.50" },
+    { "outcome": "No", "token_id": "token-no", "clob_token_id": "token-no", "price": "0.50" }
+  ]
 }
 ```
 
@@ -59,25 +54,18 @@ curl "https://api.dexbuilder.com/api/v4/prediction/markets/slug/<market_slug>"
 
 | 字段 | 说明 |
 | --- | --- |
-| `market_id` | Market 唯一标识 |
-| `event_id` | 所属 Event ID |
-| `slug` | Market slug |
-| `question` | 多语言问题对象 |
+| `market_id`、`event_id` | Market 与所属 Event 的 ID |
+| `title` | 市场标题，字符串 |
 | `condition_id` | 结算 Condition ID |
-| `outcomes` | Outcome 数组，每个元素包含 `token_id` 与 `outcome` |
-| `status` | Market 当前状态 |
-| `closed` | Market 是否关闭 |
-| `accepting_orders` | 当前是否接受订单 |
-| `enable_order_book` | 是否启用订单簿 |
-| `best_bid`, `best_ask` | 当前最佳买价与卖价 |
-| `last_trade_price` | 最近成交价 |
-| `min_order_size` | 最小下单数量 |
-| `tick_size` | 最小价格变动单位 |
-| `neg_risk` | 是否使用 Negative Risk 结算机制 |
-| `start_date`, `end_date` | Market 时间字段，Unix 秒 |
-| `resolved_at` | 已结算时的结算时间 |
-| `winning_outcome`, `winning_token_id` | 获胜结果与对应 Token ID |
-| `tags` | Market 关联 Tag |
+| `outcomes` | 每项包含字符串 `outcome`、`token_id`、`clob_token_id` 和 `price` |
+| `status`、`closed` | 市场状态 |
+| `accepting_orders`、`enable_order_book` | 交易与订单簿开关 |
+| `best_bid`、`best_ask`、`last_trade_price` | 盘口与最近成交摘要 |
+| `start_time`、`end_time` | Unix 秒级时间戳 |
+
+## 按 slug 查询的响应
+
+`GET /api/v4/prediction/markets/slug/{slug}` 使用另一种 MarketDetail 模型，可包含多语言 `question`、`min_order_size`、`tick_size`、`neg_risk`、`resolved_at` 等字段。其字段及类型以[按 Slug 查询市场](/zh/event-markets/rest/query-market-by-slug)为准，不应与按 ID 查询的响应混用。
 
 ## 使用 Outcome Token
 

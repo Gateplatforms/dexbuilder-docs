@@ -12,7 +12,7 @@ Production API Base URL:
 https://api.dexbuilder.com
 ```
 
-Unless otherwise specified, time fields in Event and Market responses use Unix timestamps in seconds. Text fields such as `title`, `question`, `outcome`, and Tag `label` are returned as multilingual objects; the languages actually present depend on the source data.
+Unless an endpoint says otherwise, Event and Market time fields use Unix timestamps in seconds. Event `title`, `description`, and Tag `label` may be multilingual objects; Market lists and ID lookups return `title` as a string. Market slug lookups use a separate response model.
 
 ## Events
 
@@ -121,38 +121,38 @@ curl "https://api.dexbuilder.com/api/v4/prediction/markets/<market_id>"
 curl "https://api.dexbuilder.com/api/v4/prediction/markets/slug/<market_slug>"
 ```
 
-The `outcomes` array in Market details directly returns the `token_id` values required by order-book and price endpoints.
+Market lists and ID lookups return a string `title`, and each `outcomes[].outcome` is also a string. Use `outcomes[].token_id` for price and order-book requests. The slug lookup uses a separate MarketDetail response model that may include a multilingual `question`, trading limits, and resolution fields; check the matching API Reference page.
 
 | Field | Description |
 | --- | --- |
 | `market_id` | Unique Market identifier |
 | `event_id` | Parent Event ID |
 | `slug` | Market slug |
-| `question` | Multilingual market question |
+| `title` | Market title as a string |
 | `condition_id` | Condition ID |
-| `outcomes` | Outcome list containing `token_id` and multilingual `outcome` |
+| `outcomes` | Outcome list; each item has string `outcome`, `token_id`, `clob_token_id`, and `price` |
 | `status`, `closed` | Market state |
 | `accepting_orders` | Whether the Market currently accepts orders |
 | `enable_order_book` | Whether the order book is enabled |
-| `best_bid`, `best_ask`, `last_trade_price` | Current market and latest-trade summary |
-| `min_order_size`, `tick_size`, `neg_risk` | Trading limits and Negative Risk flag |
-| `start_date`, `end_date`, `resolved_at` | Lifecycle times |
-| `winning_outcome`, `winning_token_id` | Winning result after resolution |
+| `best_bid`, `best_ask`, `last_trade_price` | Order-book and latest-trade summary |
+| `start_time`, `end_time` | Market times in Unix seconds |
 
 ```json Example
 {
   "market_id": "market-123",
   "event_id": "event-123",
   "slug": "example-market",
-  "question": { "en": "Will the outcome occur?" },
+  "title": "Will the outcome occur?",
   "condition_id": "0xabc...",
   "status": "active",
   "closed": false,
   "accepting_orders": true,
   "enable_order_book": true,
+  "start_time": 1782666000,
+  "end_time": 1782752400,
   "outcomes": [
-    { "token_id": "token-yes", "outcome": { "en": "Yes" } },
-    { "token_id": "token-no", "outcome": { "en": "No" } }
+    { "outcome": "Yes", "token_id": "token-yes", "clob_token_id": "token-yes", "price": "0.50" },
+    { "outcome": "No", "token_id": "token-no", "clob_token_id": "token-no", "price": "0.50" }
   ]
 }
 ```

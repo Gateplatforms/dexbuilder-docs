@@ -12,7 +12,7 @@ description: "透過 Prediction API 查詢公開 Event、Market 與 Tag，支援
 https://api.dexbuilder.com
 ```
 
-除介面另有說明外，Event 和 Market 響應中的時間欄位使用 Unix 秒級時間戳。`title`、`question`、`outcome`、Tag `label` 等文本欄位以多語言對象回傳，實際包含哪些語言取決於源資料。
+除介面另有說明外，Event 和 Market 的時間欄位使用 Unix 秒級時間戳。Event 的 `title`、`description` 和 Tag `label` 等欄位可回傳多語言對象；Market 清單及按 ID 查詢的 `title` 是字串。按 slug 查詢的 Market 使用另一種回應模型。
 
 ## Events
 
@@ -121,38 +121,38 @@ curl "https://api.dexbuilder.com/api/v4/prediction/markets/<market_id>"
 curl "https://api.dexbuilder.com/api/v4/prediction/markets/slug/<market_slug>"
 ```
 
-Market 詳情中的 `outcomes` 數組直接回傳訂單簿與價格介面所需的 `token_id`。
+按 ID 查詢和市場清單回傳字串 `title`，`outcomes[].outcome` 也是字串；`outcomes[].token_id` 可用於價格和訂單簿介面。按 slug 查詢使用另一種 MarketDetail 回應模型，可能包含多語言 `question`、交易限制及結算欄位；請分別查看對應的 API Reference。
 
 | 欄位 | 說明 |
 | --- | --- |
 | `market_id` | Market 唯一標識 |
 | `event_id` | 所屬 Event ID |
 | `slug` | Market slug |
-| `question` | 多語言市場問題 |
+| `title` | 市場標題，字串 |
 | `condition_id` | Condition ID |
-| `outcomes` | Outcome 清單，包含 `token_id` 與多語言 `outcome` |
+| `outcomes` | Outcome 清單；每項包含字串 `outcome`、`token_id`、`clob_token_id` 和 `price` |
 | `status`, `closed` | Market 狀態 |
 | `accepting_orders` | 目前是否接受訂單 |
-| `enable_order_book` | 是否啓用訂單簿 |
-| `best_bid`, `best_ask`, `last_trade_price` | 目前盤口與最近成交摘要 |
-| `min_order_size`, `tick_size`, `neg_risk` | 交易限制與 Negative Risk 標記 |
-| `start_date`, `end_date`, `resolved_at` | 生命週期時間 |
-| `winning_outcome`, `winning_token_id` | 已結算後的獲勝結果 |
+| `enable_order_book` | 是否啟用訂單簿 |
+| `best_bid`, `best_ask`, `last_trade_price` | 盤口和最近成交摘要 |
+| `start_time`, `end_time` | Market 時間，Unix 秒 |
 
 ```json Example
 {
   "market_id": "market-123",
   "event_id": "event-123",
   "slug": "example-market",
-  "question": { "en": "Will the outcome occur?" },
+  "title": "Will the outcome occur?",
   "condition_id": "0xabc...",
   "status": "active",
   "closed": false,
   "accepting_orders": true,
   "enable_order_book": true,
+  "start_time": 1782666000,
+  "end_time": 1782752400,
   "outcomes": [
-    { "token_id": "token-yes", "outcome": { "en": "Yes" } },
-    { "token_id": "token-no", "outcome": { "en": "No" } }
+    { "outcome": "Yes", "token_id": "token-yes", "clob_token_id": "token-yes", "price": "0.50" },
+    { "outcome": "No", "token_id": "token-no", "clob_token_id": "token-no", "price": "0.50" }
   ]
 }
 ```
