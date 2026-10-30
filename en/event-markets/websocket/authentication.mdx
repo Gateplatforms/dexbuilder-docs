@@ -58,4 +58,4 @@ channel=server.sign&event=auth&time=1720000000&wallet_address=<URL-encoded walle
 }
 ```
 
-After successful connection authentication, subsequent private subscriptions and unsubscriptions can omit `auth`. A connection is bound to one user wallet. Open a new connection to switch users, and authenticate again after reconnecting. Pass the wallet in the WebSocket message; the REST `sub_user_wallet_addr` header is not required on the WebSocket handshake. For REST signing, see [Broker API Key and signing](/api-reference/common/broker-authentication).
+After successful connection authentication, subsequent private subscriptions and unsubscriptions can omit `auth`. A connection is bound to one user wallet. Open a new connection to switch users, and authenticate again after reconnecting. Pass the wallet in the WebSocket message; the REST `sub_user_wallet_addr` header is not required on the WebSocket handshake. For REST signing, see [Broker API Key and signing](/en/api-reference/common/broker-authentication).

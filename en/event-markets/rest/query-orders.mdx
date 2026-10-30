@@ -8,12 +8,16 @@ Returns the authenticated user's orders.
 
 **Base URL:** `https://api.dexbuilder.com`
 
-**Authentication:** This is a private endpoint and requires API authentication. The authenticated account is inferred from the request credentials; do not send internal user headers.
+**Authentication:** Use a Broker API Key and sign this request with `Timestamp` and `SIGN`. Pass a wallet address that belongs to your Broker in `sub_user_wallet_addr`. Calculate the signature using the external Broker path. See [Broker API Key and signing](/en/api-reference/common/broker-authentication) and [Access on behalf of a user](/en/api-reference/common/sub-user-wallet).
 
 ## Request
 
 ```bash
-curl -G "https://api.dexbuilder.com/api/v4/prediction/orders"
+curl -X GET "https://api.dexbuilder.com/api/v4/broker/prediction/orders" \
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "sub_user_wallet_addr: ${USER_WALLET}"
 ```
 
 Filter by market, condition, status, time range, and cursor using the supported query parameters.
