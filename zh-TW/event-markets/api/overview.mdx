@@ -56,9 +56,7 @@ Market 的 `status` 描述市場狀態；REST 訂單的 `status` 使用 `process
 
 ## 標準錯誤
 
-```json
-{"label":"INVALID_PARAM_VALUE","message":"invalid request"}
-```
+錯誤回應包含 `label` 和 `message`。公開行情介面的參數錯誤使用 `INVALID_PARAM_VALUE`，行情來源不可用使用 `QUOTE_UNAVAILABLE`；Broker 私有業務介面的參數錯誤可能使用 `INVALID_ARGUMENT`。請以各介面的錯誤定義為準。
 
 | HTTP 狀態 | 說明 |
 | --- | --- |

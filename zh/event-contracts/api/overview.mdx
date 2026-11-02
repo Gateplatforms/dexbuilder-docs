@@ -42,8 +42,6 @@ https://api.dexbuilder.com
 
 ## 标准错误
 
-```json
-{"label":"INVALID_PARAM_VALUE","message":"invalid request"}
-```
+错误响应包含 `label` 和 `message`。公开行情接口的参数错误使用 `INVALID_PARAM_VALUE`，行情源不可用使用 `QUOTE_UNAVAILABLE`；Broker 私有业务接口的参数错误可能使用 `INVALID_ARGUMENT`。请以具体接口的错误定义为准。
 
 常见 HTTP 状态包括 `400`、`401`、`404` 和 `503`。
