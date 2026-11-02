@@ -12,7 +12,7 @@ Base URL: `https://api.dexbuilder.com`
 
 | Parameter | Required | Description |
 | --- | --- | --- |
-| `tag_id` | Yes | Positive cryptocurrency tag ID; for example, BTC is `235`. |
+| `tag_id` | Yes | Positive cryptocurrency tag ID; for example, BTC is `235`. Do not add the `ge_` prefix. |
 | `interval` | Yes | Display interval: `1m`, `5m`, `15m`, `1h`, `4h`, `1d`, `1w`, `1mon`, `1y`, or `all`. |
 | `start_ts` | No | Start time in Unix seconds; omit or pass `0` to use the default time window. |
 | `end_ts` | No | End time in Unix seconds; omit or pass `0` to use the default time window. |
@@ -42,4 +42,4 @@ A successful response contains the currency pair, display interval, and candlest
 
 `history[].t` is a Unix timestamp in seconds. Open, high, low, close, and volume are decimal strings. `source` is a data source name and is omitted when unavailable. Sources without volume may return `"0"`; no data returns an empty `history` array.
 
-Invalid parameters return HTTP 400; an unavailable quote source returns HTTP 503.
+Invalid parameters return HTTP 400 with `label` set to `INVALID_PARAM_VALUE`. An unavailable quote source returns HTTP 503 with `label` set to `QUOTE_UNAVAILABLE`.

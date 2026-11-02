@@ -12,7 +12,7 @@ Base URL：`https://api.dexbuilder.com`
 
 | 參數 | 必填 | 說明 |
 | --- | --- | --- |
-| `tag_id` | 是 | 加密貨幣標籤 ID，正整數；例如 BTC 為 `235`。 |
+| `tag_id` | 是 | 加密貨幣標籤 ID，正整數；例如 BTC 為 `235`，不要加上 `ge_` 前綴。 |
 | `interval` | 是 | 展示檔位：`1m`、`5m`、`15m`、`1h`、`4h`、`1d`、`1w`、`1mon`、`1y`、`all`。 |
 | `start_ts` | 否 | 起始 Unix 秒；省略或傳 `0` 時使用預設時間範圍。 |
 | `end_ts` | 否 | 結束 Unix 秒；省略或傳 `0` 時使用預設時間範圍。 |
@@ -42,4 +42,4 @@ curl "https://api.dexbuilder.com/api/v4/prediction/crypto/candlesticks?tag_id=23
 
 `history[].t` 為 Unix 秒；開、高、低、收及成交量均為十進位字串。`source` 為資料來源名稱，未提供時會省略該欄位。某些資料來源沒有成交量，可回傳 `"0"`；無資料時 `history` 為 `[]`。
 
-參數無效回傳 HTTP 400；行情來源不可用回傳 HTTP 503。
+參數無效回傳 HTTP 400，錯誤 `label` 為 `INVALID_PARAM_VALUE`；行情來源不可用回傳 HTTP 503，錯誤 `label` 為 `QUOTE_UNAVAILABLE`。
