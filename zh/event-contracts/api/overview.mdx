@@ -37,12 +37,13 @@ https://api.dexbuilder.com
 
 - 事件与市场日期字段通常使用 Unix 秒；
 - `from`、`to` 等范围参数通常使用 Unix 毫秒；
+- 加密货币 K 线的 `start_ts`、`end_ts` 和 `history[].t` 使用 Unix 秒；
 - 价格、数量、成交额、余额、手续费等金额类字段通常以字符串返回，建议使用 Decimal 精度处理。
 
 ## 标准错误
 
 ```json
-{"label":"INVALID_ARGUMENT","message":"invalid request"}
+{"label":"INVALID_PARAM_VALUE","message":"invalid request"}
 ```
 
 常见 HTTP 状态包括 `400`、`401`、`404` 和 `503`。
