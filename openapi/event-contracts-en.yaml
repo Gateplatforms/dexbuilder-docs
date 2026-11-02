@@ -2223,7 +2223,7 @@
             "name": "start_ts",
             "in": "query",
             "required": false,
-            "description": "Start time in Unix seconds; omitted or 0 uses the default window.",
+            "description": "Start time in Unix seconds; omitted or 0 follows the server's default rule.",
             "schema": {
               "type": "integer",
               "minimum": 0
@@ -2233,7 +2233,7 @@
             "name": "end_ts",
             "in": "query",
             "required": false,
-            "description": "End time in Unix seconds; omitted or 0 uses the default window.",
+            "description": "End time in Unix seconds; omitted or 0 follows the server's default rule.",
             "schema": {
               "type": "integer",
               "minimum": 0
@@ -2257,6 +2257,10 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "label": "INVALID_PARAM_VALUE",
+                  "message": "invalid crypto candlestick parameters"
                 }
               }
             }
@@ -2267,6 +2271,10 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "label": "QUOTE_UNAVAILABLE",
+                  "message": "crypto candlesticks unavailable"
                 }
               }
             }

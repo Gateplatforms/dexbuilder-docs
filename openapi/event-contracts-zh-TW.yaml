@@ -2223,7 +2223,7 @@
             "name": "start_ts",
             "in": "query",
             "required": false,
-            "description": "起始 Unix 秒；省略或為 0 時使用預設時間範圍。",
+            "description": "起始 Unix 秒；省略或為 0 時依服務端預設規則處理。",
             "schema": {
               "type": "integer",
               "minimum": 0
@@ -2233,7 +2233,7 @@
             "name": "end_ts",
             "in": "query",
             "required": false,
-            "description": "結束 Unix 秒；省略或為 0 時使用預設時間範圍。",
+            "description": "結束 Unix 秒；省略或為 0 時依服務端預設規則處理。",
             "schema": {
               "type": "integer",
               "minimum": 0
@@ -2257,6 +2257,10 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "label": "INVALID_PARAM_VALUE",
+                  "message": "invalid crypto candlestick parameters"
                 }
               }
             }
@@ -2267,6 +2271,10 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "label": "QUOTE_UNAVAILABLE",
+                  "message": "crypto candlesticks unavailable"
                 }
               }
             }
