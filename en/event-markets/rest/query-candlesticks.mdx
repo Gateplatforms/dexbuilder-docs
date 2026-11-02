@@ -14,8 +14,8 @@ Base URL: `https://api.dexbuilder.com`
 | --- | --- | --- |
 | `tag_id` | Yes | Positive cryptocurrency tag ID; for example, BTC is `235`. Do not add the `ge_` prefix. |
 | `interval` | Yes | Display interval: `1m`, `5m`, `15m`, `1h`, `4h`, `1d`, `1w`, `1mon`, `1y`, or `all`. |
-| `start_ts` | No | Start time in Unix seconds; omit or pass `0` to use the default time window. |
-| `end_ts` | No | End time in Unix seconds; omit or pass `0` to use the default time window. |
+| `start_ts` | No | Start time in Unix seconds; omit or pass `0` to use the server's default boundary rule. |
+| `end_ts` | No | End time in Unix seconds; omit or pass `0` to use the server's default boundary rule. |
 
 When both boundaries are nonzero, `end_ts` must be greater than `start_ts`.
 
