@@ -120,6 +120,74 @@
             "schema": {
               "type": "boolean"
             }
+          },
+          {
+            "name": "start_date_min",
+            "in": "query",
+            "required": false,
+            "description": "Unix timestamp in milliseconds.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "start_date_max",
+            "in": "query",
+            "required": false,
+            "description": "Unix timestamp in milliseconds.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "end_date_min",
+            "in": "query",
+            "required": false,
+            "description": "Unix timestamp in milliseconds.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "end_date_max",
+            "in": "query",
+            "required": false,
+            "description": "Unix timestamp in milliseconds.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "tag_id",
+            "in": "query",
+            "required": false,
+            "description": "Repeatable Tag ID filter.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "exclude_tag_id",
+            "in": "query",
+            "required": false,
+            "description": "Repeatable excluded Tag ID filter.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
           }
         ]
       }
@@ -828,90 +896,9 @@
           {
             "name": "token_ids",
             "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-    "/api/v4/prediction/tokens/{currency}/candlesticks": {
-      "get": {
-        "summary": "Get Candlesticks",
-        "description": "Get Candlesticks.",
-        "operationId": "query_candlesticks",
-        "responses": {
-          "200": {
-            "description": "Request succeeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CurrencyCandlestickList"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid request or parameters",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Service temporarily unavailable",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "currency",
-            "in": "path",
             "required": true,
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "interval",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "from",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "to",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
             }
           }
         ]
@@ -2225,6 +2212,99 @@
           }
         ]
       }
+    },
+    "/api/v4/prediction/crypto/candlesticks": {
+      "get": {
+        "summary": "Get Crypto Candlesticks",
+        "description": "Query OHLCV candlesticks by cryptocurrency tag ID.",
+        "operationId": "query_crypto_candlesticks",
+        "parameters": [
+          {
+            "name": "tag_id",
+            "in": "query",
+            "required": true,
+            "description": "Positive cryptocurrency tag ID. For example, BTC is 235.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "example": 235
+            }
+          },
+          {
+            "name": "interval",
+            "in": "query",
+            "required": true,
+            "description": "Display interval.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1m",
+                "5m",
+                "15m",
+                "1h",
+                "4h",
+                "1d",
+                "1w",
+                "1mon",
+                "1y",
+                "all"
+              ]
+            }
+          },
+          {
+            "name": "start_ts",
+            "in": "query",
+            "required": false,
+            "description": "Start time in Unix seconds; omitted or 0 uses the default window.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "end_ts",
+            "in": "query",
+            "required": false,
+            "description": "End time in Unix seconds; omitted or 0 uses the default window.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request succeeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CryptoCandlesticksResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service temporarily unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2243,30 +2323,6 @@
           }
         }
       },
-      "CurrencyCandlestick": {
-        "type": "object",
-        "properties": {
-          "c": {
-            "type": "string"
-          },
-          "h": {
-            "type": "string"
-          },
-          "l": {
-            "type": "string"
-          },
-          "o": {
-            "type": "string"
-          },
-          "t": {
-            "type": "integer"
-          },
-          "v": {
-            "type": "string"
-          }
-        },
-        "description": "Response object."
-      },
       "EventDetail": {
         "type": "object",
         "properties": {
@@ -2274,28 +2330,34 @@
             "type": "boolean"
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "closed": {
             "type": "boolean"
           },
           "closed_time": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "description": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "end_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "event_id": {
             "type": "string"
           },
           "icon": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "image": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "markets": {
             "type": "array",
@@ -2307,16 +2369,19 @@
             "type": "boolean"
           },
           "resolution_source": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "slug": {
             "type": "string"
           },
           "start_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "start_time": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "tags": {
             "type": "array",
@@ -2325,10 +2390,12 @@
             }
           },
           "title": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "volume": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         },
         "description": "Response object."
@@ -2340,34 +2407,41 @@
             "type": "boolean"
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "closed": {
             "type": "boolean"
           },
           "closed_time": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "end_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "event_id": {
             "type": "string"
           },
           "icon": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "image": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "slug": {
             "type": "string"
           },
           "start_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "start_time": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "tags": {
             "type": "array",
@@ -2376,10 +2450,12 @@
             }
           },
           "title": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "volume": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         },
         "description": "Response object."
@@ -2394,7 +2470,9 @@
             }
           },
           "next_cursor": {
-            "type": "string"
+            "type": "string",
+            "nullable": true,
+            "description": "Cursor for the next page; null means there are no more results."
           }
         },
         "description": "Response object."
@@ -2647,7 +2725,8 @@
         "type": "object",
         "properties": {
           "label": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "slug": {
             "type": "string"
@@ -2668,7 +2747,9 @@
             }
           },
           "next_cursor": {
-            "type": "string"
+            "type": "string",
+            "nullable": true,
+            "description": "Cursor for the next page; null means there are no more results."
           }
         },
         "description": "Response object."
@@ -3396,13 +3477,6 @@
         },
         "description": "Response object."
       },
-      "CurrencyCandlestickList": {
-        "type": "array",
-        "description": "List response.",
-        "items": {
-          "$ref": "#/components/schemas/CurrencyCandlestick"
-        }
-      },
       "Trade": {
         "type": "object",
         "properties": {
@@ -3511,6 +3585,69 @@
           }
         },
         "description": "Market order book response."
+      },
+      "CryptoCandlestick": {
+        "type": "object",
+        "description": "One candlestick.",
+        "required": [
+          "t",
+          "o",
+          "h",
+          "l",
+          "c",
+          "v"
+        ],
+        "properties": {
+          "t": {
+            "type": "integer",
+            "description": "Unix timestamp in seconds."
+          },
+          "o": {
+            "type": "string"
+          },
+          "h": {
+            "type": "string"
+          },
+          "l": {
+            "type": "string"
+          },
+          "c": {
+            "type": "string"
+          },
+          "v": {
+            "type": "string",
+            "description": "Volume as a decimal string; sources without volume may return 0."
+          }
+        }
+      },
+      "CryptoCandlesticksResponse": {
+        "type": "object",
+        "description": "Crypto candlestick response.",
+        "required": [
+          "symbol",
+          "interval",
+          "history"
+        ],
+        "properties": {
+          "symbol": {
+            "type": "string",
+            "description": "Currency pair identifier."
+          },
+          "interval": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "description": "Data source name; omitted when unavailable."
+          },
+          "history": {
+            "type": "array",
+            "description": "OHLCV candlesticks in time order.",
+            "items": {
+              "$ref": "#/components/schemas/CryptoCandlestick"
+            }
+          }
+        }
       }
     }
   }

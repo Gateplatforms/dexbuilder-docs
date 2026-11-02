@@ -120,6 +120,74 @@
             "schema": {
               "type": "boolean"
             }
+          },
+          {
+            "name": "start_date_min",
+            "in": "query",
+            "required": false,
+            "description": "Unix 毫秒時間戳。",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "start_date_max",
+            "in": "query",
+            "required": false,
+            "description": "Unix 毫秒時間戳。",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "end_date_min",
+            "in": "query",
+            "required": false,
+            "description": "Unix 毫秒時間戳。",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "end_date_max",
+            "in": "query",
+            "required": false,
+            "description": "Unix 毫秒時間戳。",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "tag_id",
+            "in": "query",
+            "required": false,
+            "description": "可重複傳入的 Tag ID。",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "exclude_tag_id",
+            "in": "query",
+            "required": false,
+            "description": "可重複傳入的排除 Tag ID。",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
           }
         ]
       }
@@ -828,90 +896,9 @@
           {
             "name": "token_ids",
             "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-    "/api/v4/prediction/tokens/{currency}/candlesticks": {
-      "get": {
-        "summary": "查詢 K 線",
-        "description": "查詢 K 線",
-        "operationId": "query_candlesticks",
-        "responses": {
-          "200": {
-            "description": "請求成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CurrencyCandlestickList"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "請求參數錯誤",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "服務暫時不可用",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "currency",
-            "in": "path",
             "required": true,
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "interval",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "from",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "to",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
             }
           }
         ]
@@ -2225,6 +2212,99 @@
           }
         ]
       }
+    },
+    "/api/v4/prediction/crypto/candlesticks": {
+      "get": {
+        "summary": "查詢加密貨幣 K 線",
+        "description": "按加密貨幣標籤 ID 查詢 OHLCV K 線。",
+        "operationId": "query_crypto_candlesticks",
+        "parameters": [
+          {
+            "name": "tag_id",
+            "in": "query",
+            "required": true,
+            "description": "加密貨幣標籤 ID，正整數。例如 BTC 為 235。",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "example": 235
+            }
+          },
+          {
+            "name": "interval",
+            "in": "query",
+            "required": true,
+            "description": "展示檔位。",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1m",
+                "5m",
+                "15m",
+                "1h",
+                "4h",
+                "1d",
+                "1w",
+                "1mon",
+                "1y",
+                "all"
+              ]
+            }
+          },
+          {
+            "name": "start_ts",
+            "in": "query",
+            "required": false,
+            "description": "起始 Unix 秒；省略或為 0 時使用預設時間範圍。",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "end_ts",
+            "in": "query",
+            "required": false,
+            "description": "結束 Unix 秒；省略或為 0 時使用預設時間範圍。",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "請求成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CryptoCandlesticksResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "請求參數錯誤",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "服務暫時不可用",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2243,30 +2323,6 @@
           }
         }
       },
-      "CurrencyCandlestick": {
-        "type": "object",
-        "properties": {
-          "c": {
-            "type": "string"
-          },
-          "h": {
-            "type": "string"
-          },
-          "l": {
-            "type": "string"
-          },
-          "o": {
-            "type": "string"
-          },
-          "t": {
-            "type": "integer"
-          },
-          "v": {
-            "type": "string"
-          }
-        },
-        "description": "回應物件。"
-      },
       "EventDetail": {
         "type": "object",
         "properties": {
@@ -2274,28 +2330,34 @@
             "type": "boolean"
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "closed": {
             "type": "boolean"
           },
           "closed_time": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "description": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "end_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "event_id": {
             "type": "string"
           },
           "icon": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "image": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "markets": {
             "type": "array",
@@ -2307,16 +2369,19 @@
             "type": "boolean"
           },
           "resolution_source": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "slug": {
             "type": "string"
           },
           "start_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "start_time": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "tags": {
             "type": "array",
@@ -2325,10 +2390,12 @@
             }
           },
           "title": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "volume": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         },
         "description": "回應物件。"
@@ -2340,34 +2407,41 @@
             "type": "boolean"
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "closed": {
             "type": "boolean"
           },
           "closed_time": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "end_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "event_id": {
             "type": "string"
           },
           "icon": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "image": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "slug": {
             "type": "string"
           },
           "start_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "start_time": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "tags": {
             "type": "array",
@@ -2376,10 +2450,12 @@
             }
           },
           "title": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "volume": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         },
         "description": "回應物件。"
@@ -2394,7 +2470,9 @@
             }
           },
           "next_cursor": {
-            "type": "string"
+            "type": "string",
+            "nullable": true,
+            "description": "下一頁游標；為 null 時表示沒有更多結果。"
           }
         },
         "description": "回應物件。"
@@ -2647,7 +2725,8 @@
         "type": "object",
         "properties": {
           "label": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "slug": {
             "type": "string"
@@ -2668,7 +2747,9 @@
             }
           },
           "next_cursor": {
-            "type": "string"
+            "type": "string",
+            "nullable": true,
+            "description": "下一頁游標；為 null 時表示沒有更多結果。"
           }
         },
         "description": "回應物件。"
@@ -3396,13 +3477,6 @@
         },
         "description": "回應物件。"
       },
-      "CurrencyCandlestickList": {
-        "type": "array",
-        "description": "列表回應。",
-        "items": {
-          "$ref": "#/components/schemas/CurrencyCandlestick"
-        }
-      },
       "Trade": {
         "type": "object",
         "properties": {
@@ -3511,6 +3585,69 @@
           }
         },
         "description": "市場訂單簿回應。"
+      },
+      "CryptoCandlestick": {
+        "type": "object",
+        "description": "單根 K 線。",
+        "required": [
+          "t",
+          "o",
+          "h",
+          "l",
+          "c",
+          "v"
+        ],
+        "properties": {
+          "t": {
+            "type": "integer",
+            "description": "Unix 秒時間戳。"
+          },
+          "o": {
+            "type": "string"
+          },
+          "h": {
+            "type": "string"
+          },
+          "l": {
+            "type": "string"
+          },
+          "c": {
+            "type": "string"
+          },
+          "v": {
+            "type": "string",
+            "description": "成交量字串；無成交量的資料來源可能回傳 0。"
+          }
+        }
+      },
+      "CryptoCandlesticksResponse": {
+        "type": "object",
+        "description": "加密貨幣 K 線回應。",
+        "required": [
+          "symbol",
+          "interval",
+          "history"
+        ],
+        "properties": {
+          "symbol": {
+            "type": "string",
+            "description": "幣種交易對識別碼。"
+          },
+          "interval": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "description": "資料來源名稱；上游未提供時省略。"
+          },
+          "history": {
+            "type": "array",
+            "description": "依時間回傳的 OHLCV K 線。",
+            "items": {
+              "$ref": "#/components/schemas/CryptoCandlestick"
+            }
+          }
+        }
       }
     }
   }

@@ -120,6 +120,74 @@
             "schema": {
               "type": "boolean"
             }
+          },
+          {
+            "name": "start_date_min",
+            "in": "query",
+            "required": false,
+            "description": "Unix 毫秒时间戳。",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "start_date_max",
+            "in": "query",
+            "required": false,
+            "description": "Unix 毫秒时间戳。",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "end_date_min",
+            "in": "query",
+            "required": false,
+            "description": "Unix 毫秒时间戳。",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "end_date_max",
+            "in": "query",
+            "required": false,
+            "description": "Unix 毫秒时间戳。",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "tag_id",
+            "in": "query",
+            "required": false,
+            "description": "可重复传入的 Tag ID。",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "exclude_tag_id",
+            "in": "query",
+            "required": false,
+            "description": "可重复传入的排除 Tag ID。",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
           }
         ]
       }
@@ -828,90 +896,9 @@
           {
             "name": "token_ids",
             "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-    "/api/v4/prediction/tokens/{currency}/candlesticks": {
-      "get": {
-        "summary": "查询 K 线",
-        "description": "查询 K 线",
-        "operationId": "query_candlesticks",
-        "responses": {
-          "200": {
-            "description": "请求成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CurrencyCandlestickList"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "请求参数错误",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "服务暂时不可用",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "currency",
-            "in": "path",
             "required": true,
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "interval",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "from",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "to",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
             }
           }
         ]
@@ -2793,6 +2780,99 @@
           }
         ]
       }
+    },
+    "/api/v4/prediction/crypto/candlesticks": {
+      "get": {
+        "summary": "查询加密货币 K 线",
+        "description": "按加密货币标签 ID 查询 OHLCV K 线。",
+        "operationId": "query_crypto_candlesticks",
+        "parameters": [
+          {
+            "name": "tag_id",
+            "in": "query",
+            "required": true,
+            "description": "加密货币标签 ID，正整数。例如 BTC 为 235。",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "example": 235
+            }
+          },
+          {
+            "name": "interval",
+            "in": "query",
+            "required": true,
+            "description": "展示档位。",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1m",
+                "5m",
+                "15m",
+                "1h",
+                "4h",
+                "1d",
+                "1w",
+                "1mon",
+                "1y",
+                "all"
+              ]
+            }
+          },
+          {
+            "name": "start_ts",
+            "in": "query",
+            "required": false,
+            "description": "起始 Unix 秒；省略或为 0 时使用默认时间窗口。",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "end_ts",
+            "in": "query",
+            "required": false,
+            "description": "结束 Unix 秒；省略或为 0 时使用默认时间窗口。",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "请求成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CryptoCandlesticksResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "服务暂时不可用",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2811,30 +2891,6 @@
           }
         }
       },
-      "CurrencyCandlestick": {
-        "type": "object",
-        "properties": {
-          "c": {
-            "type": "string"
-          },
-          "h": {
-            "type": "string"
-          },
-          "l": {
-            "type": "string"
-          },
-          "o": {
-            "type": "string"
-          },
-          "t": {
-            "type": "integer"
-          },
-          "v": {
-            "type": "string"
-          }
-        },
-        "description": "响应对象。"
-      },
       "EventDetail": {
         "type": "object",
         "properties": {
@@ -2842,28 +2898,34 @@
             "type": "boolean"
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "closed": {
             "type": "boolean"
           },
           "closed_time": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "description": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "end_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "event_id": {
             "type": "string"
           },
           "icon": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "image": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "markets": {
             "type": "array",
@@ -2875,16 +2937,19 @@
             "type": "boolean"
           },
           "resolution_source": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "slug": {
             "type": "string"
           },
           "start_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "start_time": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "tags": {
             "type": "array",
@@ -2893,10 +2958,12 @@
             }
           },
           "title": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "volume": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         },
         "description": "响应对象。"
@@ -2908,34 +2975,41 @@
             "type": "boolean"
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "closed": {
             "type": "boolean"
           },
           "closed_time": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "end_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "event_id": {
             "type": "string"
           },
           "icon": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "image": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "slug": {
             "type": "string"
           },
           "start_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "start_time": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "tags": {
             "type": "array",
@@ -2944,10 +3018,12 @@
             }
           },
           "title": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "volume": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         },
         "description": "响应对象。"
@@ -2962,7 +3038,9 @@
             }
           },
           "next_cursor": {
-            "type": "string"
+            "type": "string",
+            "nullable": true,
+            "description": "下一页游标；为 null 时表示没有更多结果。"
           }
         },
         "description": "响应对象。"
@@ -3215,7 +3293,8 @@
         "type": "object",
         "properties": {
           "label": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "slug": {
             "type": "string"
@@ -3236,7 +3315,9 @@
             }
           },
           "next_cursor": {
-            "type": "string"
+            "type": "string",
+            "nullable": true,
+            "description": "下一页游标；为 null 时表示没有更多结果。"
           }
         },
         "description": "响应对象。"
@@ -3964,13 +4045,6 @@
         },
         "description": "响应对象。"
       },
-      "CurrencyCandlestickList": {
-        "type": "array",
-        "description": "列表响应。",
-        "items": {
-          "$ref": "#/components/schemas/CurrencyCandlestick"
-        }
-      },
       "Trade": {
         "type": "object",
         "properties": {
@@ -4079,6 +4153,69 @@
           }
         },
         "description": "市场订单簿响应。"
+      },
+      "CryptoCandlestick": {
+        "type": "object",
+        "description": "单根 K 线。",
+        "required": [
+          "t",
+          "o",
+          "h",
+          "l",
+          "c",
+          "v"
+        ],
+        "properties": {
+          "t": {
+            "type": "integer",
+            "description": "Unix 秒时间戳。"
+          },
+          "o": {
+            "type": "string"
+          },
+          "h": {
+            "type": "string"
+          },
+          "l": {
+            "type": "string"
+          },
+          "c": {
+            "type": "string"
+          },
+          "v": {
+            "type": "string",
+            "description": "成交量字符串；无成交量的数据源可能返回 0。"
+          }
+        }
+      },
+      "CryptoCandlesticksResponse": {
+        "type": "object",
+        "description": "加密货币 K 线响应。",
+        "required": [
+          "symbol",
+          "interval",
+          "history"
+        ],
+        "properties": {
+          "symbol": {
+            "type": "string",
+            "description": "币种交易对标识。"
+          },
+          "interval": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "description": "数据源名称；上游未提供时省略。"
+          },
+          "history": {
+            "type": "array",
+            "description": "OHLCV K 线，按时间返回。",
+            "items": {
+              "$ref": "#/components/schemas/CryptoCandlestick"
+            }
+          }
+        }
       }
     },
     "securitySchemes": {
