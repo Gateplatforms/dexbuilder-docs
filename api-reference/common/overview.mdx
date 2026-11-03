@@ -3,7 +3,7 @@ title: "API 使用说明"
 description: "DexBuilder API Reference 的接入地址、路由和通用请求约定。"
 ---
 
-本文说明 DexBuilder 平台、预测市场和事件合约 API 的共同接入约定。各接口的参数、时间单位、分页方式、响应和错误字段以对应接口页为准。
+本文说明 DexBuilder 平台、事件市场和事件合约 API 的共同接入约定。各接口的参数、时间单位、分页方式、响应和错误字段以对应接口页为准。
 
 ## 接入地址与接口范围
 
@@ -16,8 +16,8 @@ https://api.dexbuilder.com
 | 产品与接口类型 | 路径前缀 | 认证要求 |
 | --- | --- | --- |
 | DexBuilder 平台 API | `/api/v4/dexbuilder/...` | 使用 Broker API Key 签名；用户级接口还需提供 `sub_user_wallet_addr` |
-| 预测市场公开行情 | `/api/v4/prediction/...` | 无需 Broker API Key |
-| 预测市场 Broker 私有接口 | `/api/v4/broker/prediction/...` | Broker API Key 签名及 `sub_user_wallet_addr` |
+| 事件市场公开行情 | `/api/v4/prediction/...` | 无需 Broker API Key |
+| 事件市场 Broker 私有接口 | `/api/v4/broker/prediction/...` | Broker API Key 签名及 `sub_user_wallet_addr` |
 | 事件合约公开行情 | `/api/v4/event_contracts/...` | 无需 Broker API Key |
 | 事件合约 Broker 私有接口 | `/api/v4/broker/event_contracts/...` | Broker API Key 签名及 `sub_user_wallet_addr` |
 
@@ -39,5 +39,5 @@ DexBuilder 平台的资产配置查询也使用 Broker API Key，但无需指定
 不同产品的业务响应和错误字段可能不同。请先根据 HTTP 状态码判断请求结果，再按照对应接口页及产品错误码页解析响应体。对提交类请求，若网络超时或收到不确定结果，应先查询操作状态，再决定是否重试；有幂等键要求的接口须按接口页提供幂等键。
 
 - [DexBuilder 平台 API 概览](/api-reference/dexbuilder/overview)
-- [预测市场 API 概览](/zh/event-markets/api/overview)与[错误码](/zh/event-markets/error-codes)
+- [事件市场 API 概览](/zh/event-markets/api/overview)与[错误码](/zh/event-markets/error-codes)
 - [事件合约 API 概览](/zh/event-contracts/api/overview)与[错误码](/zh/event-contracts/error-codes)

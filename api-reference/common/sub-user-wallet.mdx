@@ -11,11 +11,11 @@ Broker 代旗下用户访问私有接口时，使用 Broker API Key 证明 Broke
 | --- | --- |
 | DexBuilder 平台的资产配置查询 | 不需要 |
 | DexBuilder 平台的用户、充值与提现接口 | 必需 |
-| 预测市场的 Broker 私有 REST 接口 | 必需 |
+| 事件市场的 Broker 私有 REST 接口 | 必需 |
 | 事件合约的 Broker 私有 REST 接口 | 必需 |
-| 预测市场和事件合约的公开行情接口 | 不需要 |
+| 事件市场和事件合约的公开行情接口 | 不需要 |
 
-预测市场和事件合约的公开行情继续使用各自的公开路径；订单、持仓、账户等私有请求使用 Broker 路径。路径前缀见[API 使用说明](/api-reference/common/overview)。钱包地址未绑定到当前 Broker，或 Key 不具备相应权限时，请求会被拒绝。
+事件市场和事件合约的公开行情继续使用各自的公开路径；订单、持仓、账户等私有请求使用 Broker 路径。路径前缀见[API 使用说明](/api-reference/common/overview)。钱包地址未绑定到当前 Broker，或 Key 不具备相应权限时，请求会被拒绝。
 
 ## DexBuilder 平台接口清单
 
