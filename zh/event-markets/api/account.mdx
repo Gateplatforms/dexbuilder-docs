@@ -1,7 +1,7 @@
 ---
 title: "账户、手续费与领取"
 sidebarTitle: "账户与领取"
-description: "查询预测市场账户资产、资金流水、手续费以及结算后可领取金额。"
+description: "查询事件市场账户资产、资金流水、手续费以及结算后可领取金额。"
 ---
 
 本页接口均为私有接口，需要认证。
@@ -21,8 +21,8 @@ GET /api/v4/broker/prediction/assets
 | 字段 | 说明 |
 | --- | --- |
 | `fund_total` | 账户总资金 |
-| `prediction_market_asset` | 预测市场业务资产 |
-| `prediction_position_value` | 预测市场持仓价值 |
+| `prediction_market_asset` | 事件市场业务资产 |
+| `prediction_position_value` | 事件市场持仓价值 |
 | `spot_usdt_balance` | 现货 USDT 余额 |
 | `unclaimed_amount` | 待领取金额 |
 
@@ -49,7 +49,7 @@ GET /api/v4/broker/prediction/claims/available
 GET /api/v4/broker/prediction/claims/available/{token_id}
 ```
 
-用于查询当前账户已结算且可领取的预测市场资产。
+用于查询当前账户已结算且可领取的事件市场资产。
 
 ## 发起领取
 

@@ -11,11 +11,11 @@ Broker 代旗下使用者存取私有介面時，使用 Broker API Key 證明 Br
 | --- | --- |
 | DexBuilder 平台的資產配置查詢 | 不需要 |
 | DexBuilder 平台的使用者、充值與提現介面 | 必需 |
-| 預測市場的 Broker 私有 REST 介面 | 必需 |
+| 事件市場的 Broker 私有 REST 介面 | 必需 |
 | 事件合約的 Broker 私有 REST 介面 | 必需 |
-| 預測市場和事件合約的公開行情介面 | 不需要 |
+| 事件市場和事件合約的公開行情介面 | 不需要 |
 
-預測市場和事件合約的公開行情繼續使用各自的公開路徑；訂單、持倉、賬戶等私有請求使用 Broker 路徑。路徑前綴見[API 使用說明](/zh-TW/api-reference/common/overview)。錢包地址未綁定到當前 Broker，或 Key 不具備相應權限時，請求會被拒絕。
+事件市場和事件合約的公開行情繼續使用各自的公開路徑；訂單、持倉、賬戶等私有請求使用 Broker 路徑。路徑前綴見[API 使用說明](/zh-TW/api-reference/common/overview)。錢包地址未綁定到當前 Broker，或 Key 不具備相應權限時，請求會被拒絕。
 
 ## DexBuilder 平台介面清單
 

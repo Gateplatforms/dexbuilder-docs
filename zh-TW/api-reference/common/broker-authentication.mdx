@@ -1,9 +1,9 @@
 ---
 title: "Broker API Key 與簽名"
-description: "DexBuilder 平台、預測市場和事件合約 Broker 私有 REST 介面的認證方法。"
+description: "DexBuilder 平台、事件市場和事件合約 Broker 私有 REST 介面的認證方法。"
 ---
 
-本頁適用於 DexBuilder 平台、預測市場和事件合約的 **Broker 私有 REST 介面**。Broker 使用分配給自身的 Broker API Key 在服務端呼叫介面。終端使用者的個人 API Key 不能代替 Broker API Key。
+本頁適用於 DexBuilder 平台、事件市場和事件合約的 **Broker 私有 REST 介面**。Broker 使用分配給自身的 Broker API Key 在服務端呼叫介面。終端使用者的個人 API Key 不能代替 Broker API Key。
 
 <Note>
   PerpDEX 目前不支持 Broker API，其 API Key 和簽名規則見[PerpDEX 認證與簽名](/zh-TW/api-reference/perpdex/authentication)。WebSocket 私有頻道的認證以對應產品的 WebSocket 文檔為準。
@@ -52,7 +52,7 @@ SIGN = HexEncode(HMAC_SHA512(Secret Key, 簽名原文))
 - `TIMESTAMP` 必須與請求頭 `Timestamp` 的值完全一致。
 - `sub_user_wallet_addr` 是單獨的請求頭，不拼入上述簽名原文。
 
-簽名時必須使用實際存取的外部路徑：DexBuilder 平台為 `/api/v4/dexbuilder/...`，預測市場 Broker 私有介面為 `/api/v4/broker/prediction/...`，事件合約 Broker 私有介面為 `/api/v4/broker/event_contracts/...`。
+簽名時必須使用實際存取的外部路徑：DexBuilder 平台為 `/api/v4/dexbuilder/...`，事件市場 Broker 私有介面為 `/api/v4/broker/prediction/...`，事件合約 Broker 私有介面為 `/api/v4/broker/event_contracts/...`。
 
 ## GET 請求示例
 
