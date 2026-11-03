@@ -3,7 +3,7 @@
   "info": {
     "title": "DexBuilder Prediction Market API",
     "version": "1.0.0",
-    "description": "DexBuilder 預測市場 REST API"
+    "description": "DexBuilder 事件市場 REST API"
   },
   "servers": [
     {
