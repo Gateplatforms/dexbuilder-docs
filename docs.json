@@ -483,11 +483,15 @@
             "groups": [
               {
                 "group": "事件市场",
-                "pages": []
+                "pages": [
+                  "changelog/event-markets"
+                ]
               },
               {
                 "group": "事件合约",
-                "pages": []
+                "pages": [
+                  "changelog/event-contracts"
+                ]
               }
             ]
           }
@@ -963,19 +967,6 @@
                 ]
               }
             ]
-          },
-          {
-            "tab": "Changelog",
-            "groups": [
-              {
-                "group": "Prediction",
-                "pages": []
-              },
-              {
-                "group": "Event Contracts",
-                "pages": []
-              }
-            ]
           }
         ]
       },
@@ -1447,19 +1438,6 @@
                     ]
                   }
                 ]
-              }
-            ]
-          },
-          {
-            "tab": "更新日誌",
-            "groups": [
-              {
-                "group": "事件市場",
-                "pages": []
-              },
-              {
-                "group": "事件合約",
-                "pages": []
               }
             ]
           }

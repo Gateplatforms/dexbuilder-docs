@@ -1,0 +1,22 @@
+---
+title: "事件合约更新日志"
+description: "记录事件合约 API 的对外变更，说明新增能力、适用接口及接入方需要关注的事项。"
+---
+
+这里记录事件合约 API 的对外变更。每条记录按生效日期排列，并附上对应的接口文档。
+
+<Warning>
+以下条目为待发布草稿。接口生效日期尚未确认，确认后再发布本条记录。
+</Warning>
+
+<Update label="生效日期待确认" description="币种 K 线查询">
+  ## 新增加密货币 K 线查询
+
+  新增公开接口 `GET /api/v4/event_contracts/crypto/candlesticks`，可按加密货币标签 ID 查询币种的 OHLCV K 线，无需 Broker API Key。
+
+  - 使用 `tag_id` 指定币种，使用 `interval` 选择展示档位。
+  - 可通过 `start_ts` 和 `end_ts` 限定查询范围。请求时间和 `history[].t` 均使用 Unix 秒。
+  - 查询币种 K 线时，请使用此接口；Token 价格历史仍按其独立接口的说明查询。
+
+  详见[查询加密货币 K 线](/zh/event-contracts/rest/query-candlesticks)。
+</Update>
