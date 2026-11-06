@@ -491,6 +491,12 @@
                 "pages": [
                   "changelog/event-contracts"
                 ]
+              },
+              {
+                "group": "DexBuilder 平台 API",
+                "pages": [
+                  "changelog/dexbuilder"
+                ]
               }
             ]
           }
