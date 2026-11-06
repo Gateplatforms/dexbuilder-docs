@@ -5,7 +5,7 @@ description: "通过 Prediction API 创建事件市场私有订单。"
 ---
 
 <Note>
-  以下私有接口示例使用 Broker API Key。每次请求都需携带 `KEY`、`Timestamp`、`SIGN` 和 `sub_user_wallet_addr`；签名使用实际外部请求路径、Query String 和 Body。 [Broker API 认证与签名](/zh/event-markets/api/broker-authentication)。
+  以下私有接口示例使用 Broker API Key。每次请求都需携带 `KEY`、`Timestamp`、`SIGN` 和 `X-User-Wallet-Address`；签名使用实际外部请求路径、Query String 和 Body。 [Broker API 认证与签名](/zh/event-markets/api/broker-authentication)。
 </Note>
 
 在确认 Market 当前接受订单后，可以针对指定 Outcome Token 提交交易。公开市场数据无需认证；下单属于私有操作，需要完成认证。
@@ -40,7 +40,7 @@ curl -X POST "https://api.dexbuilder.com/api/v4/broker/prediction/orders" \
   -H "KEY: ${BROKER_API_KEY}" \
   -H "SIGN: ${SIGN}" \
   -H "Timestamp: ${TIMESTAMP}" \
-  -H "sub_user_wallet_addr: ${WALLET}" \
+  -H "X-User-Wallet-Address: ${WALLET}" \
   --data '{
     "token_id": "<token_id>",
     "side": "BUY",

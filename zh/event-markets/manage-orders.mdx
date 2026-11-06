@@ -5,7 +5,7 @@ description: "通过 Prediction API 查询和取消事件市场私有订单。"
 ---
 
 <Note>
-  以下私有接口示例使用 Broker API Key。每次请求都需携带 `KEY`、`Timestamp`、`SIGN` 和 `sub_user_wallet_addr`；签名使用实际外部请求路径、Query String 和 Body。 [Broker API 认证与签名](/zh/event-markets/api/broker-authentication)。
+  以下私有接口示例使用 Broker API Key。每次请求都需携带 `KEY`、`Timestamp`、`SIGN` 和 `X-User-Wallet-Address`；签名使用实际外部请求路径、Query String 和 Body。 [Broker API 认证与签名](/zh/event-markets/api/broker-authentication)。
 </Note>
 
 订单查询与撤单都属于私有操作，需要认证。生产环境 Base URL：
@@ -21,7 +21,7 @@ curl -G "https://api.dexbuilder.com/api/v4/broker/prediction/orders" \
   -H "KEY: ${BROKER_API_KEY}" \
   -H "SIGN: ${SIGN}" \
   -H "Timestamp: ${TIMESTAMP}" \
-  -H "sub_user_wallet_addr: ${WALLET}" \
+  -H "X-User-Wallet-Address: ${WALLET}" \
   --data-urlencode "status=open" \
   --data-urlencode "condition_id=<condition_id>" \
   --data-urlencode "limit=20"
@@ -68,7 +68,7 @@ curl "https://api.dexbuilder.com/api/v4/broker/prediction/orders/<order_id>" \
   -H "KEY: ${BROKER_API_KEY}" \
   -H "SIGN: ${SIGN}" \
   -H "Timestamp: ${TIMESTAMP}" \
-  -H "sub_user_wallet_addr: ${WALLET}"
+  -H "X-User-Wallet-Address: ${WALLET}"
 ```
 
 详情响应包含列表中的订单标识、价格、数量、成交进度与状态等字段，并可能包含订单服务返回的 `error_code`。
@@ -80,7 +80,7 @@ curl -X DELETE "https://api.dexbuilder.com/api/v4/broker/prediction/orders/<orde
   -H "KEY: ${BROKER_API_KEY}" \
   -H "SIGN: ${SIGN}" \
   -H "Timestamp: ${TIMESTAMP}" \
-  -H "sub_user_wallet_addr: ${WALLET}"
+  -H "X-User-Wallet-Address: ${WALLET}"
 ```
 
 ```json
@@ -98,7 +98,7 @@ curl -X DELETE "https://api.dexbuilder.com/api/v4/broker/prediction/orders?condi
   -H "KEY: ${BROKER_API_KEY}" \
   -H "SIGN: ${SIGN}" \
   -H "Timestamp: ${TIMESTAMP}" \
-  -H "sub_user_wallet_addr: ${WALLET}"
+  -H "X-User-Wallet-Address: ${WALLET}"
 ```
 
 ```json

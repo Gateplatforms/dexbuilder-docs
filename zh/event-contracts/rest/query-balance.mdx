@@ -5,7 +5,7 @@ openapi: "/openapi/event-contracts.yaml GET /api/v4/broker/event_contracts/balan
 ---
 
 <Note>
-  此接口仅供 Broker 使用。请求须携带 Broker API Key、`Timestamp`、`SIGN` 和 `sub_user_wallet_addr`。网关确认钱包属于当前 Broker 后转发。请按外部 `/api/v4/broker/...` 路径计算签名。详见[Broker API 认证与签名](/zh/event-contracts/api/broker-authentication).
+  此接口仅供 Broker 使用。请求须携带 Broker API Key、`Timestamp`、`SIGN` 和 `X-User-Wallet-Address`。网关确认钱包属于当前 Broker 后转发。请按外部 `/api/v4/broker/...` 路径计算签名。详见[Broker API 认证与签名](/zh/event-contracts/api/broker-authentication).
 </Note>
 
 查询当前用户的事件合约账户余额。

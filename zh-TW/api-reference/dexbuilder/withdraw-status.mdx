@@ -7,7 +7,7 @@ openapi: "/openapi/dexbuilder-zh-TW.yaml GET /api/v4/dexbuilder/withdraw/status"
 按事件 ID 查詢提現狀態。
 
 <Note>
-  使用 Broker API Key 呼叫，並在請求頭提供 `sub_user_wallet_addr`。網關會校驗錢包與 Broker 的歸屬關係。 認證規則見[Broker API 認證與簽名](/zh-TW/api-reference/common/broker-authentication)。
+  使用 Broker API Key 呼叫，並在請求頭提供 `X-User-Wallet-Address`。網關會校驗錢包與 Broker 的歸屬關係。 認證規則見[Broker API 認證與簽名](/zh-TW/api-reference/common/broker-authentication)。
 </Note>
 
 ## 使用說明
