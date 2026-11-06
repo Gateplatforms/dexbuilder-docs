@@ -1,10 +1,10 @@
 ---
 title: "Get Crypto Candlesticks"
-description: "Query public OHLCV candlesticks by cryptocurrency tag ID, including request parameters, time units, and response fields."
+description: "Query public OHLCV candlesticks by currency code, including request parameters, time units, and response fields."
 openapi: "/openapi/event-contracts-en.yaml GET /api/v4/event_contracts/crypto/candlesticks"
 ---
 
-Use a cryptocurrency tag ID to query public OHLCV candlesticks. Authentication is not required.
+Use a currency code to query public OHLCV candlesticks. Authentication is not required.
 
 Base URL: `https://api.dexbuilder.com`
 
@@ -12,17 +12,18 @@ Base URL: `https://api.dexbuilder.com`
 
 | Parameter | Required | Description |
 | --- | --- | --- |
-| `tag_id` | Yes | Positive cryptocurrency tag ID; for example, BTC is `235`. Do not add the `ge_` prefix. |
+| `symbol` | One of two | Case-insensitive currency code. Currently supported: `BTC`, `ETH`, `HYPE`, `XRP`, `SOL`, `DOGE`, and `BNB`. Use this parameter for new integrations. |
+| `tag_id` | One of two | Compatibility parameter: positive cryptocurrency tag ID; for example, BTC is `235`. Do not add the `ge_` prefix. |
 | `interval` | Yes | Display interval: `1m`, `5m`, `15m`, `1h`, `4h`, `1d`, `1w`, `1mon`, `1y`, or `all`. |
 | `start_ts` | No | Start time in Unix seconds; omit or pass `0` to use the server's default boundary rule. |
 | `end_ts` | No | End time in Unix seconds; omit or pass `0` to use the server's default boundary rule. |
 
-When both boundaries are nonzero, `end_ts` must be greater than `start_ts`.
+Provide exactly one of `symbol` or `tag_id`. The `tag_id` parameter remains temporarily supported; existing integrations should migrate to `symbol`. When both boundaries are nonzero, `end_ts` must be greater than `start_ts`.
 
-`interval` selects a display interval and does not guarantee the width of each returned candlestick. Use `history[].t` to read sample times.
+`interval` selects a display interval and does not guarantee the width of each returned candlestick. Use `history[].t` to read sample times. `interval=all` does not guarantee the full price history; specify `start_ts` and `end_ts` to query a particular range.
 
 ```bash
-curl "https://api.dexbuilder.com/api/v4/event_contracts/crypto/candlesticks?tag_id=235&interval=1h"
+curl "https://api.dexbuilder.com/api/v4/event_contracts/crypto/candlesticks?symbol=BTC&interval=1h"
 ```
 
 ## Response
