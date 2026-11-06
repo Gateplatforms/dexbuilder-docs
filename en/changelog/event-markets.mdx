@@ -5,6 +5,12 @@ description: "Announcements about Prediction capabilities for Brokers."
 
 This page records Broker-facing releases. Refer to the linked API documentation for integration details.
 
+<Update label="2026-11-10" description="Crypto candlesticks">
+  ## Crypto candlesticks
+
+  Prediction now provides a public OHLCV candlestick endpoint at `GET /api/v4/prediction/crypto/candlesticks`. Use the currency code `symbol` for new integrations; `tag_id` remains temporarily supported. Provide exactly one of these parameters. Time boundaries and `history[].t` use Unix seconds. `interval=all` does not guarantee the full price history. See [Get Crypto Candlesticks](/en/event-markets/rest/query-candlesticks) for the request and response contract.
+</Update>
+
 <Update label="2026-11-10" description="Broker API support">
   ## Prediction changelog
 
