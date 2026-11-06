@@ -1582,10 +1582,7 @@
                           "zh-TW/api-reference/perpdex/models/dexfuturesbboorder",
                           "zh-TW/api-reference/perpdex/models/batchamendorderreq"
                         ]
-                      },
-                      "zh-TW/api-reference/common/sub-user-wallet",
-                      "zh-TW/api-reference/common/broker-authentication",
-                      "zh-TW/api-reference/common/overview"
+                      }
                     ]
                   }
                 ]
@@ -1714,7 +1711,11 @@
                 "groups": [
                   {
                     "group": "通用說明",
-                    "pages": []
+                    "pages": [
+                      "zh-TW/api-reference/common/overview",
+                      "zh-TW/api-reference/common/broker-authentication",
+                      "zh-TW/api-reference/common/sub-user-wallet"
+                    ]
                   }
                 ]
               },
