@@ -5,16 +5,14 @@ description: "記錄事件市場 API 的能力上線及介面更新。"
 
 此頁記錄事件市場 API 的能力上線及介面更新。具體接入方式及參數以連結的 API 文件為準。
 
-<Update label="2026-11-10" description="K 線介面更新">
-  ## 加密貨幣 K 線介面更新
+<Update label="2026-11-10" description="Broker API 與 K 線介面更新">
+  ## 事件市場 API 更新
 
-  事件市場的公開 K 線文件現建議使用 `GET /api/v4/prediction/crypto/candlesticks`。與原文件中的 `GET /api/v4/prediction/tokens/{currency}/candlesticks` 相比，新介面使用查詢參數 `symbol` 和必填的 `interval`；時間範圍使用 `start_ts/end_ts`，成功回應由 K 線陣列改為包含 `symbol`、`interval`、`history` 等欄位的物件。`tag_id` 暫時相容，與 `symbol` 必須二選一。舊介面仍保留供既有呼叫使用；接入新介面時請依新回應結構解析。請參閱[查詢加密貨幣 K 線](/zh-TW/event-markets/rest/query-candlesticks)。
-</Update>
+  ### Broker API 接入
 
-<Update label="2026-11-10" description="Broker API 支援">
-  ## 事件市場更新日誌
+  事件市場支援 Broker 使用 Broker API Key 存取私有 REST 介面。Broker 可代表旗下使用者呼叫相關介面，並透過 `X-User-Wallet-Address` 指定使用者錢包；公開行情介面無需認證。接入方式請參閱[Broker API Key 與簽名](/zh-TW/api-reference/common/broker-authentication)及[事件市場 API 概覽](/zh-TW/event-markets/api/overview)。
 
-  事件市場已支援 Broker 使用 Broker API Key 存取私有 REST 能力。Broker 可代表旗下使用者呼叫相關介面，並透過 `X-User-Wallet-Address` 指定使用者錢包。公開行情介面仍可直接存取。
+  ### K 線介面更新
 
-  接入前請閱讀[Broker API Key 與簽名](/zh-TW/api-reference/common/broker-authentication)及[事件市場 API 概覽](/zh-TW/event-markets/api/overview)。
+  公開 K 線文件現建議使用 `GET /api/v4/prediction/crypto/candlesticks`。與原文件中的 `GET /api/v4/prediction/tokens/{currency}/candlesticks` 相比，新介面使用查詢參數 `symbol` 和必填的 `interval`，時間範圍使用 `start_ts/end_ts`；成功回應由 K 線陣列改為包含 `symbol`、`interval`、`history` 等欄位的物件。`tag_id` 暫時相容，與 `symbol` 必須二選一。舊介面仍保留供既有呼叫使用。請參閱[查詢加密貨幣 K 線](/zh-TW/event-markets/rest/query-candlesticks)。
 </Update>

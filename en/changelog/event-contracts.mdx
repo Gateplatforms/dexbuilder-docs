@@ -5,16 +5,14 @@ description: "Announcements about Event Contracts API capabilities and interface
 
 This page records Event Contracts API releases and interface updates. Refer to the linked API documentation for integration details.
 
-<Update label="2026-11-10" description="Candlestick API update">
-  ## Crypto candlestick API updated
+<Update label="2026-11-10" description="Broker API and candlestick update">
+  ## Event Contracts API update
 
-  The Event Contracts documentation now recommends `GET /api/v4/event_contracts/crypto/candlesticks` for public crypto candlesticks. Compared with the previously documented `GET /api/v4/event_contracts/tokens/{currency}/candlesticks`, the new endpoint uses the `symbol` query parameter and requires `interval`; use `start_ts/end_ts` for the time range. A successful response is an object with `symbol`, `interval`, and `history`, rather than a candlestick array. `tag_id` remains temporarily supported and must not be sent with `symbol`. The previous endpoint remains available for existing clients. See [Get Crypto Candlesticks](/en/event-contracts/rest/query-candlesticks) for the new contract.
-</Update>
+  ### Broker API access
 
-<Update label="2026-11-10" description="Broker API support">
-  ## Event Contracts changelog
+  Event Contracts supports Broker API Keys for private REST endpoints. A Broker can call these endpoints on behalf of its users and specify the user's wallet with `X-User-Wallet-Address`. Public market data does not require authentication. See [Broker API Key and signing](/en/api-reference/common/broker-authentication) and the [Event Contracts API overview](/en/event-contracts/api/overview).
 
-  Event Contracts supports Broker API Keys for private REST endpoints. A Broker can access these endpoints on behalf of its users and specify the user's wallet with `X-User-Wallet-Address`. Public market data remains available without authentication.
+  ### Candlestick API update
 
-  See [Broker API Key and signing](/en/api-reference/common/broker-authentication) and the [Event Contracts API overview](/en/event-contracts/api/overview) for integration details.
+  The public candlestick documentation now recommends `GET /api/v4/event_contracts/crypto/candlesticks`. Compared with the previously documented `GET /api/v4/event_contracts/tokens/{currency}/candlesticks`, the new endpoint uses the `symbol` query parameter and requires `interval`; use `start_ts/end_ts` for the time range. A successful response is an object with `symbol`, `interval`, and `history`, rather than a candlestick array. `tag_id` remains temporarily supported and must not be sent with `symbol`. The previous endpoint remains available for existing clients. See [Get Crypto Candlesticks](/en/event-contracts/rest/query-candlesticks).
 </Update>

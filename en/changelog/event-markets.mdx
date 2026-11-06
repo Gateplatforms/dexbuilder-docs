@@ -5,16 +5,14 @@ description: "Announcements about Prediction API capabilities and interface upda
 
 This page records Prediction API releases and interface updates. Refer to the linked API documentation for integration details.
 
-<Update label="2026-11-10" description="Candlestick API update">
-  ## Crypto candlestick API updated
+<Update label="2026-11-10" description="Broker API and candlestick update">
+  ## Prediction API update
 
-  The Prediction documentation now recommends `GET /api/v4/prediction/crypto/candlesticks` for public crypto candlesticks. Compared with the previously documented `GET /api/v4/prediction/tokens/{currency}/candlesticks`, the new endpoint uses the `symbol` query parameter and requires `interval`; use `start_ts/end_ts` for the time range. A successful response is an object with `symbol`, `interval`, and `history`, rather than a candlestick array. `tag_id` remains temporarily supported and must not be sent with `symbol`. The previous endpoint remains available for existing clients. See [Get Crypto Candlesticks](/en/event-markets/rest/query-candlesticks) for the new contract.
-</Update>
+  ### Broker API access
 
-<Update label="2026-11-10" description="Broker API support">
-  ## Prediction changelog
+  Prediction supports Broker API Keys for private REST endpoints. A Broker can call these endpoints on behalf of its users and specify the user's wallet with `X-User-Wallet-Address`. Public market data does not require authentication. See [Broker API Key and signing](/en/api-reference/common/broker-authentication) and the [Prediction API overview](/en/event-markets/api/overview).
 
-  Prediction supports Broker API Keys for private REST endpoints. A Broker can access these endpoints on behalf of its users and specify the user's wallet with `X-User-Wallet-Address`. Public market data remains available without authentication.
+  ### Candlestick API update
 
-  See [Broker API Key and signing](/en/api-reference/common/broker-authentication) and the [Prediction API overview](/en/event-markets/api/overview) for integration details.
+  The public candlestick documentation now recommends `GET /api/v4/prediction/crypto/candlesticks`. Compared with the previously documented `GET /api/v4/prediction/tokens/{currency}/candlesticks`, the new endpoint uses the `symbol` query parameter and requires `interval`; use `start_ts/end_ts` for the time range. A successful response is an object with `symbol`, `interval`, and `history`, rather than a candlestick array. `tag_id` remains temporarily supported and must not be sent with `symbol`. The previous endpoint remains available for existing clients. See [Get Crypto Candlesticks](/en/event-markets/rest/query-candlesticks).
 </Update>

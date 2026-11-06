@@ -5,16 +5,14 @@ description: "记录事件合约 API 的能力上线与接口更新。"
 
 这里记录事件合约 API 的能力上线与接口更新。具体接入方式和参数以链接的 API 文档为准。
 
-<Update label="2026-11-10" description="K 线接口更新">
-  ## 加密货币 K 线接口更新
+<Update label="2026-11-10" description="Broker API 与 K 线接口更新">
+  ## 事件合约 API 更新
 
-  事件合约的公开 K 线文档现推荐 `GET /api/v4/event_contracts/crypto/candlesticks`。与原文档中的 `GET /api/v4/event_contracts/tokens/{currency}/candlesticks` 相比，新接口使用查询参数 `symbol` 和必填的 `interval`；时间范围使用 `start_ts/end_ts`，成功响应由 K 线数组调整为包含 `symbol`、`interval`、`history` 等字段的对象。`tag_id` 暂时兼容，与 `symbol` 必须二选一。旧接口仍保留供现有调用使用；接入新接口时请按新响应结构解析。详见[查询加密货币 K 线](/zh/event-contracts/rest/query-candlesticks)。
-</Update>
+  ### Broker API 接入
 
-<Update label="2026-11-10" description="Broker API 支持">
-  ## 事件合约支持 Broker API 接入
+  事件合约支持 Broker 使用 Broker API Key 访问私有 REST 接口。Broker 可代表旗下用户调用相关接口，并通过 `X-User-Wallet-Address` 指定用户钱包；公开行情接口无需认证。接入方式见[Broker API Key 与签名](/api-reference/common/broker-authentication)和[事件合约 API 概览](/zh/event-contracts/api/overview)。
 
-  事件合约已支持 Broker 使用 Broker API Key 访问私有 REST 能力。Broker 可代表旗下用户调用相关接口，并通过 `X-User-Wallet-Address` 指定用户钱包。公开行情接口仍可直接访问。
+  ### K 线接口更新
 
-  本次同时提供 Broker API Key 的认证与签名说明。接入前请阅读[Broker API Key 与签名](/api-reference/common/broker-authentication)和[事件合约 API 概览](/zh/event-contracts/api/overview)。
+  公开 K 线文档现推荐 `GET /api/v4/event_contracts/crypto/candlesticks`。与原文档中的 `GET /api/v4/event_contracts/tokens/{currency}/candlesticks` 相比，新接口使用查询参数 `symbol` 和必填的 `interval`，时间范围使用 `start_ts/end_ts`；成功响应由 K 线数组改为包含 `symbol`、`interval`、`history` 等字段的对象。`tag_id` 暂时兼容，与 `symbol` 必须二选一。旧接口仍保留供现有调用使用。详见[查询加密货币 K 线](/zh/event-contracts/rest/query-candlesticks)。
 </Update>
