@@ -290,7 +290,8 @@
                           "api-reference/perpdex/models/dexfuturesbboorder",
                           "api-reference/perpdex/models/batchamendorderreq"
                         ]
-                      }
+                      },
+                      "api-reference/common/overview"
                     ]
                   }
                 ]
