@@ -17,7 +17,7 @@ curl -G "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders" \
   -H "KEY: ${BROKER_API_KEY}" \
   -H "SIGN: ${SIGN}" \
   -H "Timestamp: ${TIMESTAMP}" \
-  -H "sub_user_wallet_addr: ${USER_WALLET}" \
+  -H "X-User-Wallet-Address: ${USER_WALLET}" \
   --data-urlencode "status=open" \
   --data-urlencode "condition_id=<condition_id>" \
   --data-urlencode "limit=20"
@@ -64,7 +64,7 @@ curl "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders/<order_id>
   -H "KEY: ${BROKER_API_KEY}" \
   -H "SIGN: ${SIGN}" \
   -H "Timestamp: ${TIMESTAMP}" \
-  -H "sub_user_wallet_addr: ${USER_WALLET}"
+  -H "X-User-Wallet-Address: ${USER_WALLET}"
 ```
 
 The detail response includes the order identifiers, price, quantity, fill progress, and status from the list response and may also include an `error_code` returned by the order service.
@@ -76,7 +76,7 @@ curl -X DELETE "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders/
   -H "KEY: ${BROKER_API_KEY}" \
   -H "SIGN: ${SIGN}" \
   -H "Timestamp: ${TIMESTAMP}" \
-  -H "sub_user_wallet_addr: ${USER_WALLET}"
+  -H "X-User-Wallet-Address: ${USER_WALLET}"
 ```
 
 ```json
@@ -94,7 +94,7 @@ curl -X DELETE "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders?
   -H "KEY: ${BROKER_API_KEY}" \
   -H "SIGN: ${SIGN}" \
   -H "Timestamp: ${TIMESTAMP}" \
-  -H "sub_user_wallet_addr: ${USER_WALLET}"
+  -H "X-User-Wallet-Address: ${USER_WALLET}"
 ```
 
 ```json
@@ -106,5 +106,5 @@ curl -X DELETE "https://api.dexbuilder.com/api/v4/broker/event_contracts/orders?
 ```
 
 <Note>
-  Use a Broker API Key and pass a wallet address that belongs to your Broker in `sub_user_wallet_addr`. Calculate `SIGN` from the actual request method, path, query string, and body. See [Broker API key and signing](/en/api-reference/common/broker-authentication) and [Access on behalf of a user](/en/api-reference/common/sub-user-wallet).
+  Use a Broker API Key and pass a wallet address that belongs to your Broker in `X-User-Wallet-Address`. Calculate `SIGN` from the actual request method, path, query string, and body. See [Broker API key and signing](/en/api-reference/common/broker-authentication) and [Access on behalf of a user](/en/api-reference/common/sub-user-wallet).
 </Note>
