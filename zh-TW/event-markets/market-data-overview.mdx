@@ -1,14 +1,14 @@
 ---
 title: "市場資料概覽"
 sidebarTitle: "概覽"
-description: "瞭解預測市場的資料結構，以及如何從 Event、Market 和 Outcome 開始取得應用所需資料。"
+description: "瞭解事件市場的資料結構，以及如何從 Event、Market 和 Outcome 開始取得應用所需資料。"
 ---
 
-預測市場的資料接入通常從確定應用關注的 Event、Market 或 Outcome 開始。本節將介紹如何完成市場發現、讀取市場詳情、取得價格與訂單簿，以及訂閱即時資料。
+事件市場的資料接入通常從確定應用關注的 Event、Market 或 Outcome 開始。本節將介紹如何完成市場發現、讀取市場詳情、取得價格與訂單簿，以及訂閱即時資料。
 
 ## 資料模型
 
-在預測市場中，一個 Event 可以包含一個或多個 Market。每個 Market 是一個可交易問題，並包含 YES / NO 等結果。每個 Outcome 都有對應的 Token ID。
+在事件市場中，一個 Event 可以包含一個或多個 Market。每個 Market 是一個可交易問題，並包含 YES / NO 等結果。每個 Outcome 都有對應的 Token ID。
 
 當應用需要讀取某個結果的價格、訂單簿或提交訂單時，需要使用該 Outcome 的 `token_id`。
 

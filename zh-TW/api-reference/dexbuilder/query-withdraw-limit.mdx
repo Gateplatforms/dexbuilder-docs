@@ -1,0 +1,15 @@
+---
+title: "查詢提現限額"
+description: "查詢單筆及單日提現限額。"
+openapi: "/openapi/dexbuilder-zh-TW.yaml GET /api/v4/dexbuilder/withdraw_limit"
+---
+
+查詢單筆及單日提現限額。
+
+<Note>
+  使用 Broker API Key 呼叫。此介面查詢 Broker 配置，無需提供 `X-User-Wallet-Address`。 認證規則見[Broker API 認證與簽名](/zh-TW/api-reference/common/broker-authentication)。
+</Note>
+
+## 使用說明
+
+- `once` 與 `day` 為 USDT 計價的限額。可選擇傳入 `network`，查詢該網路的最低提現額 `min_withdraw`；未指定網路時不回傳該欄位。呼叫時須提供 `x-perp-device-type`，取值見[平台 API 認證](/zh-TW/api-reference/dexbuilder/authentication)。

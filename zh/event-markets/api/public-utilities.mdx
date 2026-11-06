@@ -1,7 +1,7 @@
 ---
 title: "公共工具接口"
 sidebarTitle: "公共工具"
-description: "查询标签、K 线和服务器时间等预测市场公共辅助数据。"
+description: "查询标签、K 线和服务器时间等事件市场公共辅助数据。"
 ---
 
 ## 标签
@@ -18,22 +18,13 @@ GET /api/v4/prediction/tags
 - `slug`
 - `label` 多语言对象
 
-## K 线
+## 加密货币 K 线
 
 ```text
-GET /api/v4/prediction/tokens/{currency}/candlesticks
+GET /api/v4/prediction/crypto/candlesticks
 ```
 
-参数：
-
-| 参数 | 位置 | 必填 | 说明 |
-| --- | --- | --- | --- |
-| `currency` | path | 是 | 基础资产，如 `BTC`、`ETH` |
-| `interval` | query | 是 | K 线周期 |
-| `from` / `to` | query | 否 | Unix 毫秒 |
-| `limit` | query | 否 | 返回数量 |
-
-每根 K 线包含 `t`、`o`、`h`、`l`、`c`、`v`。
+使用必填的加密货币标签 ID `tag_id` 和展示档位 `interval` 查询；可选的 `start_ts`、`end_ts` 使用 Unix 秒。响应的 `history` 包含 K 线数组，每根 K 线的 `t` 也使用 Unix 秒。参见[查询加密货币 K 线](/zh/event-markets/rest/query-candlesticks)。
 
 ## 服务器时间
 

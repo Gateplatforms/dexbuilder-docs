@@ -1,0 +1,15 @@
+---
+title: "Get user information"
+description: "Get a user's information and bound wallets."
+openapi: "/openapi/dexbuilder-en.yaml GET /api/v4/dexbuilder/user/info"
+---
+
+Get a user's information and bound wallets.
+
+<Note>
+  Use a Broker API Key and pass the target user's wallet in X-User-Wallet-Address. The gateway checks that the wallet belongs to your Broker. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
+</Note>
+
+## Usage notes
+
+- The response includes bound wallets. Each wallet's `vm` identifies the virtual machine type (`evm` or `solana`), not a specific network. User status is `active`; wallet status is `bound`.

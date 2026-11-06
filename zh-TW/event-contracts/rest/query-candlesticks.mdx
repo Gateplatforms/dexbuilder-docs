@@ -1,11 +1,46 @@
 ---
-title: "查詢 K 線"
-description: "查詢 K 線"
-openapi: "/openapi/event-contracts-zh-TW.yaml GET /api/v4/event_contracts/tokens/{currency}/candlesticks"
+title: "查詢加密貨幣 K 線"
+description: "按幣種代碼查詢公開 OHLCV K 線，瞭解請求參數、時間單位及回應欄位。"
+openapi: "/openapi/event-contracts-zh-TW.yaml GET /api/v4/event_contracts/crypto/candlesticks"
 ---
 
-查詢 K 線。
+透過幣種代碼查詢公開 OHLCV K 線。此介面無需認證。
 
-<Note>
-該介面為公開介面，不需要認證。
-</Note>
+Base URL：`https://api.dexbuilder.com`
+
+## 請求參數
+
+| 參數 | 必填 | 說明 |
+| --- | --- | --- |
+| `symbol` | 二選一 | 幣種代碼，不區分大小寫。目前支援 `BTC`、`ETH`、`HYPE`、`XRP`、`SOL`、`DOGE`、`BNB`；新接入建議使用此參數。 |
+| `tag_id` | 二選一 | 相容參數：正整數加密貨幣標籤 ID，例如 BTC 為 `235`；不接受 `ge_` 前綴。 |
+| `interval` | 是 | 展示檔位：`1m`、`5m`、`15m`、`1h`、`4h`、`1d`、`1w`、`1mon`、`1y`、`all`。 |
+| `start_ts` | 否 | 起始 Unix 秒；省略或傳 `0` 時依服務端預設規則處理。 |
+| `end_ts` | 否 | 結束 Unix 秒；省略或傳 `0` 時依服務端預設規則處理。 |
+
+`symbol` 與 `tag_id` 必須且只能提供其中一個。`tag_id` 暫時保留相容，建議既有呼叫遷移至 `symbol`。兩個非零時間邊界同時提供時，`end_ts` 必須大於 `start_ts`。
+
+`interval` 選擇展示檔位，不保證每根回傳 K 線的時間寬度；請使用 `history[].t` 判斷取樣時間。`interval=all` 不保證回傳全部歷史；查詢指定範圍時請提供 `start_ts` 和 `end_ts`。
+
+```bash
+curl "https://api.dexbuilder.com/api/v4/event_contracts/crypto/candlesticks?symbol=BTC&interval=1h"
+```
+
+## 回應
+
+成功時回傳包含幣種交易對、展示檔位及歷史 K 線的物件：
+
+```json
+{
+  "symbol": "BTCUSD",
+  "interval": "1h",
+  "source": "binance",
+  "history": [
+    { "t": 1700000000, "o": "30000", "h": "30100", "l": "29900", "c": "30050", "v": "12.5" }
+  ]
+}
+```
+
+`history[].t` 為 Unix 秒；開、高、低、收及成交量均為十進位字串。`source` 為資料來源名稱，未提供時會省略該欄位。某些資料來源沒有成交量，可回傳 `"0"`；無資料時 `history` 為 `[]`。
+
+參數無效回傳 HTTP 400，錯誤 `label` 為 `INVALID_PARAM_VALUE`；行情來源不可用回傳 HTTP 503，錯誤 `label` 為 `QUOTE_UNAVAILABLE`。

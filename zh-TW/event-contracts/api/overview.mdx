@@ -10,11 +10,7 @@ description: "事件合約 API 的基礎位址、存取模型、分頁、時間�
 https://api.dexbuilder.com
 ```
 
-事件合約 REST API 前綴為：
-
-```text
-/api/v4/event_contracts
-```
+公開行情 REST 介面使用 `/api/v4/event_contracts`，無需認證。私有交易、持倉與帳戶介面使用 `/api/v4/broker/event_contracts`。請以 Broker API Key 簽名，並在 `X-User-Wallet-Address` 傳入目標使用者錢包地址。詳見 [Broker API Key 與簽名](/zh-TW/api-reference/common/broker-authentication) 和 [代表使用者存取](/zh-TW/api-reference/common/sub-user-wallet)。私有 WebSocket 頻道使用獨立的 [Broker WebSocket 認證](/zh-TW/event-contracts/websocket/authentication) 流程。
 
 ## 介面存取模型
 
@@ -34,12 +30,11 @@ https://api.dexbuilder.com
 
 - 事件與市場日期欄位通常使用 Unix 秒；
 - `from`、`to` 等範圍參數通常使用 Unix 毫秒；
+- 加密貨幣 K 線的 `start_ts`、`end_ts` 和 `history[].t` 使用 Unix 秒；
 - 價格、數量、成交額、餘額、手續費等金額類欄位通常以字串回傳，建議使用 Decimal 精度處理。
 
 ## 標準錯誤
 
-```json
-{"label":"INVALID_ARGUMENT","message":"invalid request"}
-```
+錯誤回應包含 `label` 和 `message`。公開行情介面的參數錯誤使用 `INVALID_PARAM_VALUE`，行情來源不可用使用 `QUOTE_UNAVAILABLE`；Broker 私有業務介面的參數錯誤可能使用 `INVALID_ARGUMENT`。請以各介面的錯誤定義為準。
 
 常見 HTTP 狀態包括 `400`、`401`、`404` 和 `503`。

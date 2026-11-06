@@ -1,0 +1,34 @@
+---
+title: "DexBuilder 平台 API 认证"
+description: "DexBuilder 平台 REST 接口的 Broker API Key 权限与钱包地址要求。"
+---
+
+DexBuilder 平台 API 使用 Broker API Key 访问，生产环境 Base URL 为 `https://api.dexbuilder.com`，接口路径以 `/api/v4/dexbuilder` 开头。所有平台接口都需要 `KEY`、`Timestamp` 和 `SIGN` 请求头。请先阅读[Broker API Key 与签名](/api-reference/common/broker-authentication)。
+
+调用前确认 Key 已开通 `dex_builder` 权限。查询接口需要只读或读写权限；提交类接口需要读写权限。终端用户个人 API Key 不能代替 Broker API Key。
+
+## 钱包地址
+
+查询 Broker 资产配置的接口不需要 `X-User-Wallet-Address`；用户、充值和提现接口需要在请求头传递目标终端用户的钱包地址。完整清单见[代表用户访问](/api-reference/common/sub-user-wallet)。平台会校验该钱包与当前 Broker 的归属关系。
+
+## 设备类型
+
+部分平台接口要求请求头 `x-perp-device-type`，可用值为 `1`（Android）、`2`（iOS）和 `3`（WEB）。`4`（H5）不适用于这些 DexBuilder 平台接口。请以具体接口页的必填要求为准。
+
+提交提现时，还需按接口要求提供 `Idempotency-Key`。其他额外请求头以具体接口页为准。
+
+## 请求示例
+
+```bash
+BASE_URL="https://api.dexbuilder.com"
+API_PATH="/api/v4/dexbuilder/user/info"
+
+curl -i --request GET "${BASE_URL}${API_PATH}" \
+  --header "KEY: ${BROKER_API_KEY}" \
+  --header "SIGN: ${SIGN}" \
+  --header "Timestamp: ${TIMESTAMP}" \
+  --header "X-User-Wallet-Address: ${WALLET}" \
+  --header 'Accept: application/json'
+```
+
+签名应根据实际访问的外部路径生成。公开路径、时间与响应约定见[API 使用说明](/api-reference/common/overview)。

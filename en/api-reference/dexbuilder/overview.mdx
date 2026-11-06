@@ -1,0 +1,37 @@
+---
+title: "DexBuilder Platform API overview"
+description: "Use the DexBuilder Platform REST API for Broker asset configuration, user queries, deposits, and withdrawals."
+---
+
+The DexBuilder Platform API lets Brokers query asset settings and user balances and support onchain deposits and withdrawals.
+
+## Base URL
+
+Production Base URL:
+
+```text
+https://api.dexbuilder.com
+```
+
+Endpoint paths begin with `/api/v4/dexbuilder`. For example, `GET /api/v4/dexbuilder/assets` lists supported assets.
+
+Every endpoint requires a Broker API Key. See [Broker API Key and signing](/en/api-reference/common/broker-authentication). User-level endpoints also require X-User-Wallet-Address; see [Access on behalf of a user](/en/api-reference/common/sub-user-wallet).
+
+## Endpoint groups
+
+| Group | Capabilities |
+| --- | --- |
+| Asset configuration | Assets, networks, availability, fixed fees, and withdrawal limits |
+| User | User information, bound wallets, Vault balance, and fund statistics |
+| Deposit | Fee estimate, signing data, status, and history |
+| Withdrawal | Signing data, submission, status, history, and Solana ATA creation |
+
+Asset-configuration endpoints read Broker settings and do not require a user wallet. User, deposit, and withdrawal endpoints require `X-User-Wallet-Address`. Some endpoints also require x-perp-device-type or Idempotency-Key; see each endpoint's request parameters.
+
+## Responses and errors
+
+Successful business responses contain code, message, data, and trace_id. code=0 indicates success. The data structure is defined in each endpoint's OpenAPI response model.
+
+Errors may include a machine-readable label. Some downstream business and risk-control errors use HTTP 200, so check code or label as well as the HTTP status. Common labels include INVALID_ARGUMENT, MISSING_REQUIRED_HEADER, USER_NOT_FOUND, INVALID_ADDRESS, INVALID_DEVICE_TYPE, PROJECT_ACCESS_DENIED, PRODUCT_DISABLED, BUSINESS_ERROR, and RISK_CONTROL_REJECTED. See the endpoint model and [shared API conventions](/en/api-reference/common/overview) for interpretation.
+
+An accepted withdrawal submission is not an onchain final state. Query the corresponding status endpoint to determine the final result of a deposit or withdrawal.

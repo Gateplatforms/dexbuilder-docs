@@ -6,10 +6,14 @@ description: "查询事件合约持仓、个人成交和相关私有账户数据
 
 本页接口属于私有接口，需要认证。
 
+<Note>
+  请使用 Broker API Key、`Timestamp`、`SIGN` 和 `sub_user_wallet_addr` 调用这些接口。签名须使用外部 Broker 路径；目标钱包须属于当前 Broker。详见[Broker API 认证与签名](/zh/api-reference/common/broker-authentication)和[代用户访问](/zh/api-reference/common/sub-user-wallet)。
+</Note>
+
 ## 查询持仓列表
 
 ```text
-GET /api/v4/event_contracts/positions
+GET /api/v4/broker/event_contracts/positions
 ```
 
 支持 `event_id`、`condition_id`、`settlement_status`、`limit` 和 `cursor`。
@@ -19,7 +23,7 @@ GET /api/v4/event_contracts/positions
 ## 查询已结算持仓
 
 ```text
-GET /api/v4/event_contracts/positions/settled
+GET /api/v4/broker/event_contracts/positions/settled
 ```
 
 查询已结算的事件合约持仓。
@@ -27,7 +31,7 @@ GET /api/v4/event_contracts/positions/settled
 ## 查询个人成交
 
 ```text
-GET /api/v4/event_contracts/usertrades
+GET /api/v4/broker/event_contracts/usertrades
 ```
 
 支持 `condition_id`、`from`、`to`、`sort_type`、`order_id`、`token_id`、`limit` 和 `cursor`。

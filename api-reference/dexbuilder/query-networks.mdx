@@ -1,0 +1,16 @@
+---
+title: "查询资产网络"
+description: "查询资产支持的充值和提现网络。"
+openapi: "/openapi/dexbuilder.yaml GET /api/v4/dexbuilder/networks"
+---
+
+查询资产支持的充值和提现网络。
+
+<Note>
+  使用 Broker API Key 调用。此接口查询 Broker 配置，无需提供 `X-User-Wallet-Address`。 认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
+</Note>
+
+## 使用说明
+
+- 返回资产对应的可用网络配置。`network` 标识具体网络，`vm` 表示 EVM 或 Solana；支持情况请以接口响应为准。
+- `min_deposit` 和 `min_withdraw` 是可读的 token 数量，非链上最小单位。未取得最小提现额时，`min_withdraw` 可能省略。调用时须提供 `x-perp-device-type`，取值见[平台 API 认证](/api-reference/dexbuilder/authentication)。

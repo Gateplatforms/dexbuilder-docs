@@ -3,7 +3,7 @@
   "info": {
     "title": "DexBuilder Prediction Market API",
     "version": "1.0.0",
-    "description": "DexBuilder 預測市場 REST API"
+    "description": "DexBuilder 事件市場 REST API"
   },
   "servers": [
     {
@@ -120,6 +120,74 @@
             "schema": {
               "type": "boolean"
             }
+          },
+          {
+            "name": "start_date_min",
+            "in": "query",
+            "required": false,
+            "description": "Unix 毫秒時間戳。",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "start_date_max",
+            "in": "query",
+            "required": false,
+            "description": "Unix 毫秒時間戳。",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "end_date_min",
+            "in": "query",
+            "required": false,
+            "description": "Unix 毫秒時間戳。",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "end_date_max",
+            "in": "query",
+            "required": false,
+            "description": "Unix 毫秒時間戳。",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "tag_id",
+            "in": "query",
+            "required": false,
+            "description": "可重複傳入的 Tag ID。",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "exclude_tag_id",
+            "in": "query",
+            "required": false,
+            "description": "可重複傳入的排除 Tag ID。",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
           }
         ]
       }
@@ -233,7 +301,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LegacyMarketsResponse"
+                  "$ref": "#/components/schemas/MarketsPage"
                 }
               }
             }
@@ -346,7 +414,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LegacyMarket"
+                  "$ref": "#/components/schemas/MarketDetail"
                 }
               }
             }
@@ -444,7 +512,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LegacyTradeList"
+                  "$ref": "#/components/schemas/TradesPage"
                 }
               }
             }
@@ -656,7 +724,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LegacyOrderBook"
+                  "$ref": "#/components/schemas/OrderBookResponse"
                 }
               }
             }
@@ -696,7 +764,10 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
             }
           }
         ]
@@ -751,25 +822,34 @@
           {
             "name": "interval",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "5m",
+                "15m",
+                "1h",
+                "4h",
+                "1d"
+              ]
             }
           },
           {
             "name": "from",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             }
           },
           {
             "name": "to",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             }
           }
         ]
@@ -816,96 +896,15 @@
           {
             "name": "token_ids",
             "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-    "/api/v4/prediction/tokens/{currency}/candlesticks": {
-      "get": {
-        "summary": "查詢 K 線",
-        "description": "查詢 K 線",
-        "operationId": "query_candlesticks",
-        "responses": {
-          "200": {
-            "description": "請求成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CurrencyCandlestickList"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "請求參數錯誤",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "服務暫時不可用",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "currency",
-            "in": "path",
             "required": true,
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "interval",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "from",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "to",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
           }
         ]
       }
     },
-    "/api/v4/prediction/orders": {
+    "/api/v4/broker/prediction/orders": {
       "post": {
         "summary": "提交訂單",
         "description": "提交訂單",
@@ -983,10 +982,22 @@
                     "type": "string"
                   },
                   "order_type": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "GTC",
+                      "GTD",
+                      "FOK",
+                      "FAK"
+                    ],
+                    "description": "訂單有效方式：GTC、GTD、FOK 或 FAK"
                   },
                   "order_mode": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "LIMIT",
+                      "MARKET"
+                    ],
+                    "description": "下單模式：LIMIT 或 MARKET"
                   },
                   "client_order_id": {
                     "type": "string"
@@ -1004,7 +1015,41 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒級時間戳；與閘道時間的差距不得超過 60 秒。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "使用實際對外請求路徑、Query 與 Body 計算的 HMAC-SHA512 十六進位簽名。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目標終端使用者的錢包地址；閘道會驗證該錢包屬於目前 Broker。",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
+        ]
       },
       "get": {
         "summary": "查詢訂單清單",
@@ -1054,11 +1099,46 @@
         },
         "parameters": [
           {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒級時間戳；與閘道時間的差距不得超過 60 秒。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "使用實際對外請求路徑、Query 與 Body 計算的 HMAC-SHA512 十六進位簽名。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目標終端使用者的錢包地址；閘道會驗證該錢包屬於目前 Broker。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "status",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "processing",
+                "open",
+                "matched",
+                "canceled",
+                "failed"
+              ],
+              "description": "REST 訂單狀態，使用小寫值"
             }
           },
           {
@@ -1133,6 +1213,11 @@
               "type": "integer"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       },
       "delete": {
@@ -1183,6 +1268,33 @@
         },
         "parameters": [
           {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒級時間戳；與閘道時間的差距不得超過 60 秒。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "使用實際對外請求路徑、Query 與 Body 計算的 HMAC-SHA512 十六進位簽名。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目標終端使用者的錢包地址；閘道會驗證該錢包屬於目前 Broker。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "condition_id",
             "in": "query",
             "required": false,
@@ -1190,10 +1302,15 @@
               "type": "string"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/prediction/orders/{order_id}": {
+    "/api/v4/broker/prediction/orders/{order_id}": {
       "get": {
         "summary": "查詢單個訂單",
         "description": "查詢單個訂單",
@@ -1242,12 +1359,44 @@
         },
         "parameters": [
           {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒級時間戳；與閘道時間的差距不得超過 60 秒。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "使用實際對外請求路徑、Query 與 Body 計算的 HMAC-SHA512 十六進位簽名。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目標終端使用者的錢包地址；閘道會驗證該錢包屬於目前 Broker。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "order_id",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string"
             }
+          }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
           }
         ]
       },
@@ -1299,6 +1448,33 @@
         },
         "parameters": [
           {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒級時間戳；與閘道時間的差距不得超過 60 秒。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "使用實際對外請求路徑、Query 與 Body 計算的 HMAC-SHA512 十六進位簽名。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目標終端使用者的錢包地址；閘道會驗證該錢包屬於目前 Broker。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "order_id",
             "in": "path",
             "required": true,
@@ -1306,10 +1482,15 @@
               "type": "string"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/prediction/positions": {
+    "/api/v4/broker/prediction/positions": {
       "get": {
         "summary": "查詢持倉清單",
         "description": "查詢持倉清單",
@@ -1358,6 +1539,33 @@
         },
         "parameters": [
           {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒級時間戳；與閘道時間的差距不得超過 60 秒。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "使用實際對外請求路徑、Query 與 Body 計算的 HMAC-SHA512 十六進位簽名。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目標終端使用者的錢包地址；閘道會驗證該錢包屬於目前 Broker。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "event_id",
             "in": "query",
             "required": false,
@@ -1397,10 +1605,15 @@
               "type": "integer"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/prediction/positions/{position_id}": {
+    "/api/v4/broker/prediction/positions/{position_id}": {
       "get": {
         "summary": "查詢持倉詳情",
         "description": "查詢持倉詳情",
@@ -1449,6 +1662,33 @@
         },
         "parameters": [
           {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒級時間戳；與閘道時間的差距不得超過 60 秒。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "使用實際對外請求路徑、Query 與 Body 計算的 HMAC-SHA512 十六進位簽名。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目標終端使用者的錢包地址；閘道會驗證該錢包屬於目前 Broker。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "position_id",
             "in": "path",
             "required": true,
@@ -1456,10 +1696,15 @@
               "type": "string"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/prediction/positions/{position_id}/close": {
+    "/api/v4/broker/prediction/positions/{position_id}/close": {
       "post": {
         "summary": "平倉",
         "description": "平倉",
@@ -1508,6 +1753,33 @@
         },
         "parameters": [
           {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒級時間戳；與閘道時間的差距不得超過 60 秒。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "使用實際對外請求路徑、Query 與 Body 計算的 HMAC-SHA512 十六進位簽名。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目標終端使用者的錢包地址；閘道會驗證該錢包屬於目前 Broker。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "position_id",
             "in": "path",
             "required": true,
@@ -1515,10 +1787,15 @@
               "type": "string"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/prediction/usertrades": {
+    "/api/v4/broker/prediction/usertrades": {
       "get": {
         "summary": "查詢個人成交",
         "description": "查詢個人成交",
@@ -1566,6 +1843,33 @@
           }
         },
         "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒級時間戳；與閘道時間的差距不得超過 60 秒。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "使用實際對外請求路徑、Query 與 Body 計算的 HMAC-SHA512 十六進位簽名。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目標終端使用者的錢包地址；閘道會驗證該錢包屬於目前 Broker。",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "condition_id",
             "in": "query",
@@ -1630,10 +1934,15 @@
               "type": "integer"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/prediction/assets": {
+    "/api/v4/broker/prediction/assets": {
       "get": {
         "summary": "查詢帳戶資產",
         "description": "查詢帳戶資產",
@@ -1679,10 +1988,44 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒級時間戳；與閘道時間的差距不得超過 60 秒。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "使用實際對外請求路徑、Query 與 Body 計算的 HMAC-SHA512 十六進位簽名。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目標終端使用者的錢包地址；閘道會驗證該錢包屬於目前 Broker。",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
+        ]
       }
     },
-    "/api/v4/prediction/account_book": {
+    "/api/v4/broker/prediction/account_book": {
       "get": {
         "summary": "查詢資金流水",
         "description": "查詢資金流水",
@@ -1731,6 +2074,33 @@
         },
         "parameters": [
           {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒級時間戳；與閘道時間的差距不得超過 60 秒。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "使用實際對外請求路徑、Query 與 Body 計算的 HMAC-SHA512 十六進位簽名。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目標終端使用者的錢包地址；閘道會驗證該錢包屬於目前 Broker。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "limit",
             "in": "query",
             "required": false,
@@ -1746,10 +2116,15 @@
               "type": "string"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/prediction/fee": {
+    "/api/v4/broker/prediction/fee": {
       "get": {
         "summary": "查詢手續費",
         "description": "查詢手續費",
@@ -1798,6 +2173,33 @@
         },
         "parameters": [
           {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒級時間戳；與閘道時間的差距不得超過 60 秒。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "使用實際對外請求路徑、Query 與 Body 計算的 HMAC-SHA512 十六進位簽名。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目標終端使用者的錢包地址；閘道會驗證該錢包屬於目前 Broker。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "fee_type",
             "in": "query",
             "required": false,
@@ -1805,10 +2207,15 @@
               "type": "string"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/prediction/claims/available": {
+    "/api/v4/broker/prediction/claims/available": {
       "get": {
         "summary": "查詢全部可領取資產",
         "description": "查詢全部可領取資產",
@@ -1854,10 +2261,44 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒級時間戳；與閘道時間的差距不得超過 60 秒。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "使用實際對外請求路徑、Query 與 Body 計算的 HMAC-SHA512 十六進位簽名。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目標終端使用者的錢包地址；閘道會驗證該錢包屬於目前 Broker。",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
+        ]
       }
     },
-    "/api/v4/prediction/claims/available/{token_id}": {
+    "/api/v4/broker/prediction/claims/available/{token_id}": {
       "get": {
         "summary": "查詢 Token 可領取資產",
         "description": "查詢 Token 可領取資產",
@@ -1906,6 +2347,33 @@
         },
         "parameters": [
           {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒級時間戳；與閘道時間的差距不得超過 60 秒。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "使用實際對外請求路徑、Query 與 Body 計算的 HMAC-SHA512 十六進位簽名。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目標終端使用者的錢包地址；閘道會驗證該錢包屬於目前 Broker。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "token_id",
             "in": "path",
             "required": true,
@@ -1913,10 +2381,15 @@
               "type": "string"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/prediction/claims": {
+    "/api/v4/broker/prediction/claims": {
       "post": {
         "summary": "發起領取",
         "description": "發起領取",
@@ -1977,10 +2450,44 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒級時間戳；與閘道時間的差距不得超過 60 秒。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "使用實際對外請求路徑、Query 與 Body 計算的 HMAC-SHA512 十六進位簽名。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目標終端使用者的錢包地址；閘道會驗證該錢包屬於目前 Broker。",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
+        ]
       }
     },
-    "/api/v4/prediction/claims/{record_id}": {
+    "/api/v4/broker/prediction/claims/{record_id}": {
       "get": {
         "summary": "查詢領取結果",
         "description": "查詢領取結果",
@@ -2029,12 +2536,44 @@
         },
         "parameters": [
           {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒級時間戳；與閘道時間的差距不得超過 60 秒。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "使用實際對外請求路徑、Query 與 Body 計算的 HMAC-SHA512 十六進位簽名。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目標終端使用者的錢包地址；閘道會驗證該錢包屬於目前 Broker。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "record_id",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string"
             }
+          }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
           }
         ]
       }
@@ -2193,6 +2732,118 @@
           }
         ]
       }
+    },
+    "/api/v4/prediction/crypto/candlesticks": {
+      "get": {
+        "summary": "查詢加密貨幣 K 線",
+        "description": "使用幣種代碼 `symbol` 查詢 OHLCV K 線；暫時相容 `tag_id`。兩者必須且只能提供其中一個。`interval=all` 不保證回傳全部歷史；查詢指定範圍時請提供 `start_ts` 和 `end_ts`。",
+        "operationId": "query_crypto_candlesticks",
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "query",
+            "required": false,
+            "description": "幣種代碼，不區分大小寫。目前支援 BTC、ETH、HYPE、XRP、SOL、DOGE、BNB；與 `tag_id` 二選一。",
+            "schema": {
+              "type": "string",
+              "example": "BTC"
+            }
+          },
+          {
+            "name": "tag_id",
+            "in": "query",
+            "required": false,
+            "description": "相容參數：正整數加密貨幣標籤 ID；與 `symbol` 二選一。新接入建議使用 `symbol`。",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "example": 235
+            },
+            "deprecated": true
+          },
+          {
+            "name": "interval",
+            "in": "query",
+            "required": true,
+            "description": "展示檔位。",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1m",
+                "5m",
+                "15m",
+                "1h",
+                "4h",
+                "1d",
+                "1w",
+                "1mon",
+                "1y",
+                "all"
+              ]
+            }
+          },
+          {
+            "name": "start_ts",
+            "in": "query",
+            "required": false,
+            "description": "起始 Unix 秒；省略或為 0 時依服務端預設規則處理。",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "end_ts",
+            "in": "query",
+            "required": false,
+            "description": "結束 Unix 秒；省略或為 0 時依服務端預設規則處理。",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "請求成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CryptoCandlesticksResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "請求參數錯誤",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "label": "INVALID_PARAM_VALUE",
+                  "message": "invalid crypto candlestick parameters"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "服務暫時不可用",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "label": "QUOTE_UNAVAILABLE",
+                  "message": "crypto candlesticks unavailable"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2211,30 +2862,6 @@
           }
         }
       },
-      "CurrencyCandlestick": {
-        "type": "object",
-        "properties": {
-          "c": {
-            "type": "string"
-          },
-          "h": {
-            "type": "string"
-          },
-          "l": {
-            "type": "string"
-          },
-          "o": {
-            "type": "string"
-          },
-          "t": {
-            "type": "integer"
-          },
-          "v": {
-            "type": "string"
-          }
-        },
-        "description": "回應物件。"
-      },
       "EventDetail": {
         "type": "object",
         "properties": {
@@ -2242,28 +2869,34 @@
             "type": "boolean"
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "closed": {
             "type": "boolean"
           },
           "closed_time": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "description": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "end_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "event_id": {
             "type": "string"
           },
           "icon": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "image": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "markets": {
             "type": "array",
@@ -2275,16 +2908,19 @@
             "type": "boolean"
           },
           "resolution_source": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "slug": {
             "type": "string"
           },
           "start_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "start_time": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "tags": {
             "type": "array",
@@ -2293,10 +2929,12 @@
             }
           },
           "title": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "volume": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         },
         "description": "回應物件。"
@@ -2308,34 +2946,41 @@
             "type": "boolean"
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "closed": {
             "type": "boolean"
           },
           "closed_time": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "end_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "event_id": {
             "type": "string"
           },
           "icon": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "image": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "slug": {
             "type": "string"
           },
           "start_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "start_time": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "tags": {
             "type": "array",
@@ -2344,10 +2989,12 @@
             }
           },
           "title": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "volume": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         },
         "description": "回應物件。"
@@ -2362,7 +3009,9 @@
             }
           },
           "next_cursor": {
-            "type": "string"
+            "type": "string",
+            "nullable": true,
+            "description": "下一頁游標；為 null 時表示沒有更多結果。"
           }
         },
         "description": "回應物件。"
@@ -2371,7 +3020,8 @@
         "type": "object",
         "properties": {
           "accepting_orders": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": true
           },
           "best_ask": {
             "type": "string"
@@ -2380,7 +3030,8 @@
             "type": "string"
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "closed": {
             "type": "boolean"
@@ -2389,22 +3040,27 @@
             "type": "string"
           },
           "description": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "enable_order_book": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": true
           },
           "end_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "event_id": {
             "type": "string"
           },
           "icon": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "image": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "last_trade_price": {
             "type": "string"
@@ -2416,10 +3072,12 @@
             "type": "string"
           },
           "min_order_size": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "neg_risk": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": true
           },
           "outcomes": {
             "type": "array",
@@ -2428,19 +3086,23 @@
             }
           },
           "question": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "resolution_source": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "resolved_at": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "slug": {
             "type": "string"
           },
           "start_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "status": {
             "type": "string"
@@ -2452,35 +3114,39 @@
             }
           },
           "tick_size": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "uma_end_date": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "uma_end_date_iso": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "uma_resolution_status": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "uma_resolution_statuses": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "volume": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "volume_24hr": {
             "type": "string"
           },
           "winning_outcome": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "winning_token_id": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         },
         "description": "回應物件。"
@@ -2495,7 +3161,8 @@
             "type": "string"
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "closed": {
             "type": "boolean"
@@ -2504,7 +3171,8 @@
             "type": "string"
           },
           "end_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "event_id": {
             "type": "string"
@@ -2525,13 +3193,15 @@
             }
           },
           "question": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "slug": {
             "type": "string"
           },
           "start_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "status": {
             "type": "string"
@@ -2544,22 +3214,23 @@
           },
           "uma_end_date": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "uma_end_date_iso": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "uma_resolution_status": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "uma_resolution_statuses": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "volume": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "volume_24hr": {
             "type": "string"
@@ -2571,7 +3242,8 @@
         "type": "object",
         "properties": {
           "outcome": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "token_id": {
             "type": "string"
@@ -2592,7 +3264,8 @@
         "type": "object",
         "properties": {
           "label": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "slug": {
             "type": "string"
@@ -2613,7 +3286,9 @@
             }
           },
           "next_cursor": {
-            "type": "string"
+            "type": "string",
+            "nullable": true,
+            "description": "下一頁游標；為 null 時表示沒有更多結果。"
           }
         },
         "description": "回應物件。"
@@ -2625,7 +3300,8 @@
             "type": "string"
           },
           "timestamp": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "token_id": {
             "type": "string"
@@ -2655,7 +3331,8 @@
             "type": "string"
           },
           "timestamp": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "token_id": {
             "type": "string"
@@ -2679,16 +3356,20 @@
         "type": "object",
         "properties": {
           "best_ask": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "best_bid": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "last_price": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "timestamp": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "token_id": {
             "type": "string"
@@ -2700,10 +3381,12 @@
         "type": "object",
         "properties": {
           "p": {
-            "type": "string"
+            "type": "string",
+            "description": "價格字串。"
           },
           "t": {
-            "type": "integer"
+            "type": "integer",
+            "description": "Unix 毫秒時間戳。"
           }
         },
         "description": "回應物件。"
@@ -2766,7 +3449,10 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "accepted"
+            ]
           },
           "total_orders": {
             "type": "integer"
@@ -2778,7 +3464,10 @@
         "type": "object",
         "properties": {
           "cancel_status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "accepted"
+            ]
           },
           "order_id": {
             "type": "string"
@@ -2931,10 +3620,22 @@
             "type": "string"
           },
           "order_mode": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "LIMIT",
+              "MARKET"
+            ],
+            "description": "下單模式：LIMIT 或 MARKET"
           },
           "order_type": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "GTC",
+              "GTD",
+              "FOK",
+              "FAK"
+            ],
+            "description": "訂單有效方式：GTC、GTD、FOK 或 FAK"
           },
           "outcome": {
             "type": "string"
@@ -2955,7 +3656,15 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "processing",
+              "open",
+              "matched",
+              "canceled",
+              "failed"
+            ],
+            "description": "REST 訂單狀態，使用小寫值"
           },
           "token_id": {
             "type": "string"
@@ -2991,10 +3700,22 @@
             "type": "string"
           },
           "order_mode": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "LIMIT",
+              "MARKET"
+            ],
+            "description": "下單模式：LIMIT 或 MARKET"
           },
           "order_type": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "GTC",
+              "GTD",
+              "FOK",
+              "FAK"
+            ],
+            "description": "訂單有效方式：GTC、GTD、FOK 或 FAK"
           },
           "outcome": {
             "type": "string"
@@ -3015,7 +3736,15 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "processing",
+              "open",
+              "matched",
+              "canceled",
+              "failed"
+            ],
+            "description": "REST 訂單狀態，使用小寫值"
           },
           "token_id": {
             "type": "string"
@@ -3039,7 +3768,10 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "processing"
+            ]
           }
         },
         "description": "回應物件。"
@@ -3245,177 +3977,22 @@
         },
         "description": "回應物件。"
       },
-      "LegacyMarket": {
-        "type": "object",
-        "properties": {
-          "accepting_orders": {
-            "type": "boolean"
-          },
-          "best_ask": {
-            "type": "string"
-          },
-          "best_bid": {
-            "type": "string"
-          },
-          "category": {
-            "type": "string"
-          },
-          "closed": {
-            "type": "boolean"
-          },
-          "condition_id": {
-            "type": "string"
-          },
-          "enable_order_book": {
-            "type": "boolean"
-          },
-          "end_time": {
-            "type": "integer"
-          },
-          "event_icon_url": {
-            "type": "string"
-          },
-          "event_id": {
-            "type": "string"
-          },
-          "event_title": {
-            "type": "string"
-          },
-          "last_trade_price": {
-            "type": "string"
-          },
-          "liquidity": {
-            "type": "string"
-          },
-          "market_id": {
-            "type": "string"
-          },
-          "outcomes": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LegacyOutcome"
-            }
-          },
-          "slug": {
-            "type": "string"
-          },
-          "start_time": {
-            "type": "integer"
-          },
-          "status": {
-            "type": "string"
-          },
-          "tags": {},
-          "title": {
-            "type": "string"
-          },
-          "volume": {
-            "type": "string"
-          }
-        },
-        "description": "回應物件。"
-      },
-      "LegacyMarketsResponse": {
+      "MarketsPage": {
         "type": "object",
         "properties": {
           "items": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/LegacyMarket"
+              "$ref": "#/components/schemas/MarketSummary"
             }
           },
-          "total": {
-            "type": "integer"
+          "next_cursor": {
+            "type": "string",
+            "nullable": true,
+            "description": "下一頁游標；為 null 時表示沒有更多結果。"
           }
         },
-        "description": "回應物件。"
-      },
-      "LegacyOrderBook": {
-        "type": "object",
-        "properties": {
-          "asks": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LegacyPriceSize"
-            }
-          },
-          "bids": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/LegacyPriceSize"
-            }
-          },
-          "condition_id": {
-            "type": "string"
-          },
-          "token_id": {
-            "type": "string"
-          }
-        },
-        "description": "回應物件。"
-      },
-      "LegacyOutcome": {
-        "type": "object",
-        "properties": {
-          "clob_token_id": {
-            "type": "string"
-          },
-          "outcome": {
-            "type": "string"
-          },
-          "price": {
-            "type": "string"
-          },
-          "token_id": {
-            "type": "string"
-          }
-        },
-        "description": "回應物件。"
-      },
-      "LegacyPriceSize": {
-        "type": "object",
-        "properties": {
-          "price": {
-            "type": "string"
-          },
-          "size": {
-            "type": "string"
-          }
-        },
-        "description": "回應物件。"
-      },
-      "LegacyTrade": {
-        "type": "object",
-        "properties": {
-          "condition_id": {
-            "type": "string"
-          },
-          "created_at": {
-            "type": "integer"
-          },
-          "id": {
-            "type": "string"
-          },
-          "market_id": {
-            "type": "string"
-          },
-          "outcome": {
-            "type": "string"
-          },
-          "price": {
-            "type": "string"
-          },
-          "side": {
-            "type": "string"
-          },
-          "size": {
-            "type": "string"
-          },
-          "token_id": {
-            "type": "string"
-          }
-        },
-        "description": "回應物件。"
+        "description": "市場列表分頁回應。"
       },
       "EventReferencePrice": {
         "type": "object",
@@ -3439,19 +4016,185 @@
         },
         "description": "回應物件。"
       },
-      "CurrencyCandlestickList": {
-        "type": "array",
-        "description": "列表回應。",
-        "items": {
-          "$ref": "#/components/schemas/CurrencyCandlestick"
+      "Trade": {
+        "type": "object",
+        "properties": {
+          "trade_id": {
+            "type": "string"
+          },
+          "market_id": {
+            "type": "string"
+          },
+          "condition_id": {
+            "type": "string"
+          },
+          "token_id": {
+            "type": "string"
+          },
+          "side": {
+            "type": "string"
+          },
+          "price": {
+            "type": "string"
+          },
+          "size": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "integer",
+            "description": "成交時間，Unix 毫秒。"
+          }
         }
       },
-      "LegacyTradeList": {
-        "type": "array",
-        "description": "列表回應。",
-        "items": {
-          "$ref": "#/components/schemas/LegacyTrade"
+      "TradesPage": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Trade"
+            }
+          },
+          "next_cursor": {
+            "type": "string",
+            "nullable": true,
+            "description": "下一頁游標；為 null 時表示沒有更多結果。"
+          }
+        },
+        "description": "市場成交分頁回應。"
+      },
+      "OrderBookLevel": {
+        "type": "object",
+        "properties": {
+          "price": {
+            "type": "string"
+          },
+          "size": {
+            "type": "string"
+          }
+        },
+        "description": "盤口檔位。"
+      },
+      "OrderBookResponse": {
+        "type": "object",
+        "properties": {
+          "condition_id": {
+            "type": "string"
+          },
+          "token_id": {
+            "type": "string"
+          },
+          "timestamp": {
+            "type": "integer",
+            "nullable": true,
+            "description": "訂單簿來源快照時間，Unix 毫秒；無可靠來源時為 null。"
+          },
+          "hash": {
+            "type": "string",
+            "nullable": true,
+            "description": "來源完整快照的 Hash；無可靠來源時為 null。"
+          },
+          "bids": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderBookLevel"
+            }
+          },
+          "asks": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderBookLevel"
+            }
+          },
+          "min_order_size": {
+            "type": "string",
+            "nullable": true
+          },
+          "tick_size": {
+            "type": "string",
+            "nullable": true
+          },
+          "neg_risk": {
+            "type": "boolean",
+            "nullable": true
+          },
+          "last_trade_price": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "description": "市場訂單簿回應。"
+      },
+      "CryptoCandlestick": {
+        "type": "object",
+        "description": "單根 K 線。",
+        "required": [
+          "t",
+          "o",
+          "h",
+          "l",
+          "c",
+          "v"
+        ],
+        "properties": {
+          "t": {
+            "type": "integer",
+            "description": "Unix 秒時間戳。"
+          },
+          "o": {
+            "type": "string"
+          },
+          "h": {
+            "type": "string"
+          },
+          "l": {
+            "type": "string"
+          },
+          "c": {
+            "type": "string"
+          },
+          "v": {
+            "type": "string",
+            "description": "成交量字串；無成交量的資料來源可能回傳 0。"
+          }
         }
+      },
+      "CryptoCandlesticksResponse": {
+        "type": "object",
+        "description": "加密貨幣 K 線回應。",
+        "required": [
+          "symbol",
+          "interval",
+          "history"
+        ],
+        "properties": {
+          "symbol": {
+            "type": "string",
+            "description": "幣種交易對識別碼。"
+          },
+          "interval": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "description": "資料來源名稱；上游未提供時省略。"
+          },
+          "history": {
+            "type": "array",
+            "description": "依時間回傳的 OHLCV K 線。",
+            "items": {
+              "$ref": "#/components/schemas/CryptoCandlestick"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BrokerAPIKey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "KEY",
+        "description": "Broker API Key，由專案管理流程建立。"
       }
     }
   }

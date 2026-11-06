@@ -1,0 +1,16 @@
+---
+title: "List asset networks"
+description: "List the deposit and withdrawal networks available for an asset."
+openapi: "/openapi/dexbuilder-en.yaml GET /api/v4/dexbuilder/networks"
+---
+
+List the deposit and withdrawal networks available for an asset.
+
+<Note>
+  Use a Broker API Key. This endpoint reads Broker configuration and does not require X-User-Wallet-Address. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
+</Note>
+
+## Usage notes
+
+- The response lists the available network configuration for the asset. `network` identifies the network; `vm` identifies EVM or Solana. Check the response for current availability.
+- `min_deposit` and `min_withdraw` use display token units. `min_withdraw` may be omitted when no minimum is configured. Pass the required `x-perp-device-type` header; see [Platform API authentication](/en/api-reference/dexbuilder/authentication).

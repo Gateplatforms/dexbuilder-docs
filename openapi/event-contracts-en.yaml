@@ -120,6 +120,74 @@
             "schema": {
               "type": "boolean"
             }
+          },
+          {
+            "name": "start_date_min",
+            "in": "query",
+            "required": false,
+            "description": "Unix timestamp in milliseconds.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "start_date_max",
+            "in": "query",
+            "required": false,
+            "description": "Unix timestamp in milliseconds.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "end_date_min",
+            "in": "query",
+            "required": false,
+            "description": "Unix timestamp in milliseconds.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "end_date_max",
+            "in": "query",
+            "required": false,
+            "description": "Unix timestamp in milliseconds.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "tag_id",
+            "in": "query",
+            "required": false,
+            "description": "Repeatable Tag ID filter.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "exclude_tag_id",
+            "in": "query",
+            "required": false,
+            "description": "Repeatable excluded Tag ID filter.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
           }
         ]
       }
@@ -696,7 +764,10 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
             }
           }
         ]
@@ -751,25 +822,34 @@
           {
             "name": "interval",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "5m",
+                "15m",
+                "1h",
+                "4h",
+                "1d"
+              ]
             }
           },
           {
             "name": "from",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             }
           },
           {
             "name": "to",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             }
           }
         ]
@@ -816,96 +896,15 @@
           {
             "name": "token_ids",
             "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-    "/api/v4/event_contracts/tokens/{currency}/candlesticks": {
-      "get": {
-        "summary": "Get Candlesticks",
-        "description": "Get Candlesticks.",
-        "operationId": "query_candlesticks",
-        "responses": {
-          "200": {
-            "description": "Request succeeded",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CurrencyCandlestickList"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid request or parameters",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "Service temporarily unavailable",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "currency",
-            "in": "path",
             "required": true,
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "interval",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "from",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "to",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
           }
         ]
       }
     },
-    "/api/v4/event_contracts/orders": {
+    "/api/v4/broker/event_contracts/orders": {
       "post": {
         "summary": "Place Order",
         "description": "Place Order.",
@@ -983,10 +982,22 @@
                     "type": "string"
                   },
                   "order_type": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "GTC",
+                      "GTD",
+                      "FOK",
+                      "FAK"
+                    ],
+                    "description": "Time-in-force: GTC, GTD, FOK, or FAK"
                   },
                   "order_mode": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "LIMIT",
+                      "MARKET"
+                    ],
+                    "description": "Execution mode: LIMIT or MARKET"
                   },
                   "client_order_id": {
                     "type": "string"
@@ -1004,7 +1015,41 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix timestamp in seconds; the gateway allows at most 60 seconds of clock skew.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "Hexadecimal HMAC-SHA512 signature over the external request path, query string, and body.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "End-user wallet address. The gateway checks that this wallet belongs to the current Broker.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
+        ]
       },
       "get": {
         "summary": "List Orders",
@@ -1054,11 +1099,46 @@
         },
         "parameters": [
           {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix timestamp in seconds; the gateway allows at most 60 seconds of clock skew.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "Hexadecimal HMAC-SHA512 signature over the external request path, query string, and body.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "End-user wallet address. The gateway checks that this wallet belongs to the current Broker.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "status",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "processing",
+                "open",
+                "matched",
+                "canceled",
+                "failed"
+              ],
+              "description": "Lowercase REST order status"
             }
           },
           {
@@ -1133,6 +1213,11 @@
               "type": "integer"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       },
       "delete": {
@@ -1183,6 +1268,33 @@
         },
         "parameters": [
           {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix timestamp in seconds; the gateway allows at most 60 seconds of clock skew.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "Hexadecimal HMAC-SHA512 signature over the external request path, query string, and body.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "End-user wallet address. The gateway checks that this wallet belongs to the current Broker.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "condition_id",
             "in": "query",
             "required": false,
@@ -1190,10 +1302,15 @@
               "type": "string"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/event_contracts/orders/{order_id}": {
+    "/api/v4/broker/event_contracts/orders/{order_id}": {
       "get": {
         "summary": "Get Order",
         "description": "Get Order.",
@@ -1242,12 +1359,44 @@
         },
         "parameters": [
           {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix timestamp in seconds; the gateway allows at most 60 seconds of clock skew.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "Hexadecimal HMAC-SHA512 signature over the external request path, query string, and body.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "End-user wallet address. The gateway checks that this wallet belongs to the current Broker.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "order_id",
             "in": "path",
             "required": true,
             "schema": {
               "type": "string"
             }
+          }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
           }
         ]
       },
@@ -1299,6 +1448,33 @@
         },
         "parameters": [
           {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix timestamp in seconds; the gateway allows at most 60 seconds of clock skew.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "Hexadecimal HMAC-SHA512 signature over the external request path, query string, and body.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "End-user wallet address. The gateway checks that this wallet belongs to the current Broker.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "order_id",
             "in": "path",
             "required": true,
@@ -1306,10 +1482,15 @@
               "type": "string"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/event_contracts/positions": {
+    "/api/v4/broker/event_contracts/positions": {
       "get": {
         "summary": "List Positions",
         "description": "List Positions.",
@@ -1358,6 +1539,33 @@
         },
         "parameters": [
           {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix timestamp in seconds; the gateway allows at most 60 seconds of clock skew.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "Hexadecimal HMAC-SHA512 signature over the external request path, query string, and body.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "End-user wallet address. The gateway checks that this wallet belongs to the current Broker.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "event_id",
             "in": "query",
             "required": false,
@@ -1397,10 +1605,15 @@
               "type": "integer"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/event_contracts/usertrades": {
+    "/api/v4/broker/event_contracts/usertrades": {
       "get": {
         "summary": "List User Trades",
         "description": "List User Trades.",
@@ -1448,6 +1661,33 @@
           }
         },
         "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix timestamp in seconds; the gateway allows at most 60 seconds of clock skew.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "Hexadecimal HMAC-SHA512 signature over the external request path, query string, and body.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "End-user wallet address. The gateway checks that this wallet belongs to the current Broker.",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "condition_id",
             "in": "query",
@@ -1512,10 +1752,15 @@
               "type": "integer"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/event_contracts/assets": {
+    "/api/v4/broker/event_contracts/assets": {
       "get": {
         "summary": "Get Account Assets",
         "description": "Get Account Assets.",
@@ -1561,10 +1806,44 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix timestamp in seconds; the gateway allows at most 60 seconds of clock skew.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "Hexadecimal HMAC-SHA512 signature over the external request path, query string, and body.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "End-user wallet address. The gateway checks that this wallet belongs to the current Broker.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
+        ]
       }
     },
-    "/api/v4/event_contracts/account_book": {
+    "/api/v4/broker/event_contracts/account_book": {
       "get": {
         "summary": "Get Account Book",
         "description": "Get Account Book.",
@@ -1613,6 +1892,33 @@
         },
         "parameters": [
           {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix timestamp in seconds; the gateway allows at most 60 seconds of clock skew.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "Hexadecimal HMAC-SHA512 signature over the external request path, query string, and body.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "End-user wallet address. The gateway checks that this wallet belongs to the current Broker.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "limit",
             "in": "query",
             "required": false,
@@ -1627,6 +1933,11 @@
             "schema": {
               "type": "string"
             }
+          }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
           }
         ]
       }
@@ -1786,7 +2097,7 @@
         ]
       }
     },
-    "/api/v4/event_contracts/positions/settled": {
+    "/api/v4/broker/event_contracts/positions/settled": {
       "get": {
         "summary": "List Settled Positions",
         "description": "List settled Event Contract positions.",
@@ -1835,6 +2146,33 @@
         },
         "parameters": [
           {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix timestamp in seconds; the gateway allows at most 60 seconds of clock skew.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "Hexadecimal HMAC-SHA512 signature over the external request path, query string, and body.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "End-user wallet address. The gateway checks that this wallet belongs to the current Broker.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "event_id",
             "in": "query",
             "required": false,
@@ -1866,10 +2204,15 @@
               "type": "integer"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/event_contracts/balance": {
+    "/api/v4/broker/event_contracts/balance": {
       "get": {
         "summary": "Get Account Balance",
         "description": "Get the Event Contract account balance for the current user.",
@@ -1905,10 +2248,44 @@
               }
             }
           }
-        }
+        },
+        "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix timestamp in seconds; the gateway allows at most 60 seconds of clock skew.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "Hexadecimal HMAC-SHA512 signature over the external request path, query string, and body.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "End-user wallet address. The gateway checks that this wallet belongs to the current Broker.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
+        ]
       }
     },
-    "/api/v4/event_contracts/fund_flows": {
+    "/api/v4/broker/event_contracts/fund_flows": {
       "get": {
         "summary": "List Fund Flows",
         "description": "List fund flows with type, time-range, and cursor filters.",
@@ -1957,6 +2334,33 @@
         },
         "parameters": [
           {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix timestamp in seconds; the gateway allows at most 60 seconds of clock skew.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "Hexadecimal HMAC-SHA512 signature over the external request path, query string, and body.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "End-user wallet address. The gateway checks that this wallet belongs to the current Broker.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "type",
             "in": "query",
             "required": false,
@@ -2004,10 +2408,15 @@
               "type": "string"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/event_contracts/fee/current": {
+    "/api/v4/broker/event_contracts/fee/current": {
       "get": {
         "summary": "Get Current Fee",
         "description": "Get the current fee configuration.",
@@ -2056,6 +2465,33 @@
         },
         "parameters": [
           {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix timestamp in seconds; the gateway allows at most 60 seconds of clock skew.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "Hexadecimal HMAC-SHA512 signature over the external request path, query string, and body.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "End-user wallet address. The gateway checks that this wallet belongs to the current Broker.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "name": "fee_type",
             "in": "query",
             "required": false,
@@ -2063,10 +2499,15 @@
               "type": "string"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/event_contracts/transfer": {
+    "/api/v4/broker/event_contracts/transfer": {
       "post": {
         "summary": "Transfer Event Contract Funds",
         "description": "Transfer USDT between the spot account and the Event Contract sub-account.",
@@ -2159,6 +2600,152 @@
               }
             }
           }
+        },
+        "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix timestamp in seconds; the gateway allows at most 60 seconds of clock skew.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "Hexadecimal HMAC-SHA512 signature over the external request path, query string, and body.",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "End-user wallet address. The gateway checks that this wallet belongs to the current Broker.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
+        ]
+      }
+    },
+    "/api/v4/event_contracts/crypto/candlesticks": {
+      "get": {
+        "summary": "Get Crypto Candlesticks",
+        "description": "Query OHLCV candlesticks using the `symbol` currency code. The `tag_id` parameter remains temporarily supported. Provide exactly one of `symbol` or `tag_id`. `interval=all` does not guarantee the full price history; specify `start_ts` and `end_ts` to query a particular range.",
+        "operationId": "query_crypto_candlesticks",
+        "parameters": [
+          {
+            "name": "symbol",
+            "in": "query",
+            "required": false,
+            "description": "Case-insensitive currency code. Currently supported: BTC, ETH, HYPE, XRP, SOL, DOGE, and BNB. Provide either `symbol` or `tag_id`.",
+            "schema": {
+              "type": "string",
+              "example": "BTC"
+            }
+          },
+          {
+            "name": "tag_id",
+            "in": "query",
+            "required": false,
+            "description": "Compatibility parameter: positive cryptocurrency tag ID. Provide either `symbol` or `tag_id`. Use `symbol` for new integrations.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "example": 235
+            },
+            "deprecated": true
+          },
+          {
+            "name": "interval",
+            "in": "query",
+            "required": true,
+            "description": "Display interval.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1m",
+                "5m",
+                "15m",
+                "1h",
+                "4h",
+                "1d",
+                "1w",
+                "1mon",
+                "1y",
+                "all"
+              ]
+            }
+          },
+          {
+            "name": "start_ts",
+            "in": "query",
+            "required": false,
+            "description": "Start time in Unix seconds; omitted or 0 follows the server's default rule.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "end_ts",
+            "in": "query",
+            "required": false,
+            "description": "End time in Unix seconds; omitted or 0 follows the server's default rule.",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Request succeeded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CryptoCandlesticksResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "label": "INVALID_PARAM_VALUE",
+                  "message": "invalid crypto candlestick parameters"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Service temporarily unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "label": "QUOTE_UNAVAILABLE",
+                  "message": "crypto candlesticks unavailable"
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -2179,30 +2766,6 @@
           }
         }
       },
-      "CurrencyCandlestick": {
-        "type": "object",
-        "properties": {
-          "c": {
-            "type": "string"
-          },
-          "h": {
-            "type": "string"
-          },
-          "l": {
-            "type": "string"
-          },
-          "o": {
-            "type": "string"
-          },
-          "t": {
-            "type": "integer"
-          },
-          "v": {
-            "type": "string"
-          }
-        },
-        "description": "Response object."
-      },
       "EventDetail": {
         "type": "object",
         "properties": {
@@ -2210,28 +2773,34 @@
             "type": "boolean"
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "closed": {
             "type": "boolean"
           },
           "closed_time": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "description": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "end_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "event_id": {
             "type": "string"
           },
           "icon": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "image": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "markets": {
             "type": "array",
@@ -2243,16 +2812,19 @@
             "type": "boolean"
           },
           "resolution_source": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "slug": {
             "type": "string"
           },
           "start_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "start_time": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "tags": {
             "type": "array",
@@ -2261,10 +2833,12 @@
             }
           },
           "title": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "volume": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         },
         "description": "Response object."
@@ -2276,34 +2850,41 @@
             "type": "boolean"
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "closed": {
             "type": "boolean"
           },
           "closed_time": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "end_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "event_id": {
             "type": "string"
           },
           "icon": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "image": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "slug": {
             "type": "string"
           },
           "start_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "start_time": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "tags": {
             "type": "array",
@@ -2312,10 +2893,12 @@
             }
           },
           "title": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "volume": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         },
         "description": "Response object."
@@ -2330,7 +2913,9 @@
             }
           },
           "next_cursor": {
-            "type": "string"
+            "type": "string",
+            "nullable": true,
+            "description": "Cursor for the next page; null means there are no more results."
           }
         },
         "description": "Response object."
@@ -2339,7 +2924,8 @@
         "type": "object",
         "properties": {
           "accepting_orders": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": true
           },
           "best_ask": {
             "type": "string"
@@ -2348,7 +2934,8 @@
             "type": "string"
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "closed": {
             "type": "boolean"
@@ -2357,22 +2944,27 @@
             "type": "string"
           },
           "description": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "enable_order_book": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": true
           },
           "end_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "event_id": {
             "type": "string"
           },
           "icon": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "image": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "last_trade_price": {
             "type": "string"
@@ -2384,10 +2976,12 @@
             "type": "string"
           },
           "min_order_size": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "neg_risk": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": true
           },
           "outcomes": {
             "type": "array",
@@ -2396,19 +2990,23 @@
             }
           },
           "question": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "resolution_source": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "resolved_at": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "slug": {
             "type": "string"
           },
           "start_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "status": {
             "type": "string"
@@ -2420,35 +3018,39 @@
             }
           },
           "tick_size": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "uma_end_date": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "uma_end_date_iso": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "uma_resolution_status": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "uma_resolution_statuses": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "volume": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "volume_24hr": {
             "type": "string"
           },
           "winning_outcome": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "winning_token_id": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         },
         "description": "Response object."
@@ -2463,7 +3065,8 @@
             "type": "string"
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "closed": {
             "type": "boolean"
@@ -2472,7 +3075,8 @@
             "type": "string"
           },
           "end_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "event_id": {
             "type": "string"
@@ -2493,13 +3097,15 @@
             }
           },
           "question": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "slug": {
             "type": "string"
           },
           "start_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "status": {
             "type": "string"
@@ -2512,22 +3118,23 @@
           },
           "uma_end_date": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "uma_end_date_iso": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "uma_resolution_status": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "uma_resolution_statuses": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "volume": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "volume_24hr": {
             "type": "string"
@@ -2545,7 +3152,9 @@
             }
           },
           "next_cursor": {
-            "type": "string"
+            "type": "string",
+            "nullable": true,
+            "description": "Cursor for the next page; null means there are no more results."
           }
         },
         "description": "Response object."
@@ -2569,22 +3178,28 @@
             "type": "string"
           },
           "hash": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "last_trade_price": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "min_order_size": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "neg_risk": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": true
           },
           "tick_size": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "timestamp": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "token_id": {
             "type": "string"
@@ -2596,7 +3211,8 @@
         "type": "object",
         "properties": {
           "outcome": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "token_id": {
             "type": "string"
@@ -2617,7 +3233,8 @@
         "type": "object",
         "properties": {
           "label": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "slug": {
             "type": "string"
@@ -2638,7 +3255,9 @@
             }
           },
           "next_cursor": {
-            "type": "string"
+            "type": "string",
+            "nullable": true,
+            "description": "Cursor for the next page; null means there are no more results."
           }
         },
         "description": "Response object."
@@ -2650,7 +3269,8 @@
             "type": "string"
           },
           "timestamp": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "token_id": {
             "type": "string"
@@ -2680,7 +3300,8 @@
             "type": "string"
           },
           "timestamp": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "token_id": {
             "type": "string"
@@ -2704,16 +3325,20 @@
         "type": "object",
         "properties": {
           "best_ask": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "best_bid": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "last_price": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "timestamp": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "token_id": {
             "type": "string"
@@ -2761,7 +3386,9 @@
             }
           },
           "next_cursor": {
-            "type": "string"
+            "type": "string",
+            "nullable": true,
+            "description": "Cursor for the next page; null means there are no more results."
           }
         },
         "description": "Response object."
@@ -2782,10 +3409,12 @@
         "type": "object",
         "properties": {
           "p": {
-            "type": "string"
+            "type": "string",
+            "description": "Decimal price string."
           },
           "t": {
-            "type": "integer"
+            "type": "integer",
+            "description": "Unix timestamp in milliseconds."
           }
         },
         "description": "Response object."
@@ -2815,7 +3444,10 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "accepted"
+            ]
           },
           "total_orders": {
             "type": "integer"
@@ -2827,7 +3459,10 @@
         "type": "object",
         "properties": {
           "cancel_status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "accepted"
+            ]
           },
           "order_id": {
             "type": "string"
@@ -2917,10 +3552,22 @@
             "type": "string"
           },
           "order_mode": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "LIMIT",
+              "MARKET"
+            ],
+            "description": "Execution mode: LIMIT or MARKET"
           },
           "order_type": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "GTC",
+              "GTD",
+              "FOK",
+              "FAK"
+            ],
+            "description": "Time-in-force: GTC, GTD, FOK, or FAK"
           },
           "outcome": {
             "type": "string"
@@ -2941,7 +3588,15 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "processing",
+              "open",
+              "matched",
+              "canceled",
+              "failed"
+            ],
+            "description": "Lowercase REST order status"
           },
           "token_id": {
             "type": "string"
@@ -2977,10 +3632,22 @@
             "type": "string"
           },
           "order_mode": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "LIMIT",
+              "MARKET"
+            ],
+            "description": "Execution mode: LIMIT or MARKET"
           },
           "order_type": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "GTC",
+              "GTD",
+              "FOK",
+              "FAK"
+            ],
+            "description": "Time-in-force: GTC, GTD, FOK, or FAK"
           },
           "outcome": {
             "type": "string"
@@ -3001,7 +3668,15 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "processing",
+              "open",
+              "matched",
+              "canceled",
+              "failed"
+            ],
+            "description": "Lowercase REST order status"
           },
           "token_id": {
             "type": "string"
@@ -3025,7 +3700,10 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "processing"
+            ]
           }
         },
         "description": "Response object."
@@ -3303,12 +3981,76 @@
         },
         "description": "Response object."
       },
-      "CurrencyCandlestickList": {
-        "type": "array",
-        "description": "List response.",
-        "items": {
-          "$ref": "#/components/schemas/CurrencyCandlestick"
+      "CryptoCandlestick": {
+        "type": "object",
+        "description": "One candlestick.",
+        "required": [
+          "t",
+          "o",
+          "h",
+          "l",
+          "c",
+          "v"
+        ],
+        "properties": {
+          "t": {
+            "type": "integer",
+            "description": "Unix timestamp in seconds."
+          },
+          "o": {
+            "type": "string"
+          },
+          "h": {
+            "type": "string"
+          },
+          "l": {
+            "type": "string"
+          },
+          "c": {
+            "type": "string"
+          },
+          "v": {
+            "type": "string",
+            "description": "Volume as a decimal string; sources without volume may return 0."
+          }
         }
+      },
+      "CryptoCandlesticksResponse": {
+        "type": "object",
+        "description": "Crypto candlestick response.",
+        "required": [
+          "symbol",
+          "interval",
+          "history"
+        ],
+        "properties": {
+          "symbol": {
+            "type": "string",
+            "description": "Currency pair identifier."
+          },
+          "interval": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "description": "Data source name; omitted when unavailable."
+          },
+          "history": {
+            "type": "array",
+            "description": "OHLCV candlesticks in time order.",
+            "items": {
+              "$ref": "#/components/schemas/CryptoCandlestick"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BrokerAPIKey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "KEY",
+        "description": "Broker API Key, created through the project administrator's process."
       }
     }
   }

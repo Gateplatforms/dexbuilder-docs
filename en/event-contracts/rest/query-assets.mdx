@@ -1,22 +1,26 @@
 ---
 title: "Get Account Assets"
 description: "Get Account Assets."
-openapi: "/openapi/event-contracts-en.yaml GET /api/v4/event_contracts/assets"
+openapi: "/openapi/event-contracts-en.yaml GET /api/v4/broker/event_contracts/assets"
 ---
 
 Returns the authenticated account asset summary.
 
 **Base URL:** `https://api.dexbuilder.com`
 
-**Authentication:** This is a private endpoint and requires API authentication. The authenticated account is inferred from the request credentials; do not send internal user headers.
+**Authentication:** Use a Broker API Key and sign this request with `Timestamp` and `SIGN`. Pass a wallet address that belongs to your Broker in `X-User-Wallet-Address`. Calculate the signature using the external Broker path. See [Broker API Key and signing](/en/api-reference/common/broker-authentication) and [Access on behalf of a user](/en/api-reference/common/sub-user-wallet).
 
 ## Request
 
 ```bash
-curl -G "https://api.dexbuilder.com/api/v4/event_contracts/assets"
+curl -X GET "https://api.dexbuilder.com/api/v4/broker/event_contracts/assets" \
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "X-User-Wallet-Address: ${USER_WALLET}"
 ```
 
-No public user identifier is required; the account is determined by authentication.
+The `X-User-Wallet-Address` header identifies the target user.
 
 The OpenAPI panel below is the source of truth for required parameters, types, enum values, and request-body fields. Timestamps are Unix timestamps unless the field description states otherwise.
 

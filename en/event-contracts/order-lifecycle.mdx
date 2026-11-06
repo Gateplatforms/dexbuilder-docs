@@ -16,6 +16,8 @@ Matching follows price priority, then time priority: better prices execute first
 
 ## Time-in-Force Options
 
+Use these values in `order_type`. Set `order_mode` to `LIMIT` or `MARKET`.
+
 | Type | Behavior | Typical Use |
 | --- | --- | --- |
 | `GTC` | Good-Til-Cancelled; remains active until filled or manually cancelled | Resting orders, market making |
@@ -47,14 +49,17 @@ A Post Only order is guaranteed to act only as a Maker. If it would immediately 
   </Step>
 </Steps>
 
-## Order States
+## REST Order States
+
+REST order queries and the `status` filter use the following lowercase values. WebSocket order updates use a separate uppercase UI state.
 
 | State | Meaning |
 | --- | --- |
-| `live` | The order is on the order book and can continue matching |
-| `matched` | The order has matched with a counterparty and is entering settlement |
-| `delayed` | The order is within a Taker delay window |
-| `unmatched` | The order left the order book without execution, for example due to cancellation or expiry |
+| `processing` | The order request is being processed, including cancellation in progress |
+| `open` | The order is open, including partially filled orders with a remaining quantity |
+| `matched` | The order has matched |
+| `canceled` | The order was canceled or expired |
+| `failed` | The order failed or was rejected |
 
 ## Trade States
 

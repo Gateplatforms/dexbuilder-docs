@@ -1,19 +1,23 @@
 ---
 title: "Get Available Claim for Token"
 description: "Get Available Claim for Token."
-openapi: "/openapi/event-markets-en.yaml GET /api/v4/prediction/claims/available/{token_id}"
+openapi: "/openapi/event-markets-en.yaml GET /api/v4/broker/prediction/claims/available/{token_id}"
 ---
 
 Returns claimable information for one token.
 
 **Base URL:** `https://api.dexbuilder.com`
 
-**Authentication:** This is a private endpoint and requires API authentication. The authenticated account is inferred from the request credentials; do not send internal user headers.
+**Authentication:** Use a Broker API Key and sign this request with `Timestamp` and `SIGN`. Pass a wallet address that belongs to your Broker in `X-User-Wallet-Address`. Calculate the signature using the external Broker path. See [Broker API Key and signing](/en/api-reference/common/broker-authentication) and [Access on behalf of a user](/en/api-reference/common/sub-user-wallet).
 
 ## Request
 
 ```bash
-curl -G "https://api.dexbuilder.com/api/v4/prediction/claims/available/{token_id}"
+curl -X GET "https://api.dexbuilder.com/api/v4/broker/prediction/claims/available/{token_id}" \
+  -H "KEY: ${BROKER_API_KEY}" \
+  -H "SIGN: ${SIGN}" \
+  -H "Timestamp: ${TIMESTAMP}" \
+  -H "X-User-Wallet-Address: ${USER_WALLET}"
 ```
 
 `token_id` identifies the token.
