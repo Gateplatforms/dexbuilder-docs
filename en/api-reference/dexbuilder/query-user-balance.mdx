@@ -1,10 +1,10 @@
 ---
 title: "Get Vault balance"
-description: "Get a user's available Vault balance."
+description: "Before trading, users must deposit USDT into their personal contract Vault. Each user has a separate Vault, and balance changes resulting from trades are recorded directly in that Vault. This endpoint returns the available balance in the end user's Vault."
 openapi: "/openapi/dexbuilder-en.yaml GET /api/v4/dexbuilder/user/balance"
 ---
 
-Get a user's available Vault balance.
+Before trading, users must deposit USDT into their personal contract Vault. Each user has a separate Vault, and balance changes resulting from trades are recorded directly in that Vault. This endpoint returns the available balance in the end user's Vault.
 
 <Note>
   Use a Broker API Key and pass the target user's wallet in X-User-Wallet-Address. The gateway checks that the wallet belongs to your Broker. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).

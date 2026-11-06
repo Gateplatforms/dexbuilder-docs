@@ -1,10 +1,10 @@
 ---
 title: "查询 Vault 余额"
-description: "查询终端用户的 Vault 可用余额。"
+description: "用户交易前需将 USDT 充值至个人合约金库（Vault）。每位用户拥有独立的 Vault，交易产生的资金变动将直接计入该 Vault。此接口用于查询终端用户 Vault 中的可用余额。"
 openapi: "/openapi/dexbuilder.yaml GET /api/v4/dexbuilder/user/balance"
 ---
 
-查询终端用户的 Vault 可用余额。
+用户交易前需将 USDT 充值至个人合约金库（Vault）。每位用户拥有独立的 Vault，交易产生的资金变动将直接计入该 Vault。此接口用于查询终端用户 Vault 中的可用余额。
 
 <Note>
   使用 Broker API Key 调用，并在请求头提供 `X-User-Wallet-Address`。网关会校验钱包与 Broker 的归属关系。 认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
