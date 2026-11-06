@@ -740,7 +740,13 @@
                 ]
               },
               {
-                "item": "接入与通用规则"
+                "item": "接入与通用规则",
+                "groups": [
+                  {
+                    "group": "通用说明",
+                    "pages": []
+                  }
+                ]
               },
               {
                 "item": "DexBuilder 平台 API"
