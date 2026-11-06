@@ -590,7 +590,6 @@
                           "api-reference/perpdex/models/batchamendorderreq"
                         ]
                       },
-                      "api-reference/common/overview",
                       "api-reference/common/broker-authentication",
                       "api-reference/common/sub-user-wallet",
                       "api-reference/dexbuilder/deposit-fee",
@@ -744,12 +743,20 @@
                 "groups": [
                   {
                     "group": "通用说明",
-                    "pages": []
+                    "pages": [
+                      "api-reference/common/overview"
+                    ]
                   }
                 ]
               },
               {
-                "item": "DexBuilder 平台 API"
+                "item": "DexBuilder 平台 API",
+                "groups": [
+                  {
+                    "group": "DexBuilder API",
+                    "pages": []
+                  }
+                ]
               }
             ]
           },
@@ -1207,10 +1214,22 @@
                 ]
               },
               {
-                "item": "Access and conventions"
+                "item": "Access and conventions",
+                "groups": [
+                  {
+                    "group": "Shared API guides",
+                    "pages": []
+                  }
+                ]
               },
               {
-                "item": "DexBuilder Platform API"
+                "item": "DexBuilder Platform API",
+                "groups": [
+                  {
+                    "group": "DexBuilder API",
+                    "pages": []
+                  }
+                ]
               }
             ]
           },
@@ -1668,10 +1687,22 @@
                 ]
               },
               {
-                "item": "接入與通用規則"
+                "item": "接入與通用規則",
+                "groups": [
+                  {
+                    "group": "通用說明",
+                    "pages": []
+                  }
+                ]
               },
               {
-                "item": "DexBuilder 平台 API"
+                "item": "DexBuilder 平台 API",
+                "groups": [
+                  {
+                    "group": "DexBuilder API",
+                    "pages": []
+                  }
+                ]
               }
             ]
           },
