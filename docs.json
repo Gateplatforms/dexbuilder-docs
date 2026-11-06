@@ -738,6 +738,12 @@
                     ]
                   }
                 ]
+              },
+              {
+                "item": "接入与通用规则"
+              },
+              {
+                "item": "DexBuilder 平台 API"
               }
             ]
           },
@@ -1193,6 +1199,12 @@
                     ]
                   }
                 ]
+              },
+              {
+                "item": "Access and conventions"
+              },
+              {
+                "item": "DexBuilder Platform API"
               }
             ]
           },
@@ -1648,6 +1660,12 @@
                     ]
                   }
                 ]
+              },
+              {
+                "item": "接入與通用規則"
+              },
+              {
+                "item": "DexBuilder 平台 API"
               }
             ]
           },
