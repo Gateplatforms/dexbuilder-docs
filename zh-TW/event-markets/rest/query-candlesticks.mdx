@@ -1,10 +1,10 @@
 ---
 title: "查詢加密貨幣 K 線"
-description: "按加密貨幣標籤 ID 查詢公開 OHLCV K 線，瞭解請求參數、時間單位及回應欄位。"
+description: "按幣種代碼查詢公開 OHLCV K 線，瞭解請求參數、時間單位及回應欄位。"
 openapi: "/openapi/event-markets-zh-TW.yaml GET /api/v4/prediction/crypto/candlesticks"
 ---
 
-透過加密貨幣標籤 ID 查詢幣種 OHLCV K 線。此介面公開，無需認證。
+透過幣種代碼查詢公開 OHLCV K 線。此介面無需認證。
 
 Base URL：`https://api.dexbuilder.com`
 
@@ -12,17 +12,18 @@ Base URL：`https://api.dexbuilder.com`
 
 | 參數 | 必填 | 說明 |
 | --- | --- | --- |
-| `tag_id` | 是 | 加密貨幣標籤 ID，正整數；例如 BTC 為 `235`，不要加上 `ge_` 前綴。 |
+| `symbol` | 二選一 | 幣種代碼，不區分大小寫。目前支援 `BTC`、`ETH`、`HYPE`、`XRP`、`SOL`、`DOGE`、`BNB`；新接入建議使用此參數。 |
+| `tag_id` | 二選一 | 相容參數：正整數加密貨幣標籤 ID，例如 BTC 為 `235`；不接受 `ge_` 前綴。 |
 | `interval` | 是 | 展示檔位：`1m`、`5m`、`15m`、`1h`、`4h`、`1d`、`1w`、`1mon`、`1y`、`all`。 |
 | `start_ts` | 否 | 起始 Unix 秒；省略或傳 `0` 時依服務端預設規則處理。 |
 | `end_ts` | 否 | 結束 Unix 秒；省略或傳 `0` 時依服務端預設規則處理。 |
 
-兩個非零時間邊界同時提供時，`end_ts` 必須大於 `start_ts`。
+`symbol` 與 `tag_id` 必須且只能提供其中一個。`tag_id` 暫時保留相容，建議既有呼叫遷移至 `symbol`。兩個非零時間邊界同時提供時，`end_ts` 必須大於 `start_ts`。
 
-`interval` 選擇展示檔位，不保證每根回傳 K 線的時間寬度；請使用 `history[].t` 判斷取樣時間。
+`interval` 選擇展示檔位，不保證每根回傳 K 線的時間寬度；請使用 `history[].t` 判斷取樣時間。`interval=all` 不保證回傳全部歷史；查詢指定範圍時請提供 `start_ts` 和 `end_ts`。
 
 ```bash
-curl "https://api.dexbuilder.com/api/v4/prediction/crypto/candlesticks?tag_id=235&interval=1h"
+curl "https://api.dexbuilder.com/api/v4/prediction/crypto/candlesticks?symbol=BTC&interval=1h"
 ```
 
 ## 回應
