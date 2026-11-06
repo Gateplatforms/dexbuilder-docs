@@ -316,7 +316,10 @@
                       "api-reference/dexbuilder/withdraw-status",
                       "api-reference/dexbuilder/withdraw-submit",
                       "changelog/dexbuilder",
-                      "changelog/event-markets"
+                      "changelog/event-markets",
+                      "zh/event-markets/api/broker-authentication",
+                      "zh/event-contracts/api/broker-authentication",
+                      "zh/event-markets/rest/query-event-reference-price"
                     ]
                   }
                 ]
@@ -1169,7 +1172,24 @@
                       "zh-TW/api-reference/dexbuilder/deposit-history",
                       "zh-TW/api-reference/dexbuilder/deposit-fee",
                       "zh-TW/api-reference/dexbuilder/query-assets",
-                      "zh-TW/api-reference/dexbuilder/deposit-status"
+                      "zh-TW/api-reference/dexbuilder/deposit-status",
+                      "zh-TW/api-reference/dexbuilder/overview",
+                      "zh-TW/api-reference/dexbuilder/query-dw-status",
+                      "zh-TW/api-reference/dexbuilder/query-fee",
+                      "zh-TW/api-reference/dexbuilder/query-networks",
+                      "zh-TW/api-reference/dexbuilder/query-fund-stats",
+                      "zh-TW/api-reference/dexbuilder/query-wallet-list",
+                      "zh-TW/api-reference/dexbuilder/query-user-balance",
+                      "zh-TW/api-reference/dexbuilder/query-user-info",
+                      "zh-TW/api-reference/dexbuilder/query-withdraw-limit",
+                      "zh-TW/api-reference/dexbuilder/withdraw-ata-check-and-build",
+                      "zh-TW/api-reference/dexbuilder/withdraw-history",
+                      "zh-TW/api-reference/dexbuilder/withdraw-sign-data",
+                      "zh-TW/changelog/dexbuilder",
+                      "zh-TW/api-reference/dexbuilder/withdraw-status",
+                      "zh-TW/api-reference/dexbuilder/withdraw-submit",
+                      "zh-TW/changelog/event-contracts",
+                      "zh-TW/changelog/event-markets"
                     ]
                   }
                 ]
