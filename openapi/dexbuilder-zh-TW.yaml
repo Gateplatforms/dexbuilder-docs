@@ -31,24 +31,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或簽名無效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -71,6 +57,9 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/AssetQuery"
+          },
+          {
+            "$ref": "#/components/parameters/DeviceType"
           }
         ],
         "responses": {
@@ -85,24 +74,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或簽名無效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -142,24 +117,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或簽名無效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -196,24 +157,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或簽名無效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -236,6 +183,15 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/DeviceType"
+          },
+          {
+            "name": "network",
+            "in": "query",
+            "required": false,
+            "description": "網路標識：base、bsc、ethereum、solana 或 arbitrum。",
+            "schema": {
+              "$ref": "#/components/schemas/OpenAPIChainId"
+            }
           }
         ],
         "responses": {
@@ -250,24 +206,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或簽名無效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -314,24 +256,10 @@
             }
           },
           "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "401": {
-            "description": "Broker API Key 或簽名無效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           }
         },
         "security": [
@@ -368,24 +296,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或簽名無效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -435,24 +349,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或簽名無效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -502,24 +402,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或簽名無效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -575,24 +461,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或簽名無效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -628,19 +500,7 @@
             "$ref": "#/components/parameters/SubUserWalletAddr"
           },
           {
-            "name": "x-perp-device-type",
-            "in": "header",
-            "required": false,
-            "description": "設備類型（1/2/3/4），風控使用，建議填寫",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "1",
-                "2",
-                "3",
-                "4"
-              ]
-            }
+            "$ref": "#/components/parameters/DeviceType"
           }
         ],
         "requestBody": {
@@ -665,24 +525,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或簽名無效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -737,24 +583,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或簽名無效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -807,24 +639,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或簽名無效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -881,24 +699,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或簽名無效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -962,24 +766,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或簽名無效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -1035,24 +825,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或簽名無效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -1105,24 +881,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或簽名無效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -1180,24 +942,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或簽名無效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -1255,12 +1003,12 @@
       "NetworkQuery": {
         "name": "network",
         "in": "query",
-        "required": false,
+        "required": true,
         "schema": {
           "type": "string"
         },
         "example": "ethereum",
-        "description": "網路標識，如 ethereum"
+        "description": "網路標識，例如 ethereum、solana、arbitrum、bsc 或 base。查詢充提開關時必填。"
       },
       "Page": {
         "name": "page",
@@ -1284,7 +1032,7 @@
         "description": "每頁條數，最大 100"
       },
       "SubUserWalletAddr": {
-        "name": "sub_user_wallet_addr",
+        "name": "X-User-Wallet-Address",
         "in": "header",
         "required": true,
         "description": "目標終端使用者錢包地址。網關校驗該錢包對應的使用者屬於當前 Broker。",
@@ -1296,16 +1044,16 @@
         "name": "x-perp-device-type",
         "in": "header",
         "required": true,
-        "description": "設備類型：1 Android、2 iOS、3 WEB、4 H5。僅在標明必填的介面中要求傳遞。",
+        "description": "DexBuilder 設備類型：1 Android、2 iOS、3 WEB。缺少或無效時回傳 INVALID_DEVICE_TYPE。僅適用於明確列出此請求標頭的平台介面。",
         "schema": {
           "type": "string",
           "enum": [
             "1",
             "2",
-            "3",
-            "4"
+            "3"
           ]
-        }
+        },
+        "example": "3"
       },
       "IdempotencyKey": {
         "name": "Idempotency-Key",
@@ -1753,7 +1501,7 @@
           },
           "min_withdraw": {
             "type": "string",
-            "description": "最小提現數量，十進制字符串，單位為 token 最小展示單位"
+            "description": "最低提現數量，以可讀 Token 單位的十進位字串表示；無資料時省略。"
           }
         }
       },
@@ -1810,13 +1558,9 @@
             "type": "string",
             "description": "錢包記錄 ID"
           },
-          "chain": {
-            "type": "string",
-            "description": "鏈標識"
-          },
           "address": {
             "type": "string",
-            "description": "錢包地址，須與 sub_user_wallet_addr 匹配時方可代表該使用者"
+            "description": "錢包地址，須與 X-User-Wallet-Address 匹配時方可代表該使用者"
           },
           "status": {
             "type": "string",
@@ -1830,6 +1574,10 @@
             "type": "integer",
             "format": "int64",
             "description": "綁定時間，Unix 毫秒時間戳"
+          },
+          "vm": {
+            "type": "string",
+            "description": "虛擬機類型：evm 或 solana。"
           }
         }
       },
@@ -1870,8 +1618,7 @@
             "description": "發起充值的使用者錢包，須為已綁定錢包；EVM 0x hex 或 Solana base58"
           },
           "chain": {
-            "type": "string",
-            "description": "鏈標識，須與 token 所在網路一致"
+            "$ref": "#/components/schemas/OpenAPIChainId"
           },
           "token_address": {
             "type": "string",
@@ -1899,11 +1646,10 @@
         "properties": {
           "address": {
             "type": "string",
-            "description": "使用者錢包，須已綁定；與 sub_user_wallet_addr 一致"
+            "description": "使用者錢包，須已綁定；與 X-User-Wallet-Address 一致"
           },
           "chain": {
-            "type": "string",
-            "description": "鏈標識"
+            "$ref": "#/components/schemas/OpenAPIChainId"
           },
           "token_address": {
             "type": "string",
@@ -1976,7 +1722,7 @@
           },
           "fee_source": {
             "type": "integer",
-            "description": "費用來源標識；0 表示默認。"
+            "description": "費用來源：0 表示即時報價，1 表示備用報價。"
           }
         }
       },
@@ -1997,8 +1743,7 @@
         "type": "object",
         "properties": {
           "chain": {
-            "type": "string",
-            "description": "鏈標識"
+            "$ref": "#/components/schemas/OpenAPIChainId"
           },
           "token_symbol": {
             "type": "string",
@@ -2014,11 +1759,11 @@
           },
           "to_address": {
             "type": "string",
-            "description": "到賬地址，可為第三方地址；EVM/Solana 格式須匹配 chain"
+            "description": "選填；若提供，必須與綁定的簽名錢包地址一致。不支援提現至第三方地址。"
           },
           "address": {
             "type": "string",
-            "description": "使用者已綁定錢包（簽名主體），須與 sub_user_wallet_addr 一致"
+            "description": "使用者已綁定錢包（簽名主體），須與 X-User-Wallet-Address 一致"
           }
         },
         "required": [
@@ -2026,7 +1771,6 @@
           "token_symbol",
           "token_address",
           "token_amount",
-          "to_address",
           "address"
         ]
       },
@@ -2035,7 +1779,7 @@
         "properties": {
           "data": {
             "type": "string",
-            "description": "待使用者 EIP-712 / 鏈約定格式簽名的 payload（0x hex）"
+            "description": "在 EVM 場景，完整 EIP-712 TypedData JSON 的 UTF-8 十六進位編碼（0x 前綴）。錢包對 TypedData 雜湊簽名；這不是鏈上交易 input，請勿廣播至 Vault。"
           },
           "contract_address": {
             "type": "string",
@@ -2044,7 +1788,7 @@
           "timestamp": {
             "type": "integer",
             "format": "int64",
-            "description": "簽名時間戳（秒），提交 withdraw/submit 時必須原樣帶回"
+            "description": "Unix 毫秒級時間戳；提交 withdraw/submit 時請原樣傳遞。"
           }
         }
       },
@@ -2064,8 +1808,7 @@
             "description": "簽名 s（0x hex）"
           },
           "chain": {
-            "type": "string",
-            "description": "鏈標識"
+            "$ref": "#/components/schemas/OpenAPIChainId"
           },
           "token_address": {
             "type": "string",
@@ -2081,7 +1824,7 @@
           },
           "to_address": {
             "type": "string",
-            "description": "到賬地址，須與 sign_data 請求一致"
+            "description": "選填；若提供，必須與綁定的簽名錢包地址一致。不支援提現至第三方地址。"
           },
           "timestamp": {
             "type": "integer",
@@ -2102,7 +1845,6 @@
           "token_address",
           "address",
           "token_amount",
-          "to_address",
           "token_symbol"
         ]
       },
@@ -2169,10 +1911,6 @@
       "UserInfoWallet": {
         "type": "object",
         "properties": {
-          "chain": {
-            "type": "string",
-            "description": "鏈標識"
-          },
           "address": {
             "type": "string",
             "description": "已綁定錢包地址"
@@ -2180,16 +1918,16 @@
           "status": {
             "type": "string",
             "description": "綁定狀態，如 bound"
+          },
+          "vm": {
+            "type": "string",
+            "description": "虛擬機類型：evm 或 solana。"
           }
         }
       },
       "PerpQueryFeeItem": {
         "type": "object",
         "properties": {
-          "chain": {
-            "type": "string",
-            "description": "鏈標識"
-          },
           "deposit_fee": {
             "type": "string",
             "description": "充值固定手續費（非比例），USDT 計價十進制字符串，如 0 表示免費",
@@ -2199,6 +1937,10 @@
             "type": "string",
             "description": "提現固定手續費（非比例），USDT 計價十進制字符串",
             "example": "1.5"
+          },
+          "network": {
+            "type": "string",
+            "description": "網路標識：base、bsc、ethereum、solana 或 arbitrum。"
           }
         }
       },
@@ -2241,6 +1983,11 @@
             "type": "string",
             "description": "自然日累計提現上限，USDT 計價十進制字符串",
             "example": "100000"
+          },
+          "min_withdraw": {
+            "type": "string",
+            "description": "最低提現金額，以可讀 Token 單位表示；僅在配置時回傳。",
+            "example": "20"
           }
         }
       },
@@ -2287,10 +2034,6 @@
       "PerpQueryFundStatItem": {
         "type": "object",
         "properties": {
-          "chain": {
-            "type": "string",
-            "description": "鏈標識"
-          },
           "deposit": {
             "type": "string",
             "description": "累計充值量，USDT 計價十進制字符串"
@@ -2298,6 +2041,10 @@
           "withdraw": {
             "type": "string",
             "description": "累計提現量，USDT 計價十進制字符串"
+          },
+          "network": {
+            "type": "string",
+            "description": "網路標識：base、bsc、ethereum、solana 或 arbitrum。"
           }
         }
       },
@@ -2428,6 +2175,18 @@
             "description": "符合條件的總記錄數（非僅當前頁）"
           }
         }
+      },
+      "OpenAPIChainId": {
+        "type": "string",
+        "enum": [
+          "base",
+          "bsc",
+          "ethereum",
+          "solana",
+          "arbitrum"
+        ],
+        "description": "網路標識：base、bsc、ethereum、solana 或 arbitrum。",
+        "example": "ethereum"
       }
     }
   }

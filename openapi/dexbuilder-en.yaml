@@ -31,24 +31,10 @@
             }
           },
           "401": {
-            "description": "Invalid Broker API Key or signature",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -71,6 +57,9 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/AssetQuery"
+          },
+          {
+            "$ref": "#/components/parameters/DeviceType"
           }
         ],
         "responses": {
@@ -85,24 +74,10 @@
             }
           },
           "401": {
-            "description": "Invalid Broker API Key or signature",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -142,24 +117,10 @@
             }
           },
           "401": {
-            "description": "Invalid Broker API Key or signature",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -196,24 +157,10 @@
             }
           },
           "401": {
-            "description": "Invalid Broker API Key or signature",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -236,6 +183,15 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/DeviceType"
+          },
+          {
+            "name": "network",
+            "in": "query",
+            "required": false,
+            "description": "Network identifier: base, bsc, ethereum, solana, or arbitrum.",
+            "schema": {
+              "$ref": "#/components/schemas/OpenAPIChainId"
+            }
           }
         ],
         "responses": {
@@ -250,24 +206,10 @@
             }
           },
           "401": {
-            "description": "Invalid Broker API Key or signature",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -314,24 +256,10 @@
             }
           },
           "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "401": {
-            "description": "Invalid Broker API Key or signature",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           }
         },
         "security": [
@@ -368,24 +296,10 @@
             }
           },
           "401": {
-            "description": "Invalid Broker API Key or signature",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -435,24 +349,10 @@
             }
           },
           "401": {
-            "description": "Invalid Broker API Key or signature",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -502,24 +402,10 @@
             }
           },
           "401": {
-            "description": "Invalid Broker API Key or signature",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -575,24 +461,10 @@
             }
           },
           "401": {
-            "description": "Invalid Broker API Key or signature",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -628,19 +500,7 @@
             "$ref": "#/components/parameters/SubUserWalletAddr"
           },
           {
-            "name": "x-perp-device-type",
-            "in": "header",
-            "required": false,
-            "description": "Device type (1/2/3/4). Recommended for risk controls.",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "1",
-                "2",
-                "3",
-                "4"
-              ]
-            }
+            "$ref": "#/components/parameters/DeviceType"
           }
         ],
         "requestBody": {
@@ -665,24 +525,10 @@
             }
           },
           "401": {
-            "description": "Invalid Broker API Key or signature",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -737,24 +583,10 @@
             }
           },
           "401": {
-            "description": "Invalid Broker API Key or signature",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -807,24 +639,10 @@
             }
           },
           "401": {
-            "description": "Invalid Broker API Key or signature",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -881,24 +699,10 @@
             }
           },
           "401": {
-            "description": "Invalid Broker API Key or signature",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -962,24 +766,10 @@
             }
           },
           "401": {
-            "description": "Invalid Broker API Key or signature",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -1035,24 +825,10 @@
             }
           },
           "401": {
-            "description": "Invalid Broker API Key or signature",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -1105,24 +881,10 @@
             }
           },
           "401": {
-            "description": "Invalid Broker API Key or signature",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -1180,24 +942,10 @@
             }
           },
           "401": {
-            "description": "Invalid Broker API Key or signature",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -1255,12 +1003,12 @@
       "NetworkQuery": {
         "name": "network",
         "in": "query",
-        "required": false,
+        "required": true,
         "schema": {
           "type": "string"
         },
         "example": "ethereum",
-        "description": "Network identifier, such as ethereum"
+        "description": "Network identifier such as ethereum, solana, arbitrum, bsc, or base. Required when querying deposit and withdrawal availability."
       },
       "Page": {
         "name": "page",
@@ -1284,7 +1032,7 @@
         "description": "Number of records per page, maximum 100"
       },
       "SubUserWalletAddr": {
-        "name": "sub_user_wallet_addr",
+        "name": "X-User-Wallet-Address",
         "in": "header",
         "required": true,
         "description": "Target user's wallet address. The gateway verifies that the user belongs to the current Broker.",
@@ -1296,16 +1044,16 @@
         "name": "x-perp-device-type",
         "in": "header",
         "required": true,
-        "description": "Device type: 1 Android, 2 iOS, 3 WEB, 4 H5. Required only on endpoints that mark it as required.",
+        "description": "DexBuilder device type: 1 Android, 2 iOS, 3 WEB. A missing or invalid value returns INVALID_DEVICE_TYPE. Required only on the platform endpoints that specify this header.",
         "schema": {
           "type": "string",
           "enum": [
             "1",
             "2",
-            "3",
-            "4"
+            "3"
           ]
-        }
+        },
+        "example": "3"
       },
       "IdempotencyKey": {
         "name": "Idempotency-Key",
@@ -1753,7 +1501,7 @@
           },
           "min_withdraw": {
             "type": "string",
-            "description": "Minimum withdrawal amount as a decimal string in display token units"
+            "description": "Minimum withdrawal amount as a decimal string in display token units; omitted when no value is available."
           }
         }
       },
@@ -1810,13 +1558,9 @@
             "type": "string",
             "description": "Wallet record ID"
           },
-          "chain": {
-            "type": "string",
-            "description": "Chain identifier"
-          },
           "address": {
             "type": "string",
-            "description": "Wallet address; it must match sub_user_wallet_addr to act on behalf of this user"
+            "description": "Wallet address; it must match X-User-Wallet-Address to act on behalf of this user"
           },
           "status": {
             "type": "string",
@@ -1830,6 +1574,10 @@
             "type": "integer",
             "format": "int64",
             "description": "Binding time as a Unix millisecond timestamp"
+          },
+          "vm": {
+            "type": "string",
+            "description": "Virtual machine type: evm or solana."
           }
         }
       },
@@ -1870,8 +1618,7 @@
             "description": "Bound wallet initiating the deposit; EVM 0x hex or Solana base58"
           },
           "chain": {
-            "type": "string",
-            "description": "Chain identifier; must match the token's network"
+            "$ref": "#/components/schemas/OpenAPIChainId"
           },
           "token_address": {
             "type": "string",
@@ -1899,11 +1646,10 @@
         "properties": {
           "address": {
             "type": "string",
-            "description": "Bound user wallet; must match sub_user_wallet_addr"
+            "description": "Bound user wallet; must match X-User-Wallet-Address"
           },
           "chain": {
-            "type": "string",
-            "description": "Chain identifier"
+            "$ref": "#/components/schemas/OpenAPIChainId"
           },
           "token_address": {
             "type": "string",
@@ -1976,7 +1722,7 @@
           },
           "fee_source": {
             "type": "integer",
-            "description": "Fee source identifier; 0 means default."
+            "description": "Fee source: 0 means a real-time quote; 1 means a fallback quote."
           }
         }
       },
@@ -1997,8 +1743,7 @@
         "type": "object",
         "properties": {
           "chain": {
-            "type": "string",
-            "description": "Chain identifier"
+            "$ref": "#/components/schemas/OpenAPIChainId"
           },
           "token_symbol": {
             "type": "string",
@@ -2014,11 +1759,11 @@
           },
           "to_address": {
             "type": "string",
-            "description": "Destination address, which may belong to a third party; format must match the EVM or Solana chain"
+            "description": "Optional. If provided, it must equal the bound signing wallet address; third-party withdrawal destinations are not supported."
           },
           "address": {
             "type": "string",
-            "description": "Bound user wallet that signs the request; must match sub_user_wallet_addr"
+            "description": "Bound user wallet that signs the request; must match X-User-Wallet-Address"
           }
         },
         "required": [
@@ -2026,7 +1771,6 @@
           "token_symbol",
           "token_address",
           "token_amount",
-          "to_address",
           "address"
         ]
       },
@@ -2035,7 +1779,7 @@
         "properties": {
           "data": {
             "type": "string",
-            "description": "Payload for user signing with EIP-712 or the chain-specific format, as 0x hex"
+            "description": "For EVM, UTF-8 hex (0x-prefixed) of the complete EIP-712 TypedData JSON. The wallet signs the TypedData hash. This is not onchain transaction input; do not broadcast it to the Vault."
           },
           "contract_address": {
             "type": "string",
@@ -2044,7 +1788,7 @@
           "timestamp": {
             "type": "integer",
             "format": "int64",
-            "description": "Signing timestamp in seconds; pass it unchanged to withdraw/submit"
+            "description": "Unix timestamp in milliseconds. Pass this value unchanged to withdraw/submit."
           }
         }
       },
@@ -2064,8 +1808,7 @@
             "description": "s component of the signature, as 0x hex"
           },
           "chain": {
-            "type": "string",
-            "description": "Chain identifier"
+            "$ref": "#/components/schemas/OpenAPIChainId"
           },
           "token_address": {
             "type": "string",
@@ -2081,7 +1824,7 @@
           },
           "to_address": {
             "type": "string",
-            "description": "Destination address; must match the sign_data request"
+            "description": "Optional. If provided, it must equal the bound signing wallet address; third-party withdrawal destinations are not supported."
           },
           "timestamp": {
             "type": "integer",
@@ -2102,7 +1845,6 @@
           "token_address",
           "address",
           "token_amount",
-          "to_address",
           "token_symbol"
         ]
       },
@@ -2169,10 +1911,6 @@
       "UserInfoWallet": {
         "type": "object",
         "properties": {
-          "chain": {
-            "type": "string",
-            "description": "Chain identifier"
-          },
           "address": {
             "type": "string",
             "description": "Bound wallet address"
@@ -2180,16 +1918,16 @@
           "status": {
             "type": "string",
             "description": "Binding status, such as bound"
+          },
+          "vm": {
+            "type": "string",
+            "description": "Virtual machine type: evm or solana."
           }
         }
       },
       "PerpQueryFeeItem": {
         "type": "object",
         "properties": {
-          "chain": {
-            "type": "string",
-            "description": "Chain identifier"
-          },
           "deposit_fee": {
             "type": "string",
             "description": "Fixed deposit fee, not a rate, as a USDT decimal string; 0 means free",
@@ -2199,6 +1937,10 @@
             "type": "string",
             "description": "Fixed withdrawal fee, not a rate, as a USDT decimal string",
             "example": "1.5"
+          },
+          "network": {
+            "type": "string",
+            "description": "Network identifier: base, bsc, ethereum, solana, or arbitrum."
           }
         }
       },
@@ -2241,6 +1983,11 @@
             "type": "string",
             "description": "Maximum cumulative withdrawal amount per calendar day, as a USDT decimal string",
             "example": "100000"
+          },
+          "min_withdraw": {
+            "type": "string",
+            "description": "Minimum withdrawal amount in display token units, when configured.",
+            "example": "20"
           }
         }
       },
@@ -2287,10 +2034,6 @@
       "PerpQueryFundStatItem": {
         "type": "object",
         "properties": {
-          "chain": {
-            "type": "string",
-            "description": "Chain identifier"
-          },
           "deposit": {
             "type": "string",
             "description": "Cumulative deposit amount as a USDT decimal string"
@@ -2298,6 +2041,10 @@
           "withdraw": {
             "type": "string",
             "description": "Cumulative withdrawal amount as a USDT decimal string"
+          },
+          "network": {
+            "type": "string",
+            "description": "Network identifier: base, bsc, ethereum, solana, or arbitrum."
           }
         }
       },
@@ -2428,6 +2175,18 @@
             "description": "Total matching records, not just the current page"
           }
         }
+      },
+      "OpenAPIChainId": {
+        "type": "string",
+        "enum": [
+          "base",
+          "bsc",
+          "ethereum",
+          "solana",
+          "arbitrum"
+        ],
+        "description": "Network identifier: base, bsc, ethereum, solana, or arbitrum.",
+        "example": "ethereum"
       }
     }
   }

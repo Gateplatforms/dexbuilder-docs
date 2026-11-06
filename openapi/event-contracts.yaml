@@ -1044,7 +1044,7 @@
             }
           },
           {
-            "name": "sub_user_wallet_addr",
+            "name": "X-User-Wallet-Address",
             "in": "header",
             "required": true,
             "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
@@ -1123,7 +1123,7 @@
             }
           },
           {
-            "name": "sub_user_wallet_addr",
+            "name": "X-User-Wallet-Address",
             "in": "header",
             "required": true,
             "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
@@ -1295,7 +1295,7 @@
             }
           },
           {
-            "name": "sub_user_wallet_addr",
+            "name": "X-User-Wallet-Address",
             "in": "header",
             "required": true,
             "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
@@ -1389,7 +1389,7 @@
             }
           },
           {
-            "name": "sub_user_wallet_addr",
+            "name": "X-User-Wallet-Address",
             "in": "header",
             "required": true,
             "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
@@ -1481,7 +1481,7 @@
             }
           },
           {
-            "name": "sub_user_wallet_addr",
+            "name": "X-User-Wallet-Address",
             "in": "header",
             "required": true,
             "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
@@ -1575,7 +1575,7 @@
             }
           },
           {
-            "name": "sub_user_wallet_addr",
+            "name": "X-User-Wallet-Address",
             "in": "header",
             "required": true,
             "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
@@ -1701,7 +1701,7 @@
             }
           },
           {
-            "name": "sub_user_wallet_addr",
+            "name": "X-User-Wallet-Address",
             "in": "header",
             "required": true,
             "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
@@ -1856,7 +1856,7 @@
             }
           },
           {
-            "name": "sub_user_wallet_addr",
+            "name": "X-User-Wallet-Address",
             "in": "header",
             "required": true,
             "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
@@ -1937,7 +1937,7 @@
             }
           },
           {
-            "name": "sub_user_wallet_addr",
+            "name": "X-User-Wallet-Address",
             "in": "header",
             "required": true,
             "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
@@ -2194,7 +2194,7 @@
             }
           },
           {
-            "name": "sub_user_wallet_addr",
+            "name": "X-User-Wallet-Address",
             "in": "header",
             "required": true,
             "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
@@ -2307,7 +2307,7 @@
             }
           },
           {
-            "name": "sub_user_wallet_addr",
+            "name": "X-User-Wallet-Address",
             "in": "header",
             "required": true,
             "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
@@ -2388,7 +2388,7 @@
             }
           },
           {
-            "name": "sub_user_wallet_addr",
+            "name": "X-User-Wallet-Address",
             "in": "header",
             "required": true,
             "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
@@ -2522,7 +2522,7 @@
             }
           },
           {
-            "name": "sub_user_wallet_addr",
+            "name": "X-User-Wallet-Address",
             "in": "header",
             "required": true,
             "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
@@ -2668,7 +2668,7 @@
             }
           },
           {
-            "name": "sub_user_wallet_addr",
+            "name": "X-User-Wallet-Address",
             "in": "header",
             "required": true,
             "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",

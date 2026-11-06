@@ -1032,7 +1032,7 @@
         "description": "每页条数，最大 100"
       },
       "SubUserWalletAddr": {
-        "name": "sub_user_wallet_addr",
+        "name": "X-User-Wallet-Address",
         "in": "header",
         "required": true,
         "description": "目标终端用户钱包地址。网关校验该钱包对应的用户属于当前 Broker。",
@@ -1564,7 +1564,7 @@
           },
           "address": {
             "type": "string",
-            "description": "钱包地址，须与 sub_user_wallet_addr 匹配时方可代表该用户"
+            "description": "钱包地址，须与 X-User-Wallet-Address 匹配时方可代表该用户"
           },
           "status": {
             "type": "string",
@@ -1646,7 +1646,7 @@
         "properties": {
           "address": {
             "type": "string",
-            "description": "用户钱包，须已绑定；与 sub_user_wallet_addr 一致"
+            "description": "用户钱包，须已绑定；与 X-User-Wallet-Address 一致"
           },
           "chain": {
             "$ref": "#/components/schemas/OpenAPIChainId"
@@ -1763,7 +1763,7 @@
           },
           "address": {
             "type": "string",
-            "description": "用户已绑定钱包（签名主体且为到账地址），须与 sub_user_wallet_addr 一致"
+            "description": "用户已绑定钱包（签名主体且为到账地址），须与 X-User-Wallet-Address 一致"
           }
         },
         "required": [
