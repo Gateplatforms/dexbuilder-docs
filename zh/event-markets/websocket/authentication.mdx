@@ -59,4 +59,4 @@ channel=server.sign&event=auth&time=1720000000&wallet_address=<URL编码的钱�
 }
 ```
 
-认证成功后，连接绑定该钱包对应的用户。后续私有订阅和退订可以省略 `auth`；同一连接不能切换到其他用户，切换用户须建立新连接。断线重连后须重新认证。WebSocket 客户端在 `auth.wallet_address` 或预鉴权的 `payload.wallet_address` 中提供钱包地址，无需在 WebSocket 握手中额外设置 REST 的 `sub_user_wallet_addr` 请求头。
+认证成功后，连接绑定该钱包对应的用户。后续私有订阅和退订可以省略 `auth`；同一连接不能切换到其他用户，切换用户须建立新连接。断线重连后须重新认证。WebSocket 客户端在 `auth.wallet_address` 或预鉴权的 `payload.wallet_address` 中提供钱包地址，无需在 WebSocket 握手中额外设置 REST 的 `X-User-Wallet-Address` 请求头。
