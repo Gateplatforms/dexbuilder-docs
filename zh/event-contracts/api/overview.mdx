@@ -10,11 +10,14 @@ description: "事件合约 API 的基础地址、访问模型、分页、时间�
 https://api.dexbuilder.com
 ```
 
-事件合约 REST API 前缀为：
+## REST 路由与身份
 
-```text
-/api/v4/event_contracts
-```
+| 类型 | 路径前缀 |
+| --- | --- |
+| 公开行情路径 | `/api/v4/event_contracts` |
+| Broker 代用户路径 | `/api/v4/broker/event_contracts` |
+
+公开市场数据继续使用原路径，无需 Broker Key；订单、持仓、账户及结算等私有接口使用 Broker 路径。私有请求必须携带 Broker API Key、签名和 `X-User-Wallet-Address`，网关核验钱包属于当前 Broker。 详见[Broker API 认证与签名](/zh/event-contracts/api/broker-authentication)。
 
 ## 接口访问模型
 
@@ -34,12 +37,11 @@ https://api.dexbuilder.com
 
 - 事件与市场日期字段通常使用 Unix 秒；
 - `from`、`to` 等范围参数通常使用 Unix 毫秒；
+- 加密货币 K 线的 `start_ts`、`end_ts` 和 `history[].t` 使用 Unix 秒；
 - 价格、数量、成交额、余额、手续费等金额类字段通常以字符串返回，建议使用 Decimal 精度处理。
 
 ## 标准错误
 
-```json
-{"label":"INVALID_ARGUMENT","message":"invalid request"}
-```
+错误响应包含 `label` 和 `message`。公开行情接口的参数错误使用 `INVALID_PARAM_VALUE`，行情源不可用使用 `QUOTE_UNAVAILABLE`；Broker 私有业务接口的参数错误可能使用 `INVALID_ARGUMENT`。请以具体接口的错误定义为准。
 
 常见 HTTP 状态包括 `400`、`401`、`404` 和 `503`。

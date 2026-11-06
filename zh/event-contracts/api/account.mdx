@@ -6,10 +6,14 @@ description: "查询事件合约账户资产、资金流水、手续费以及结
 
 本页接口均为私有接口，需要认证。
 
+<Note>
+  请使用 Broker API Key、`Timestamp`、`SIGN` 和 `sub_user_wallet_addr` 调用这些接口。签名须使用外部 Broker 路径；目标钱包须属于当前 Broker。详见[Broker API 认证与签名](/zh/api-reference/common/broker-authentication)和[代用户访问](/zh/api-reference/common/sub-user-wallet)。
+</Note>
+
 ## 账户资产
 
 ```text
-GET /api/v4/event_contracts/assets
+GET /api/v4/broker/event_contracts/assets
 ```
 
 常见字段包括 `fund_total`、`prediction_market_asset`、`prediction_position_value`、`spot_usdt_balance` 和 `unclaimed_amount`。
@@ -17,7 +21,7 @@ GET /api/v4/event_contracts/assets
 ## 资金流水
 
 ```text
-GET /api/v4/event_contracts/account_book
+GET /api/v4/broker/event_contracts/account_book
 ```
 
 支持 `limit` 与 `cursor`。
@@ -25,7 +29,7 @@ GET /api/v4/event_contracts/account_book
 ## 手续费
 
 ```text
-GET /api/v4/event_contracts/fee/current
+GET /api/v4/broker/event_contracts/fee/current
 ```
 
 查询当前事件合约交易费率。
@@ -33,17 +37,17 @@ GET /api/v4/event_contracts/fee/current
 ## 账户余额
 
 ```text
-GET /api/v4/event_contracts/balance
+GET /api/v4/broker/event_contracts/balance
 ```
 
 ## 资金流水
 
 ```text
-GET /api/v4/event_contracts/fund_flows
+GET /api/v4/broker/event_contracts/fund_flows
 ```
 
 ## 资产划转
 
 ```text
-POST /api/v4/event_contracts/transfer
+POST /api/v4/broker/event_contracts/transfer
 ```

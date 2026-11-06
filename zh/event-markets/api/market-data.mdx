@@ -1,7 +1,7 @@
 ---
 title: "价格与订单簿"
 sidebarTitle: "价格与订单簿"
-description: "查询预测市场公开价格、Ticker、订单簿、价格历史和 K 线数据。"
+description: "查询事件市场公开价格、Ticker、订单簿、价格历史和 K 线数据。"
 ---
 
 本页接口均为公开接口，无需认证。
@@ -16,7 +16,7 @@ description: "查询预测市场公开价格、Ticker、订单簿、价格历史
 | 订单簿 | `GET /api/v4/prediction/tokens/{token_id}/order_book` |
 | 价格历史 | `GET /api/v4/prediction/tokens/{token_id}/price_history` |
 | 批量价格 | `GET /api/v4/prediction/tokens/prices` |
-| K 线 | `GET /api/v4/prediction/tokens/{currency}/candlesticks` |
+| 加密货币 K 线 | `GET /api/v4/prediction/crypto/candlesticks` |
 
 ## 订单簿
 
@@ -62,6 +62,6 @@ GET /api/v4/prediction/tokens/prices?token_ids=token-yes,token-no
 
 一次最多支持 100 个 Token ID。
 
-## K 线
+## 加密货币 K 线
 
-K 线返回 `t`、`o`、`h`、`l`、`c`、`v`，分别代表时间、开盘价、最高价、最低价、收盘价和成交量。
+使用 `tag_id` 和 `interval` 查询币种 K 线。返回对象包含 `symbol`、`interval`、可选的 `source`，以及 K 线数组 `history`；其中 `history[].t` 使用 Unix 秒，`o`、`h`、`l`、`c`、`v` 为十进制字符串。参见[查询加密货币 K 线](/zh/event-markets/rest/query-candlesticks)。
