@@ -1,29 +1,45 @@
 ---
-title: "Get Candlesticks"
-description: "Get Candlesticks."
-openapi: "/openapi/event-contracts-en.yaml GET /api/v4/event_contracts/tokens/{currency}/candlesticks"
+title: "Get Crypto Candlesticks"
+description: "Query public OHLCV candlesticks by cryptocurrency tag ID, including request parameters, time units, and response fields."
+openapi: "/openapi/event-contracts-en.yaml GET /api/v4/event_contracts/crypto/candlesticks"
 ---
 
-Returns OHLC candlestick data for a currency or symbol.
+Use a cryptocurrency tag ID to query public OHLCV candlesticks. Authentication is not required.
 
-**Base URL:** `https://api.dexbuilder.com`
+Base URL: `https://api.dexbuilder.com`
 
-**Authentication:** This is a public market-data endpoint and does not require authentication.
+## Request parameters
 
-## Request
+| Parameter | Required | Description |
+| --- | --- | --- |
+| `tag_id` | Yes | Positive cryptocurrency tag ID; for example, BTC is `235`. Do not add the `ge_` prefix. |
+| `interval` | Yes | Display interval: `1m`, `5m`, `15m`, `1h`, `4h`, `1d`, `1w`, `1mon`, `1y`, or `all`. |
+| `start_ts` | No | Start time in Unix seconds; omit or pass `0` to use the server's default boundary rule. |
+| `end_ts` | No | End time in Unix seconds; omit or pass `0` to use the server's default boundary rule. |
+
+When both boundaries are nonzero, `end_ts` must be greater than `start_ts`.
+
+`interval` selects a display interval and does not guarantee the width of each returned candlestick. Use `history[].t` to read sample times.
 
 ```bash
-curl -G "https://api.dexbuilder.com/api/v4/event_contracts/tokens/{currency}/candlesticks"
+curl "https://api.dexbuilder.com/api/v4/event_contracts/crypto/candlesticks?tag_id=235&interval=1h"
 ```
-
-Use `currency`, interval, and the supported time-range parameters.
-
-The OpenAPI panel below is the source of truth for required parameters, types, enum values, and request-body fields. Timestamps are Unix timestamps unless the field description states otherwise.
 
 ## Response
 
-Returns candlestick records with open, high, low, close, volume, and timestamp fields.
+A successful response contains the currency pair, display interval, and candlestick history:
 
-A successful response uses HTTP 200. Invalid parameters or request bodies return HTTP 400. Private endpoints can return HTTP 401 when authentication fails, and temporary upstream failures can return HTTP 503. The error response contains a machine-readable label and message.
+```json
+{
+  "symbol": "BTCUSD",
+  "interval": "1h",
+  "source": "binance",
+  "history": [
+    { "t": 1700000000, "o": "30000", "h": "30100", "l": "29900", "c": "30050", "v": "12.5" }
+  ]
+}
+```
 
-For order, position, claim, transfer, and account operations, treat the response as the current server result and query the resource again when the operation is asynchronous.
+`history[].t` is a Unix timestamp in seconds. Open, high, low, close, and volume are decimal strings. `source` is a data source name and is omitted when unavailable. Sources without volume may return `"0"`; no data returns an empty `history` array.
+
+Invalid parameters return HTTP 400 with `label` set to `INVALID_PARAM_VALUE`. An unavailable quote source returns HTTP 503 with `label` set to `QUOTE_UNAVAILABLE`.

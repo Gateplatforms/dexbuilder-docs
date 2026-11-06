@@ -14,7 +14,7 @@ wss://broker.dexbuilder.com/ws/dex-builder/prediction
 
 ## Subscribe
 
-Use API Key signature authentication:
+Use a Broker API Key and the target user's wallet address. See [Broker WebSocket authentication](/en/event-markets/websocket/authentication):
 
 ```json
 {
@@ -26,9 +26,10 @@ Use API Key signature authentication:
     "all": true
   },
   "auth": {
-    "method": "api_key",
-    "key": "YOUR_API_KEY",
-    "sign": "HEX_SIGNATURE"
+    "method": "broker_api_key",
+    "key": "YOUR_BROKER_API_KEY",
+    "sign": "HEX_SIGNATURE",
+    "wallet_address": "<USER_WALLET>"
   }
 }
 ```

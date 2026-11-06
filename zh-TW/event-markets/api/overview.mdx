@@ -1,7 +1,7 @@
 ---
 title: "API 概覽"
 sidebarTitle: "API 概覽"
-description: "預測市場 API 的基礎位址、存取模型、分頁、時間與錯誤約定。"
+description: "事件市場 API 的基礎位址、存取模型、分頁、時間與錯誤約定。"
 ---
 
 ## Base URL
@@ -10,11 +10,7 @@ description: "預測市場 API 的基礎位址、存取模型、分頁、時間�
 https://api.dexbuilder.com
 ```
 
-預測市場 REST API 前綴為：
-
-```text
-/api/v4/prediction
-```
+公開行情 REST 介面使用 `/api/v4/prediction`，無需認證。私有交易、持倉與帳戶介面使用 `/api/v4/broker/prediction`。請以 Broker API Key 簽名，並在 `X-User-Wallet-Address` 傳入目標使用者錢包地址。詳見 [Broker API Key 與簽名](/zh-TW/api-reference/common/broker-authentication) 和 [代表使用者存取](/zh-TW/api-reference/common/sub-user-wallet)。私有 WebSocket 頻道使用獨立的 [Broker WebSocket 認證](/zh-TW/event-markets/websocket/authentication) 流程。
 
 ## 介面存取模型
 
@@ -40,7 +36,7 @@ https://api.dexbuilder.com
 
 - 事件與市場日期欄位通常使用 Unix 秒；
 - `from`、`to` 等範圍參數通常使用 Unix 毫秒；
-- K 線、價格歷史、訂單和帳戶生命週期時間通常使用 Unix 毫秒。
+- 幣種 K 線介面的 `start_ts`、`end_ts` 和 `history[].t` 使用 Unix 秒；Token 價格歷史的 `from`、`to` 和時間欄位使用 Unix 毫秒。訂單和帳戶生命週期時間以各介面欄位說明為準。
 
 ## 多語言欄位
 
@@ -54,11 +50,13 @@ https://api.dexbuilder.com
 
 價格、數量、成交額、餘額、手續費等金額類欄位通常以字串回傳。建議使用 Decimal 精度處理，避免二進制浮點誤差。
 
+## 狀態欄位
+
+Market 的 `status` 描述市場狀態；REST 訂單的 `status` 使用 `processing`、`open`、`matched`、`canceled`、`failed`。WebSocket 訊息的 `type` 表示推送訊息類型。請分別依市場、REST 訂單及 WebSocket 頻道的定義解析，不要共用一套狀態枚舉。
+
 ## 標準錯誤
 
-```json
-{"label":"INVALID_ARGUMENT","message":"invalid request"}
-```
+錯誤回應包含 `label` 和 `message`。公開行情介面的參數錯誤使用 `INVALID_PARAM_VALUE`，行情來源不可用使用 `QUOTE_UNAVAILABLE`；Broker 私有業務介面的參數錯誤可能使用 `INVALID_ARGUMENT`。請以各介面的錯誤定義為準。
 
 | HTTP 狀態 | 說明 |
 | --- | --- |

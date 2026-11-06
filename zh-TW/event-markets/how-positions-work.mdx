@@ -1,14 +1,14 @@
 ---
 title: "持倉機制"
 sidebarTitle: "持倉機制"
-description: "瞭解預測市場持倉、結果代幣、Position ID 以及市場結算後的贖回機制。"
+description: "瞭解事件市場持倉、結果代幣、Position ID 以及市場結算後的贖回機制。"
 ---
 
-預測市場的持倉本質上是結果代幣。每個市場結果對應一個可識別的 Token，使用者買入後形成持倉，並在市場結算後根據最終結果進行贖回。
+事件市場的持倉本質上是結果代幣。每個市場結果對應一個可識別的 Token，使用者買入後形成持倉，並在市場結算後根據最終結果進行贖回。
 
 ## 結果代幣
 
-預測市場基於 Conditional Token Framework（CTF）表示不同結果。二元市場通常包含兩個結果，例如 `Yes` 與 `No`。
+事件市場基於 Conditional Token Framework（CTF）表示不同結果。二元市場通常包含兩個結果，例如 `Yes` 與 `No`。
 
 每個結果代幣都有唯一的 Position ID，並作為鏈上的 Token ID 使用。多數接入場景無需自行計算 Position ID，直接使用市場介面回傳的 `token_id` 即可。
 
@@ -55,7 +55,7 @@ getPositionId(collateralToken, collectionId)
 2. 目前帳戶持有對應結果代幣；
 3. 該持倉存在可領取金額。
 
-建議優先透過預測市場帳戶和 Claim 相關介面完成領取流程，而不是由普通 API 接入方自行拼裝底層合約交易。
+建議優先透過事件市場帳戶和 Claim 相關介面完成領取流程，而不是由普通 API 接入方自行拼裝底層合約交易。
 
 <Note>
 如果只是使用 DexBuilder API 構建前端或交易應用，直接依賴市場回傳的 `token_id`、帳戶持倉和 Claim 介面即可，不需要自行實現 CTF Position ID 計算。
