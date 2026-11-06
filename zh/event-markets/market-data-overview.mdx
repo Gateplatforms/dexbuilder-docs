@@ -1,14 +1,14 @@
 ---
 title: "市场数据概览"
 sidebarTitle: "概览"
-description: "了解预测市场的数据结构，以及如何从 Event、Market 和 Outcome 开始获取应用所需数据。"
+description: "了解事件市场的数据结构，以及如何从 Event、Market 和 Outcome 开始获取应用所需数据。"
 ---
 
-预测市场的数据接入通常从确定应用关注的 Event、Market 或 Outcome 开始。本节将介绍如何完成市场发现、读取市场详情、获取价格与订单簿，以及订阅实时数据。
+事件市场的数据接入通常从确定应用关注的 Event、Market 或 Outcome 开始。本节将介绍如何完成市场发现、读取市场详情、获取价格与订单簿，以及订阅实时数据。
 
 ## 数据模型
 
-在预测市场中，一个 Event 可以包含一个或多个 Market。每个 Market 是一个可交易问题，并包含 YES / NO 等结果。每个 Outcome 都有对应的 Token ID。
+在事件市场中，一个 Event 可以包含一个或多个 Market。每个 Market 是一个可交易问题，并包含 YES / NO 等结果。每个 Outcome 都有对应的 Token ID。
 
 当应用需要读取某个结果的价格、订单簿或提交订单时，需要使用该 Outcome 的 `token_id`。
 

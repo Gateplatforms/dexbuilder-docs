@@ -1,11 +1,45 @@
 ---
-title: "查询 K 线"
-description: "查询 K 线"
-openapi: "/openapi/event-markets.yaml GET /api/v4/prediction/tokens/{currency}/candlesticks"
+title: "查询加密货币 K 线"
+description: "按加密货币标签 ID 查询公开 OHLCV K 线，了解请求参数、时间单位和响应字段。"
+openapi: "/openapi/event-markets.yaml GET /api/v4/prediction/crypto/candlesticks"
 ---
 
-查询 K 线。
+通过加密货币标签 ID 查询币种 OHLCV K 线。此接口公开，无需认证。
 
-<Note>
-该接口为公开接口，不需要认证。
-</Note>
+Base URL：`https://api.dexbuilder.com`
+
+## 请求参数
+
+| 参数 | 必填 | 说明 |
+| --- | --- | --- |
+| `tag_id` | 是 | 加密货币标签 ID，正整数；例如 BTC 为 `235`，不要添加 `ge_` 前缀。 |
+| `interval` | 是 | 展示档位：`1m`、`5m`、`15m`、`1h`、`4h`、`1d`、`1w`、`1mon`、`1y`、`all`。 |
+| `start_ts` | 否 | 起始 Unix 秒；省略或传 `0` 时按服务端默认规则处理。 |
+| `end_ts` | 否 | 结束 Unix 秒；省略或传 `0` 时按服务端默认规则处理。 |
+
+两个非零时间边界同时提供时，`end_ts` 必须大于 `start_ts`。
+
+`interval` 选择展示档位，不保证每根返回 K 线的时间宽度；请使用 `history[].t` 判断采样时间。
+
+```bash
+curl "https://api.dexbuilder.com/api/v4/prediction/crypto/candlesticks?tag_id=235&interval=1h"
+```
+
+## 响应
+
+成功时返回包含币种交易对、展示档位及历史 K 线的对象：
+
+```json
+{
+  "symbol": "BTCUSD",
+  "interval": "1h",
+  "source": "binance",
+  "history": [
+    { "t": 1700000000, "o": "30000", "h": "30100", "l": "29900", "c": "30050", "v": "12.5" }
+  ]
+}
+```
+
+`history[].t` 为 Unix 秒；开、高、低、收和成交量均为十进制字符串。`source` 为数据源名称，未提供时该字段省略。某些数据源没有成交量，可返回 `"0"`；无数据时 `history` 为 `[]`。
+
+参数无效返回 HTTP 400，错误 `label` 为 `INVALID_PARAM_VALUE`；行情源不可用返回 HTTP 503，错误 `label` 为 `QUOTE_UNAVAILABLE`。
