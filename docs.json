@@ -977,15 +977,21 @@
             "groups": [
               {
                 "group": "Prediction",
-                "pages": []
+                "pages": [
+                  "en/changelog/event-markets"
+                ]
               },
               {
                 "group": "Event Contracts",
-                "pages": []
+                "pages": [
+                  "en/changelog/event-contracts"
+                ]
               },
               {
                 "group": "DexBuilder Platform API",
-                "pages": []
+                "pages": [
+                  "en/changelog/dexbuilder"
+                ]
               }
             ]
           }
@@ -1466,15 +1472,21 @@
             "groups": [
               {
                 "group": "事件市場",
-                "pages": []
+                "pages": [
+                  "zh-TW/changelog/event-markets"
+                ]
               },
               {
                 "group": "事件合約",
-                "pages": []
+                "pages": [
+                  "zh-TW/changelog/event-contracts"
+                ]
               },
               {
                 "group": "DexBuilder 平台 API",
-                "pages": []
+                "pages": [
+                  "zh-TW/changelog/dexbuilder"
+                ]
               }
             ]
           }
