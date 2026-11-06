@@ -1,0 +1,15 @@
+---
+title: "Get withdrawal limits"
+description: "Get the per-request and daily withdrawal limits for your Broker."
+openapi: "/openapi/dexbuilder-en.yaml GET /api/v4/dexbuilder/withdraw_limit"
+---
+
+Get the per-request and daily withdrawal limits for your Broker.
+
+<Note>
+  Use a Broker API Key. This endpoint reads Broker configuration and does not require X-User-Wallet-Address. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
+</Note>
+
+## Usage notes
+
+- `once` and `day` are limits denominated in USDT. Optionally pass `network` to query `min_withdraw` for that network; the field is omitted when no network is specified. Pass the required `x-perp-device-type` header; see [Platform API authentication](/en/api-reference/dexbuilder/authentication).

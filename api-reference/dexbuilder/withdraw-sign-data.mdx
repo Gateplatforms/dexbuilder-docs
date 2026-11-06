@@ -1,0 +1,17 @@
+---
+title: "获取提现签名数据"
+description: "构建提现交易的签名数据。"
+openapi: "/openapi/dexbuilder.yaml POST /api/v4/dexbuilder/withdraw/sign_data"
+---
+
+构建提现交易的签名数据。
+
+<Note>
+  使用 Broker API Key 调用，并在请求头提供 `X-User-Wallet-Address`。网关会校验钱包与 Broker 的归属关系。 认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
+</Note>
+
+## 使用说明
+
+- `address` 为用户已绑定的签名钱包，也是到账地址。`to_address` 可省略；如提供，须与 `address` 一致。此平台接口不支持提现到第三方地址。
+- EVM 场景下，响应中的 `data` 为 EIP-712 TypedData 的十六进制编码，用于钱包签名，不是链上交易数据；`contract_address` 不应作为该数据的广播目标。
+- `timestamp` 为 Unix 毫秒时间戳。用户签名后，将签名分量和原样 `timestamp` 用于[提交提现](/api-reference/dexbuilder/withdraw-submit)。

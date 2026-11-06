@@ -1,0 +1,15 @@
+---
+title: "List bound wallets"
+description: "List all wallets currently bound to a user."
+openapi: "/openapi/dexbuilder-en.yaml GET /api/v4/dexbuilder/wallet/list"
+---
+
+List all wallets currently bound to a user.
+
+<Note>
+  Use a Broker API Key and pass the target user's wallet in X-User-Wallet-Address. The gateway checks that the wallet belongs to your Broker. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
+</Note>
+
+## Usage notes
+
+- The response lists all bound wallets without pagination. Each wallet's `vm` identifies the virtual machine type (`evm` or `solana`); query asset networks for the specific network. `bound_at` is a Unix timestamp in milliseconds.
