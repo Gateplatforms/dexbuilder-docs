@@ -12,4 +12,4 @@ openapi: "/openapi/dexbuilder-zh-TW.yaml GET /api/v4/dexbuilder/dw_status"
 
 ## 使用說明
 
-- 未提供 `asset` 或 `network` 時，對應回應欄位為空字符串；開關對應指定的資產與網路。
+- `network` 必填，用於指定查詢網路；`asset` 選填。未提供 `asset` 時，回應中的對應欄位為空字串。

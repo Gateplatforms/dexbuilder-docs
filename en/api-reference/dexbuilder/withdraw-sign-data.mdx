@@ -12,5 +12,6 @@ Get the data a user must sign to request a withdrawal.
 
 ## Usage notes
 
-- address is the user's bound signing wallet; to_address may be a third-party destination.
-- After the user signs data, pass the signature components and the unchanged timestamp to Submit a withdrawal.
+- `address` is the user's bound signing wallet and the withdrawal destination. `to_address` is optional; if provided, it must equal `address`. This platform API does not support third-party withdrawal destinations.
+- For EVM, response `data` is hex-encoded EIP-712 TypedData for wallet signing, not onchain transaction data. Do not broadcast it to `contract_address`.
+- `timestamp` is a Unix timestamp in milliseconds. After signing, pass the signature components and the unchanged `timestamp` to [Submit a withdrawal](/en/api-reference/dexbuilder/withdraw-submit).

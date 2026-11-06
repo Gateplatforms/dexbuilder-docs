@@ -12,6 +12,6 @@ Get the calldata and contract address needed for an onchain deposit.
 
 ## Usage notes
 
-- You can first estimate deposit fees, then pass native_fee unchanged and convert lz_fee using six USDT decimal places.
-- A first successful call may persistently bind the user's Perp account. Repeated calls do not bind it again.
-- Use contract_address and data to build the onchain transaction. x-perp-device-type is optional and recommended for risk controls.
+- First call [Estimate deposit fees](/en/api-reference/dexbuilder/deposit-fee), pass `native_fee` unchanged, and convert `lz_fee` to an integer using six USDT decimal places.
+- A first successful call may bind the user's Perp account; repeat calls do not bind it again. Use the returned `contract_address` and `data` to build the onchain transaction.
+- `x-perp-device-type` is required and accepts only `1`, `2`, or `3`.

@@ -11,6 +11,10 @@ Your Broker API Key needs the dex_builder product permission. Read operations re
 
 Asset-configuration endpoints do not require `X-User-Wallet-Address`. User, deposit, and withdrawal endpoints require the target user's wallet address in this header. The gateway verifies that the wallet belongs to your Broker. See [Access on behalf of a user](/en/api-reference/common/sub-user-wallet) for the full list.
 
+## Device type
+
+Some platform endpoints require the `x-perp-device-type` header. Supported values are `1` (Android), `2` (iOS), and `3` (WEB). `4` (H5) is not accepted by these DexBuilder Platform endpoints. Follow each endpoint's required parameters.
+
 Withdrawal submission also requires Idempotency-Key. Other headers are specified on the relevant endpoint pages.
 
 ## Example request

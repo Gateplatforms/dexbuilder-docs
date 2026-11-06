@@ -12,5 +12,5 @@ List the deposit and withdrawal networks available for an asset.
 
 ## Usage notes
 
-- The current configuration primarily provides USDT on Ethereum.
-- min_deposit and min_withdraw use display token units, not the chain's smallest unit.
+- The response lists the available network configuration for the asset. `network` identifies the network; `vm` identifies EVM or Solana. Check the response for current availability.
+- `min_deposit` and `min_withdraw` use display token units. `min_withdraw` may be omitted when no minimum is configured. Pass the required `x-perp-device-type` header; see [Platform API authentication](/en/api-reference/dexbuilder/authentication).

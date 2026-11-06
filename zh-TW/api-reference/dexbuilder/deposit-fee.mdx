@@ -12,4 +12,5 @@ openapi: "/openapi/dexbuilder-zh-TW.yaml POST /api/v4/dexbuilder/deposit/fee"
 
 ## 使用說明
 
-- 請求體中的 `address` 須為目標使用者已綁定的錢包。`lz_fee` 回傳 USDT 十進制字符串；傳入[獲取充值簽名資料](/zh-TW/api-reference/dexbuilder/deposit-sign-data)時需按 6 位小數轉換為整數，例如 `0.5` 轉為 `500000`。`native_fee` 為鏈原生代幣最小單位整數，直接傳入。
+- 請求體中的 `address` 須為目標使用者已綁定的錢包。`lz_fee` 回傳 USDT 十進位字串；傳入[獲取充值簽名資料](/zh-TW/api-reference/dexbuilder/deposit-sign-data)時，須按六位小數轉換為整數，例如 `0.5` 轉為 `500000`。`native_fee` 為鏈原生代幣最小單位整數，直接傳入。
+- `fee_source=0` 表示即時計算；`fee_source=1` 表示使用備用報價。

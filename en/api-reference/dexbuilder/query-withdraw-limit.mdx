@@ -12,5 +12,4 @@ Get the per-request and daily withdrawal limits for your Broker.
 
 ## Usage notes
 
-- once and day are limits denominated in USDT.
-- Pass x-perp-device-type as specified in the OpenAPI request parameters.
+- `once` and `day` are limits denominated in USDT. Optionally pass `network` to query `min_withdraw` for that network; the field is omitted when no network is specified. Pass the required `x-perp-device-type` header; see [Platform API authentication](/en/api-reference/dexbuilder/authentication).

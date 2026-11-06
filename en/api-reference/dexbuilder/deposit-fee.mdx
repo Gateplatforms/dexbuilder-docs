@@ -12,6 +12,5 @@ Estimate the fees for a user's onchain deposit.
 
 ## Usage notes
 
-- address must be a wallet bound to the target user.
-- lz_fee is a USDT decimal string. Convert it to an integer using six decimal places before calling Get deposit signing data. For example, 0.5 becomes 500000.
-- Pass native_fee unchanged as an integer in the chain's smallest native unit.
+- The request `address` must be the target user's bound wallet. `lz_fee` is a USDT decimal string; convert it to an integer with six decimal places before calling [Get deposit signing data](/en/api-reference/dexbuilder/deposit-sign-data), for example `0.5` becomes `500000`. Pass `native_fee` unchanged as an integer in the chain's smallest native unit.
+- `fee_source=0` means a real-time quote; `fee_source=1` means a fallback quote.
