@@ -1,14 +1,14 @@
 ---
 title: "Event Contracts changelog"
-description: "Announcements about Event Contracts capabilities for Brokers."
+description: "Announcements about Event Contracts API capabilities and interface updates."
 ---
 
-This page records Broker-facing releases. Refer to the linked API documentation for integration details.
+This page records Event Contracts API releases and interface updates. Refer to the linked API documentation for integration details.
 
-<Update label="2026-11-10" description="Crypto candlesticks">
-  ## Crypto candlesticks
+<Update label="2026-11-10" description="Candlestick API update">
+  ## Crypto candlestick API updated
 
-  Event Contracts now provides a public OHLCV candlestick endpoint at `GET /api/v4/event_contracts/crypto/candlesticks`. Use the currency code `symbol` for new integrations; `tag_id` remains temporarily supported. Provide exactly one of these parameters. Time boundaries and `history[].t` use Unix seconds. `interval=all` does not guarantee the full price history. See [Get Crypto Candlesticks](/en/event-contracts/rest/query-candlesticks) for the request and response contract.
+  The Event Contracts documentation now recommends `GET /api/v4/event_contracts/crypto/candlesticks` for public crypto candlesticks. Compared with the previously documented `GET /api/v4/event_contracts/tokens/{currency}/candlesticks`, the new endpoint uses the `symbol` query parameter and requires `interval`; use `start_ts/end_ts` for the time range. A successful response is an object with `symbol`, `interval`, and `history`, rather than a candlestick array. `tag_id` remains temporarily supported and must not be sent with `symbol`. The previous endpoint remains available for existing clients. See [Get Crypto Candlesticks](/en/event-contracts/rest/query-candlesticks) for the new contract.
 </Update>
 
 <Update label="2026-11-10" description="Broker API support">
