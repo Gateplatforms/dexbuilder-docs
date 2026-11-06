@@ -120,6 +120,74 @@
             "schema": {
               "type": "boolean"
             }
+          },
+          {
+            "name": "start_date_min",
+            "in": "query",
+            "required": false,
+            "description": "Unix 毫秒时间戳。",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "start_date_max",
+            "in": "query",
+            "required": false,
+            "description": "Unix 毫秒时间戳。",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "end_date_min",
+            "in": "query",
+            "required": false,
+            "description": "Unix 毫秒时间戳。",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "end_date_max",
+            "in": "query",
+            "required": false,
+            "description": "Unix 毫秒时间戳。",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "tag_id",
+            "in": "query",
+            "required": false,
+            "description": "可重复传入的 Tag ID。",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "exclude_tag_id",
+            "in": "query",
+            "required": false,
+            "description": "可重复传入的排除 Tag ID。",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
           }
         ]
       }
@@ -696,7 +764,10 @@
             "in": "query",
             "required": false,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
             }
           }
         ]
@@ -751,25 +822,34 @@
           {
             "name": "interval",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "5m",
+                "15m",
+                "1h",
+                "4h",
+                "1d"
+              ]
             }
           },
           {
             "name": "from",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             }
           },
           {
             "name": "to",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 0
             }
           }
         ]
@@ -816,96 +896,15 @@
           {
             "name": "token_ids",
             "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-    "/api/v4/event_contracts/tokens/{currency}/candlesticks": {
-      "get": {
-        "summary": "查询 K 线",
-        "description": "查询 K 线",
-        "operationId": "query_candlesticks",
-        "responses": {
-          "200": {
-            "description": "请求成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/CurrencyCandlestickList"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "请求参数错误",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          },
-          "503": {
-            "description": "服务暂时不可用",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "currency",
-            "in": "path",
             "required": true,
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "interval",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "from",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "to",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
-            }
           }
         ]
       }
     },
-    "/api/v4/event_contracts/orders": {
+    "/api/v4/broker/event_contracts/orders": {
       "post": {
         "summary": "提交订单",
         "description": "提交订单",
@@ -950,6 +949,9 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "requestBody": {
@@ -983,10 +985,22 @@
                     "type": "string"
                   },
                   "order_type": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "GTC",
+                      "GTD",
+                      "FOK",
+                      "FAK"
+                    ],
+                    "description": "订单有效方式：GTC、GTD、FOK 或 FAK"
                   },
                   "order_mode": {
-                    "type": "string"
+                    "type": "string",
+                    "enum": [
+                      "LIMIT",
+                      "MARKET"
+                    ],
+                    "description": "下单模式：LIMIT 或 MARKET"
                   },
                   "client_order_id": {
                     "type": "string"
@@ -1004,7 +1018,41 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
       },
       "get": {
         "summary": "查询订单列表",
@@ -1050,15 +1098,53 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "status",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "processing",
+                "open",
+                "matched",
+                "canceled",
+                "failed"
+              ],
+              "description": "REST 订单状态，使用小写值"
             }
           },
           {
@@ -1133,6 +1219,11 @@
               "type": "integer"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       },
       "delete": {
@@ -1179,9 +1270,39 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "condition_id",
             "in": "query",
@@ -1190,10 +1311,15 @@
               "type": "string"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/event_contracts/orders/{order_id}": {
+    "/api/v4/broker/event_contracts/orders/{order_id}": {
       "get": {
         "summary": "查询单个订单",
         "description": "查询单个订单",
@@ -1238,9 +1364,39 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "order_id",
             "in": "path",
@@ -1248,6 +1404,11 @@
             "schema": {
               "type": "string"
             }
+          }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
           }
         ]
       },
@@ -1295,9 +1456,39 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "order_id",
             "in": "path",
@@ -1306,10 +1497,15 @@
               "type": "string"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/event_contracts/positions": {
+    "/api/v4/broker/event_contracts/positions": {
       "get": {
         "summary": "查询持仓列表",
         "description": "查询持仓列表",
@@ -1354,9 +1550,39 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "event_id",
             "in": "query",
@@ -1397,10 +1623,15 @@
               "type": "integer"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/event_contracts/usertrades": {
+    "/api/v4/broker/event_contracts/usertrades": {
       "get": {
         "summary": "查询个人成交",
         "description": "查询个人成交",
@@ -1445,9 +1676,39 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "condition_id",
             "in": "query",
@@ -1512,10 +1773,15 @@
               "type": "integer"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/event_contracts/assets": {
+    "/api/v4/broker/event_contracts/assets": {
       "get": {
         "summary": "查询账户资产",
         "description": "查询账户资产",
@@ -1560,11 +1826,48 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
-        }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
       }
     },
-    "/api/v4/event_contracts/account_book": {
+    "/api/v4/broker/event_contracts/account_book": {
       "get": {
         "summary": "查询资金流水",
         "description": "查询资金流水",
@@ -1609,9 +1912,39 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "limit",
             "in": "query",
@@ -1627,6 +1960,11 @@
             "schema": {
               "type": "string"
             }
+          }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
           }
         ]
       }
@@ -1786,7 +2124,7 @@
         ]
       }
     },
-    "/api/v4/event_contracts/positions/settled": {
+    "/api/v4/broker/event_contracts/positions/settled": {
       "get": {
         "summary": "查询已结算持仓",
         "description": "查询已结算的事件合约持仓。",
@@ -1831,9 +2169,39 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "event_id",
             "in": "query",
@@ -1866,10 +2234,15 @@
               "type": "integer"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/event_contracts/balance": {
+    "/api/v4/broker/event_contracts/balance": {
       "get": {
         "summary": "查询账户余额",
         "description": "查询当前用户的事件合约账户余额。",
@@ -1904,11 +2277,48 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
-        }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
       }
     },
-    "/api/v4/event_contracts/fund_flows": {
+    "/api/v4/broker/event_contracts/fund_flows": {
       "get": {
         "summary": "查询资金流水",
         "description": "查询当前用户资金流水，支持类型、时间范围和游标分页。",
@@ -1953,9 +2363,39 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "type",
             "in": "query",
@@ -2004,10 +2444,15 @@
               "type": "string"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/event_contracts/fee/current": {
+    "/api/v4/broker/event_contracts/fee/current": {
       "get": {
         "summary": "查询当前手续费",
         "description": "查询当前手续费配置。",
@@ -2052,9 +2497,39 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          },
           {
             "name": "fee_type",
             "in": "query",
@@ -2063,10 +2538,15 @@
               "type": "string"
             }
           }
+        ],
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
         ]
       }
     },
-    "/api/v4/event_contracts/transfer": {
+    "/api/v4/broker/event_contracts/transfer": {
       "post": {
         "summary": "事件合约转账",
         "description": "在现货账户与事件合约子账户之间发起 USDT 划转。",
@@ -2111,6 +2591,9 @@
                 }
               }
             }
+          },
+          "403": {
+            "description": "Broker 权限不足，或目标钱包未通过归属校验"
           }
         },
         "requestBody": {
@@ -2159,6 +2642,141 @@
               }
             }
           }
+        },
+        "security": [
+          {
+            "BrokerAPIKey": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Timestamp",
+            "in": "header",
+            "required": true,
+            "description": "Unix 秒级时间戳，与网关时间差不超过 60 秒",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "SIGN",
+            "in": "header",
+            "required": true,
+            "description": "按实际外部请求路径、Query 和 Body 生成的 HMAC-SHA512 十六进制签名",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-Wallet-Address",
+            "in": "header",
+            "required": true,
+            "description": "目标终端用户的钱包地址；网关校验该钱包属于当前 Broker",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v4/event_contracts/crypto/candlesticks": {
+      "get": {
+        "summary": "查询加密货币 K 线",
+        "description": "按加密货币标签 ID 查询 OHLCV K 线。",
+        "operationId": "query_crypto_candlesticks",
+        "parameters": [
+          {
+            "name": "tag_id",
+            "in": "query",
+            "required": true,
+            "description": "加密货币标签 ID，正整数。例如 BTC 为 235。",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "example": 235
+            }
+          },
+          {
+            "name": "interval",
+            "in": "query",
+            "required": true,
+            "description": "展示档位。",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1m",
+                "5m",
+                "15m",
+                "1h",
+                "4h",
+                "1d",
+                "1w",
+                "1mon",
+                "1y",
+                "all"
+              ]
+            }
+          },
+          {
+            "name": "start_ts",
+            "in": "query",
+            "required": false,
+            "description": "起始 Unix 秒；省略或为 0 时按服务端默认规则处理。",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "end_ts",
+            "in": "query",
+            "required": false,
+            "description": "结束 Unix 秒；省略或为 0 时按服务端默认规则处理。",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "请求成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CryptoCandlesticksResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求参数错误",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "label": "INVALID_PARAM_VALUE",
+                  "message": "invalid crypto candlestick parameters"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "服务暂时不可用",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                },
+                "example": {
+                  "label": "QUOTE_UNAVAILABLE",
+                  "message": "crypto candlesticks unavailable"
+                }
+              }
+            }
+          }
         }
       }
     }
@@ -2179,30 +2797,6 @@
           }
         }
       },
-      "CurrencyCandlestick": {
-        "type": "object",
-        "properties": {
-          "c": {
-            "type": "string"
-          },
-          "h": {
-            "type": "string"
-          },
-          "l": {
-            "type": "string"
-          },
-          "o": {
-            "type": "string"
-          },
-          "t": {
-            "type": "integer"
-          },
-          "v": {
-            "type": "string"
-          }
-        },
-        "description": "响应对象。"
-      },
       "EventDetail": {
         "type": "object",
         "properties": {
@@ -2210,28 +2804,34 @@
             "type": "boolean"
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "closed": {
             "type": "boolean"
           },
           "closed_time": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "description": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "end_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "event_id": {
             "type": "string"
           },
           "icon": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "image": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "markets": {
             "type": "array",
@@ -2243,16 +2843,19 @@
             "type": "boolean"
           },
           "resolution_source": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "slug": {
             "type": "string"
           },
           "start_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "start_time": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "tags": {
             "type": "array",
@@ -2261,10 +2864,12 @@
             }
           },
           "title": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "volume": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         },
         "description": "响应对象。"
@@ -2276,34 +2881,41 @@
             "type": "boolean"
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "closed": {
             "type": "boolean"
           },
           "closed_time": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "end_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "event_id": {
             "type": "string"
           },
           "icon": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "image": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "slug": {
             "type": "string"
           },
           "start_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "start_time": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "tags": {
             "type": "array",
@@ -2312,10 +2924,12 @@
             }
           },
           "title": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "volume": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         },
         "description": "响应对象。"
@@ -2330,7 +2944,9 @@
             }
           },
           "next_cursor": {
-            "type": "string"
+            "type": "string",
+            "nullable": true,
+            "description": "下一页游标；为 null 时表示没有更多结果。"
           }
         },
         "description": "响应对象。"
@@ -2339,7 +2955,8 @@
         "type": "object",
         "properties": {
           "accepting_orders": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": true
           },
           "best_ask": {
             "type": "string"
@@ -2348,7 +2965,8 @@
             "type": "string"
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "closed": {
             "type": "boolean"
@@ -2357,22 +2975,27 @@
             "type": "string"
           },
           "description": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "enable_order_book": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": true
           },
           "end_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "event_id": {
             "type": "string"
           },
           "icon": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "image": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "last_trade_price": {
             "type": "string"
@@ -2384,10 +3007,12 @@
             "type": "string"
           },
           "min_order_size": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "neg_risk": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": true
           },
           "outcomes": {
             "type": "array",
@@ -2396,19 +3021,23 @@
             }
           },
           "question": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "resolution_source": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "resolved_at": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "slug": {
             "type": "string"
           },
           "start_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "status": {
             "type": "string"
@@ -2420,35 +3049,39 @@
             }
           },
           "tick_size": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "uma_end_date": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "uma_end_date_iso": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "uma_resolution_status": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "uma_resolution_statuses": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "volume": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "volume_24hr": {
             "type": "string"
           },
           "winning_outcome": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "winning_token_id": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           }
         },
         "description": "响应对象。"
@@ -2463,7 +3096,8 @@
             "type": "string"
           },
           "category": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "closed": {
             "type": "boolean"
@@ -2472,7 +3106,8 @@
             "type": "string"
           },
           "end_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "event_id": {
             "type": "string"
@@ -2493,13 +3128,15 @@
             }
           },
           "question": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "slug": {
             "type": "string"
           },
           "start_date": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "status": {
             "type": "string"
@@ -2512,22 +3149,23 @@
           },
           "uma_end_date": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "uma_end_date_iso": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "uma_resolution_status": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "uma_resolution_statuses": {
             "type": "string",
-            "x-nullable": true
+            "nullable": true
           },
           "volume": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "volume_24hr": {
             "type": "string"
@@ -2545,7 +3183,9 @@
             }
           },
           "next_cursor": {
-            "type": "string"
+            "type": "string",
+            "nullable": true,
+            "description": "下一页游标；为 null 时表示没有更多结果。"
           }
         },
         "description": "响应对象。"
@@ -2569,22 +3209,28 @@
             "type": "string"
           },
           "hash": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "last_trade_price": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "min_order_size": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "neg_risk": {
-            "type": "boolean"
+            "type": "boolean",
+            "nullable": true
           },
           "tick_size": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "timestamp": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "token_id": {
             "type": "string"
@@ -2596,7 +3242,8 @@
         "type": "object",
         "properties": {
           "outcome": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "token_id": {
             "type": "string"
@@ -2617,7 +3264,8 @@
         "type": "object",
         "properties": {
           "label": {
-            "type": "object"
+            "type": "object",
+            "nullable": true
           },
           "slug": {
             "type": "string"
@@ -2638,7 +3286,9 @@
             }
           },
           "next_cursor": {
-            "type": "string"
+            "type": "string",
+            "nullable": true,
+            "description": "下一页游标；为 null 时表示没有更多结果。"
           }
         },
         "description": "响应对象。"
@@ -2650,7 +3300,8 @@
             "type": "string"
           },
           "timestamp": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "token_id": {
             "type": "string"
@@ -2680,7 +3331,8 @@
             "type": "string"
           },
           "timestamp": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "token_id": {
             "type": "string"
@@ -2704,16 +3356,20 @@
         "type": "object",
         "properties": {
           "best_ask": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "best_bid": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "last_price": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "timestamp": {
-            "type": "integer"
+            "type": "integer",
+            "nullable": true
           },
           "token_id": {
             "type": "string"
@@ -2761,7 +3417,9 @@
             }
           },
           "next_cursor": {
-            "type": "string"
+            "type": "string",
+            "nullable": true,
+            "description": "下一页游标；为 null 时表示没有更多结果。"
           }
         },
         "description": "响应对象。"
@@ -2782,10 +3440,12 @@
         "type": "object",
         "properties": {
           "p": {
-            "type": "string"
+            "type": "string",
+            "description": "价格字符串。"
           },
           "t": {
-            "type": "integer"
+            "type": "integer",
+            "description": "Unix 毫秒时间戳。"
           }
         },
         "description": "响应对象。"
@@ -2815,7 +3475,10 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "accepted"
+            ]
           },
           "total_orders": {
             "type": "integer"
@@ -2827,7 +3490,10 @@
         "type": "object",
         "properties": {
           "cancel_status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "accepted"
+            ]
           },
           "order_id": {
             "type": "string"
@@ -2917,10 +3583,22 @@
             "type": "string"
           },
           "order_mode": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "LIMIT",
+              "MARKET"
+            ],
+            "description": "下单模式：LIMIT 或 MARKET"
           },
           "order_type": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "GTC",
+              "GTD",
+              "FOK",
+              "FAK"
+            ],
+            "description": "订单有效方式：GTC、GTD、FOK 或 FAK"
           },
           "outcome": {
             "type": "string"
@@ -2941,7 +3619,15 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "processing",
+              "open",
+              "matched",
+              "canceled",
+              "failed"
+            ],
+            "description": "REST 订单状态，使用小写值"
           },
           "token_id": {
             "type": "string"
@@ -2977,10 +3663,22 @@
             "type": "string"
           },
           "order_mode": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "LIMIT",
+              "MARKET"
+            ],
+            "description": "下单模式：LIMIT 或 MARKET"
           },
           "order_type": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "GTC",
+              "GTD",
+              "FOK",
+              "FAK"
+            ],
+            "description": "订单有效方式：GTC、GTD、FOK 或 FAK"
           },
           "outcome": {
             "type": "string"
@@ -3001,7 +3699,15 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "processing",
+              "open",
+              "matched",
+              "canceled",
+              "failed"
+            ],
+            "description": "REST 订单状态，使用小写值"
           },
           "token_id": {
             "type": "string"
@@ -3025,7 +3731,10 @@
             "type": "string"
           },
           "status": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "processing"
+            ]
           }
         },
         "description": "响应对象。"
@@ -3303,12 +4012,76 @@
         },
         "description": "响应对象。"
       },
-      "CurrencyCandlestickList": {
-        "type": "array",
-        "description": "列表响应。",
-        "items": {
-          "$ref": "#/components/schemas/CurrencyCandlestick"
+      "CryptoCandlestick": {
+        "type": "object",
+        "description": "单根 K 线。",
+        "required": [
+          "t",
+          "o",
+          "h",
+          "l",
+          "c",
+          "v"
+        ],
+        "properties": {
+          "t": {
+            "type": "integer",
+            "description": "Unix 秒时间戳。"
+          },
+          "o": {
+            "type": "string"
+          },
+          "h": {
+            "type": "string"
+          },
+          "l": {
+            "type": "string"
+          },
+          "c": {
+            "type": "string"
+          },
+          "v": {
+            "type": "string",
+            "description": "成交量字符串；无成交量的数据源可能返回 0。"
+          }
         }
+      },
+      "CryptoCandlesticksResponse": {
+        "type": "object",
+        "description": "加密货币 K 线响应。",
+        "required": [
+          "symbol",
+          "interval",
+          "history"
+        ],
+        "properties": {
+          "symbol": {
+            "type": "string",
+            "description": "币种交易对标识。"
+          },
+          "interval": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string",
+            "description": "数据源名称；上游未提供时省略。"
+          },
+          "history": {
+            "type": "array",
+            "description": "OHLCV K 线，按时间返回。",
+            "items": {
+              "$ref": "#/components/schemas/CryptoCandlestick"
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BrokerAPIKey": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "KEY",
+        "description": "Broker API Key（由项目方管理流程创建）"
       }
     }
   }
