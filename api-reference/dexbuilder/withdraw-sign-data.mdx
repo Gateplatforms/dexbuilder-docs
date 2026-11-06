@@ -12,4 +12,6 @@ openapi: "/openapi/dexbuilder.yaml POST /api/v4/dexbuilder/withdraw/sign_data"
 
 ## 使用说明
 
-- `address` 为用户已绑定的签名钱包；`to_address` 可为第三方到账地址。用户对返回的 `data` 签名后，将签名分量和原样 `timestamp` 用于[提交提现](/api-reference/dexbuilder/withdraw-submit)。
+- `address` 为用户已绑定的签名钱包，也是到账地址。`to_address` 可省略；如提供，须与 `address` 一致。此平台接口不支持提现到第三方地址。
+- EVM 场景下，响应中的 `data` 为 EIP-712 TypedData 的十六进制编码，用于钱包签名，不是链上交易数据；`contract_address` 不应作为该数据的广播目标。
+- `timestamp` 为 Unix 毫秒时间戳。用户签名后，将签名分量和原样 `timestamp` 用于[提交提现](/api-reference/dexbuilder/withdraw-submit)。

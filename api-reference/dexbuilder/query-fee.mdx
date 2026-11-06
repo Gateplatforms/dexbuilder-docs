@@ -12,4 +12,4 @@ openapi: "/openapi/dexbuilder.yaml GET /api/v4/dexbuilder/fee"
 
 ## 使用说明
 
-- `deposit_fee` 和 `withdraw_fee` 为 USDT 计价的固定金额，不是费率。调用时按 OpenAPI 要求提供 `x-perp-device-type`。
+- 响应中的 `network` 标识对应网络；`deposit_fee` 和 `withdraw_fee` 为 USDT 计价的固定金额，不是百分比费率。调用时须提供 `x-perp-device-type`。

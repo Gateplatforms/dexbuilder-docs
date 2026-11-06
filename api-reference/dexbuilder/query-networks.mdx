@@ -12,4 +12,5 @@ openapi: "/openapi/dexbuilder.yaml GET /api/v4/dexbuilder/networks"
 
 ## 使用说明
 
-- 当前主要提供 USDT 的 Ethereum 网络；`min_deposit` 和 `min_withdraw` 是可读的 token 数量，非链上最小单位。
+- 返回资产对应的可用网络配置。`network` 标识具体网络，`vm` 表示 EVM 或 Solana；支持情况请以接口响应为准。
+- `min_deposit` 和 `min_withdraw` 是可读的 token 数量，非链上最小单位。未取得最小提现额时，`min_withdraw` 可能省略。调用时须提供 `x-perp-device-type`，取值见[平台 API 认证](/api-reference/dexbuilder/authentication)。

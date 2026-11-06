@@ -12,4 +12,4 @@ openapi: "/openapi/dexbuilder.yaml GET /api/v4/dexbuilder/fund_stats"
 
 ## 使用说明
 
-- `deposit` 与 `withdraw` 为 USDT 计价的按链累计金额。调用时按 OpenAPI 要求提供 `x-perp-device-type`。
+- 响应中的 `network` 标识对应网络；`deposit` 与 `withdraw` 为 USDT 计价的累计金额。调用时须提供 `x-perp-device-type`。

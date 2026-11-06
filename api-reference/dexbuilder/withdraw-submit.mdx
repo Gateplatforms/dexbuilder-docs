@@ -12,5 +12,6 @@ openapi: "/openapi/dexbuilder.yaml POST /api/v4/dexbuilder/withdraw/submit"
 
 ## 使用说明
 
-- `r`、`v`、`s` 为用户对签名数据的签名分量；`timestamp` 必须与[获取提现签名数据](/api-reference/dexbuilder/withdraw-sign-data)的返回值一致。
+- `r`、`v`、`s` 为用户对签名数据的签名分量；`timestamp` 为毫秒时间戳，必须与[获取提现签名数据](/api-reference/dexbuilder/withdraw-sign-data)的返回值一致。
+- `to_address` 可省略；如提供，须与已绑定的 `address` 一致，并与签名数据请求保持一致。
 - `Idempotency-Key` 必填，同一用户在此接口内重试相同 Key 时回放首次成功响应。`success=true` 表示请求已受理；最终状态通过[查询提现状态](/api-reference/dexbuilder/withdraw-status)获取。

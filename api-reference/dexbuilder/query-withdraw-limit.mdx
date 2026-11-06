@@ -12,4 +12,4 @@ openapi: "/openapi/dexbuilder.yaml GET /api/v4/dexbuilder/withdraw_limit"
 
 ## 使用说明
 
-- `once` 与 `day` 为 USDT 计价的限额。调用时按 OpenAPI 要求提供 `x-perp-device-type`。
+- `once` 与 `day` 为 USDT 计价的限额。可通过 `network` 查询指定网络的最小提现额 `min_withdraw`；未指定网络时不返回该字段。调用时须提供 `x-perp-device-type`，取值见[平台 API 认证](/api-reference/dexbuilder/authentication)。

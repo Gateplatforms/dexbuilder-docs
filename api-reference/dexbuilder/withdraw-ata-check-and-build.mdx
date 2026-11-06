@@ -12,5 +12,5 @@ openapi: "/openapi/dexbuilder.yaml POST /api/v4/dexbuilder/withdraw/ata/check-an
 
 ## 使用说明
 
-- `payer_address` 为用户已绑定的 Solana 钱包，承担链上 rent 和手续费；`target_address` 为 ATA 所属 owner。
+- 此接口仅使用 Solana 钱包地址，`sub_user_wallet_addr` 不应填写 EVM `0x` 地址。`payer_address` 为用户已绑定的 Solana 钱包，承担链上 rent 和手续费；`target_address` 为 ATA 所属 owner。
 - 当 `status=0` 时，用户签名并广播返回的 base64 `tx_data` 后再提现；当 `status=1` 时，ATA 已存在，`tx_data` 为空。失败后可重新查询和构建。
