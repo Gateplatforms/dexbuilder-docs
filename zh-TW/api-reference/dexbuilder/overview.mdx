@@ -23,7 +23,7 @@ https://api.dexbuilder.com
 | --- | --- |
 | 資產配置 | 查詢資產、網路、充提開關、固定手續費和提現限額 |
 | 使用者 | 查詢使用者資訊、已綁定錢包、Vault 可用餘額和資金統計 |
-| 充值 | 估算手續費、獲取簽名資料、提交交易回執、查詢狀態與歷史 |
+| 充值 | 估算手續費、獲取簽名資料、查詢狀態與歷史 |
 | 提現 | 獲取簽名資料、提交提現、查詢狀態與歷史、處理 Solana ATA |
 
 資產配置介面不需要終端使用者錢包；其餘使用者、充值和提現介面需要 `sub_user_wallet_addr`。部分介面還需要 `x-perp-device-type` 或 `Idempotency-Key`，以對應介面的參數表為準。
@@ -42,4 +42,4 @@ https://api.dexbuilder.com
 | 403 | `PROJECT_ACCESS_DENIED`、`PRODUCT_DISABLED` | 專案存取或產品權限被拒絕 |
 | 200 | `BUSINESS_ERROR`、`RISK_CONTROL_REJECTED` | 下游業務處理或風控拒絕；查看 `message` |
 
-充值和提現的提交介面回傳“已受理”不代表鏈上終態。請使用相應狀態查詢介面確認結果。
+提交提現介面回傳「已受理」不代表鏈上終態。充值和提現的最終結果請使用相應狀態查詢介面確認。

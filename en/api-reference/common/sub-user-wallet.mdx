@@ -24,7 +24,7 @@ All paths below begin with /api/v4/dexbuilder. All require a Broker API Key and 
 | --- | --- | --- |
 | Asset configuration | Not required | GET /assets, /networks, /dw_status, /fee, /withdraw_limit |
 | User | Required | GET /user/info, /wallet/list, /user/balance, /fund_stats |
-| Deposit | Required | POST /deposit/fee, /deposit/sign_data, /deposit/submit; GET /deposit/status, /deposit/history |
+| Deposit | Required | POST /deposit/fee, /deposit/sign_data; GET /deposit/status, /deposit/history |
 | Withdrawal | Required | POST /withdraw/sign_data, /withdraw/submit, /withdraw/ata/check-and-build; GET /withdraw/status, /withdraw/history |
 
 Some endpoints require additional headers or Idempotency-Key; follow each endpoint page.

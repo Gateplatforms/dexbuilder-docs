@@ -25,7 +25,7 @@ Broker 代旗下使用者存取私有介面時，使用 Broker API Key 證明 Br
 | --- | --- | --- |
 | 資產配置 | 不需要 | `GET /assets`、`GET /networks`、`GET /dw_status`、`GET /fee`、`GET /withdraw_limit` |
 | 使用者 | 必需 | `GET /user/info`、`GET /wallet/list`、`GET /user/balance`、`GET /fund_stats` |
-| 充值 | 必需 | `POST /deposit/fee`、`POST /deposit/sign_data`、`POST /deposit/submit`、`GET /deposit/status`、`GET /deposit/history` |
+| 充值 | 必需 | `POST /deposit/fee`、`POST /deposit/sign_data`、`GET /deposit/status`、`GET /deposit/history` |
 | 提現 | 必需 | `POST /withdraw/sign_data`、`POST /withdraw/submit`、`POST /withdraw/ata/check-and-build`、`GET /withdraw/status`、`GET /withdraw/history` |
 
 資產配置介面查詢當前 Broker 的配置，不指定終端使用者；使用者、充值和提現介面需要錢包地址。部分介面還有額外請求頭或冪等鍵要求，詳見對應介面頁。

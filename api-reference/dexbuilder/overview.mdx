@@ -23,7 +23,7 @@ https://api.dexbuilder.com
 | --- | --- |
 | 资产配置 | 查询资产、网络、充提开关、固定手续费和提现限额 |
 | 用户 | 查询用户信息、已绑定钱包、Vault 可用余额和资金统计 |
-| 充值 | 估算手续费、获取签名数据、提交交易回执、查询状态与历史 |
+| 充值 | 估算手续费、获取签名数据、查询状态与历史 |
 | 提现 | 获取签名数据、提交提现、查询状态与历史、处理 Solana ATA |
 
 资产配置接口不需要终端用户钱包；其余用户、充值和提现接口需要 `sub_user_wallet_addr`。部分接口还需要 `x-perp-device-type` 或 `Idempotency-Key`，以对应接口的参数表为准。
@@ -42,4 +42,4 @@ https://api.dexbuilder.com
 | 403 | `PROJECT_ACCESS_DENIED`、`PRODUCT_DISABLED` | 项目访问或产品权限被拒绝 |
 | 200 | `BUSINESS_ERROR`、`RISK_CONTROL_REJECTED` | 下游业务处理或风控拒绝；查看 `message` |
 
-充值和提现的提交接口返回“已受理”不代表链上终态。请使用相应状态查询接口确认结果。
+提交提现接口返回“已受理”不代表链上终态。充值和提现的最终结果请使用相应状态查询接口确认。

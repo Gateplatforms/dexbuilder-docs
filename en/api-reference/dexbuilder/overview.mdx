@@ -23,7 +23,7 @@ Every endpoint requires a Broker API Key. See [Broker API Key and signing](/en/a
 | --- | --- |
 | Asset configuration | Assets, networks, availability, fixed fees, and withdrawal limits |
 | User | User information, bound wallets, Vault balance, and fund statistics |
-| Deposit | Fee estimate, signing data, transaction submission, status, and history |
+| Deposit | Fee estimate, signing data, status, and history |
 | Withdrawal | Signing data, submission, status, history, and Solana ATA creation |
 
 Asset-configuration endpoints read Broker settings and do not require a user wallet. User, deposit, and withdrawal endpoints require `sub_user_wallet_addr`. Some endpoints also require x-perp-device-type or Idempotency-Key; see each endpoint's request parameters.
@@ -34,4 +34,4 @@ Successful business responses contain code, message, data, and trace_id. code=0 
 
 Errors may include a machine-readable label. Some downstream business and risk-control errors use HTTP 200, so check code or label as well as the HTTP status. Common labels include INVALID_ARGUMENT, MISSING_REQUIRED_HEADER, USER_NOT_FOUND, INVALID_ADDRESS, INVALID_DEVICE_TYPE, PROJECT_ACCESS_DENIED, PRODUCT_DISABLED, BUSINESS_ERROR, and RISK_CONTROL_REJECTED. See the endpoint model and [shared API conventions](/en/api-reference/common/overview) for interpretation.
 
-An accepted deposit or withdrawal submission is not an onchain final state. Query the corresponding status endpoint to determine the result.
+An accepted withdrawal submission is not an onchain final state. Query the corresponding status endpoint to determine the final result of a deposit or withdrawal.

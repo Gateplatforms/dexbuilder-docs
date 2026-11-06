@@ -25,7 +25,7 @@ Broker 代旗下用户访问私有接口时，使用 Broker API Key 证明 Broke
 | --- | --- | --- |
 | 资产配置 | 不需要 | `GET /assets`、`GET /networks`、`GET /dw_status`、`GET /fee`、`GET /withdraw_limit` |
 | 用户 | 必需 | `GET /user/info`、`GET /wallet/list`、`GET /user/balance`、`GET /fund_stats` |
-| 充值 | 必需 | `POST /deposit/fee`、`POST /deposit/sign_data`、`POST /deposit/submit`、`GET /deposit/status`、`GET /deposit/history` |
+| 充值 | 必需 | `POST /deposit/fee`、`POST /deposit/sign_data`、`GET /deposit/status`、`GET /deposit/history` |
 | 提现 | 必需 | `POST /withdraw/sign_data`、`POST /withdraw/submit`、`POST /withdraw/ata/check-and-build`、`GET /withdraw/status`、`GET /withdraw/history` |
 
 资产配置接口查询当前 Broker 的配置，不指定终端用户；用户、充值和提现接口需要钱包地址。部分接口还有额外请求头或幂等键要求，详见对应接口页。
