@@ -9,7 +9,7 @@ DexBuilder 平台 API 使用 Broker API Key 访问，生产环境 Base URL 为 `
 
 ## 钱包地址
 
-查询 Broker 资产配置的接口不需要 `sub_user_wallet_addr`；用户、充值和提现接口需要在请求头传递目标终端用户的钱包地址。完整清单见[代表用户访问](/api-reference/common/sub-user-wallet)。平台会校验该钱包与当前 Broker 的归属关系。
+查询 Broker 资产配置的接口不需要 `X-User-Wallet-Address`；用户、充值和提现接口需要在请求头传递目标终端用户的钱包地址。完整清单见[代表用户访问](/api-reference/common/sub-user-wallet)。平台会校验该钱包与当前 Broker 的归属关系。
 
 ## 设备类型
 
@@ -27,7 +27,7 @@ curl -i --request GET "${BASE_URL}${API_PATH}" \
   --header "KEY: ${BROKER_API_KEY}" \
   --header "SIGN: ${SIGN}" \
   --header "Timestamp: ${TIMESTAMP}" \
-  --header "sub_user_wallet_addr: ${WALLET}" \
+  --header "X-User-Wallet-Address: ${WALLET}" \
   --header 'Accept: application/json'
 ```
 
