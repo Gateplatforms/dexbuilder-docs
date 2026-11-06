@@ -1585,12 +1585,7 @@
                       },
                       "zh-TW/api-reference/common/sub-user-wallet",
                       "zh-TW/api-reference/common/broker-authentication",
-                      "zh-TW/api-reference/common/overview",
-                      "zh-TW/api-reference/dexbuilder/withdraw-ata-check-and-build",
-                      "zh-TW/api-reference/dexbuilder/withdraw-history",
-                      "zh-TW/api-reference/dexbuilder/withdraw-sign-data",
-                      "zh-TW/api-reference/dexbuilder/withdraw-status",
-                      "zh-TW/api-reference/dexbuilder/withdraw-submit"
+                      "zh-TW/api-reference/common/overview"
                     ]
                   }
                 ]
@@ -1757,6 +1752,16 @@
                           "zh-TW/api-reference/dexbuilder/deposit-sign-data",
                           "zh-TW/api-reference/dexbuilder/deposit-status",
                           "zh-TW/api-reference/dexbuilder/deposit-history"
+                        ]
+                      },
+                      {
+                        "group": "提現",
+                        "pages": [
+                          "zh-TW/api-reference/dexbuilder/withdraw-sign-data",
+                          "zh-TW/api-reference/dexbuilder/withdraw-submit",
+                          "zh-TW/api-reference/dexbuilder/withdraw-status",
+                          "zh-TW/api-reference/dexbuilder/withdraw-history",
+                          "zh-TW/api-reference/dexbuilder/withdraw-ata-check-and-build"
                         ]
                       }
                     ]
