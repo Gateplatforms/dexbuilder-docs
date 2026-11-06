@@ -2640,19 +2640,30 @@
     "/api/v4/event_contracts/crypto/candlesticks": {
       "get": {
         "summary": "Get Crypto Candlesticks",
-        "description": "Query OHLCV candlesticks by cryptocurrency tag ID.",
+        "description": "Query OHLCV candlesticks using the `symbol` currency code. The `tag_id` parameter remains temporarily supported. Provide exactly one of `symbol` or `tag_id`. `interval=all` does not guarantee the full price history; specify `start_ts` and `end_ts` to query a particular range.",
         "operationId": "query_crypto_candlesticks",
         "parameters": [
           {
+            "name": "symbol",
+            "in": "query",
+            "required": false,
+            "description": "Case-insensitive currency code. Currently supported: BTC, ETH, HYPE, XRP, SOL, DOGE, and BNB. Provide either `symbol` or `tag_id`.",
+            "schema": {
+              "type": "string",
+              "example": "BTC"
+            }
+          },
+          {
             "name": "tag_id",
             "in": "query",
-            "required": true,
-            "description": "Positive cryptocurrency tag ID. For example, BTC is 235.",
+            "required": false,
+            "description": "Compatibility parameter: positive cryptocurrency tag ID. Provide either `symbol` or `tag_id`. Use `symbol` for new integrations.",
             "schema": {
               "type": "integer",
               "minimum": 1,
               "example": 235
-            }
+            },
+            "deprecated": true
           },
           {
             "name": "interval",

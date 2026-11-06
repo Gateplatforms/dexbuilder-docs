@@ -2640,19 +2640,30 @@
     "/api/v4/event_contracts/crypto/candlesticks": {
       "get": {
         "summary": "查詢加密貨幣 K 線",
-        "description": "按加密貨幣標籤 ID 查詢 OHLCV K 線。",
+        "description": "使用幣種代碼 `symbol` 查詢 OHLCV K 線；暫時相容 `tag_id`。兩者必須且只能提供其中一個。`interval=all` 不保證回傳全部歷史；查詢指定範圍時請提供 `start_ts` 和 `end_ts`。",
         "operationId": "query_crypto_candlesticks",
         "parameters": [
           {
+            "name": "symbol",
+            "in": "query",
+            "required": false,
+            "description": "幣種代碼，不區分大小寫。目前支援 BTC、ETH、HYPE、XRP、SOL、DOGE、BNB；與 `tag_id` 二選一。",
+            "schema": {
+              "type": "string",
+              "example": "BTC"
+            }
+          },
+          {
             "name": "tag_id",
             "in": "query",
-            "required": true,
-            "description": "加密貨幣標籤 ID，正整數。例如 BTC 為 235。",
+            "required": false,
+            "description": "相容參數：正整數加密貨幣標籤 ID；與 `symbol` 二選一。新接入建議使用 `symbol`。",
             "schema": {
               "type": "integer",
               "minimum": 1,
               "example": 235
-            }
+            },
+            "deprecated": true
           },
           {
             "name": "interval",

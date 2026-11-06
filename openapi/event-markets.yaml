@@ -2784,19 +2784,30 @@
     "/api/v4/prediction/crypto/candlesticks": {
       "get": {
         "summary": "查询加密货币 K 线",
-        "description": "按加密货币标签 ID 查询 OHLCV K 线。",
+        "description": "使用币种代码 `symbol` 查询 OHLCV K 线；暂时兼容 `tag_id`。两者必须且只能提供一个。`interval=all` 不保证返回全部历史；查询指定范围时请提供 `start_ts` 和 `end_ts`。",
         "operationId": "query_crypto_candlesticks",
         "parameters": [
           {
+            "name": "symbol",
+            "in": "query",
+            "required": false,
+            "description": "币种代码，大小写不敏感。当前支持 BTC、ETH、HYPE、XRP、SOL、DOGE、BNB；与 `tag_id` 二选一。",
+            "schema": {
+              "type": "string",
+              "example": "BTC"
+            }
+          },
+          {
             "name": "tag_id",
             "in": "query",
-            "required": true,
-            "description": "加密货币标签 ID，正整数。例如 BTC 为 235。",
+            "required": false,
+            "description": "兼容参数：正整数加密货币标签 ID；与 `symbol` 二选一。新接入建议使用 `symbol`。",
             "schema": {
               "type": "integer",
               "minimum": 1,
               "example": 235
-            }
+            },
+            "deprecated": true
           },
           {
             "name": "interval",
