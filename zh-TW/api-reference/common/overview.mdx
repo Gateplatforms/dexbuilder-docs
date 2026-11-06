@@ -15,11 +15,11 @@ https://api.dexbuilder.com
 
 | 產品與介面類型 | 路徑前綴 | 認證要求 |
 | --- | --- | --- |
-| DexBuilder 平台 API | `/api/v4/dexbuilder/...` | 使用 Broker API Key 簽名；使用者級介面還需提供 `sub_user_wallet_addr` |
+| DexBuilder 平台 API | `/api/v4/dexbuilder/...` | 使用 Broker API Key 簽名；使用者級介面還需提供 `X-User-Wallet-Address` |
 | 事件市場公開行情 | `/api/v4/prediction/...` | 無需 Broker API Key |
-| 事件市場 Broker 私有介面 | `/api/v4/broker/prediction/...` | Broker API Key 簽名及 `sub_user_wallet_addr` |
+| 事件市場 Broker 私有介面 | `/api/v4/broker/prediction/...` | Broker API Key 簽名及 `X-User-Wallet-Address` |
 | 事件合約公開行情 | `/api/v4/event_contracts/...` | 無需 Broker API Key |
-| 事件合約 Broker 私有介面 | `/api/v4/broker/event_contracts/...` | Broker API Key 簽名及 `sub_user_wallet_addr` |
+| 事件合約 Broker 私有介面 | `/api/v4/broker/event_contracts/...` | Broker API Key 簽名及 `X-User-Wallet-Address` |
 
 DexBuilder 平台的資產配置查詢也使用 Broker API Key，但無需指定終端使用者錢包。具體介面清單見[代表使用者存取](/zh-TW/api-reference/common/sub-user-wallet)。
 

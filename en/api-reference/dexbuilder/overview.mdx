@@ -15,7 +15,7 @@ https://api.dexbuilder.com
 
 Endpoint paths begin with `/api/v4/dexbuilder`. For example, `GET /api/v4/dexbuilder/assets` lists supported assets.
 
-Every endpoint requires a Broker API Key. See [Broker API Key and signing](/en/api-reference/common/broker-authentication). User-level endpoints also require sub_user_wallet_addr; see [Access on behalf of a user](/en/api-reference/common/sub-user-wallet).
+Every endpoint requires a Broker API Key. See [Broker API Key and signing](/en/api-reference/common/broker-authentication). User-level endpoints also require X-User-Wallet-Address; see [Access on behalf of a user](/en/api-reference/common/sub-user-wallet).
 
 ## Endpoint groups
 
@@ -26,7 +26,7 @@ Every endpoint requires a Broker API Key. See [Broker API Key and signing](/en/a
 | Deposit | Fee estimate, signing data, status, and history |
 | Withdrawal | Signing data, submission, status, history, and Solana ATA creation |
 
-Asset-configuration endpoints read Broker settings and do not require a user wallet. User, deposit, and withdrawal endpoints require `sub_user_wallet_addr`. Some endpoints also require x-perp-device-type or Idempotency-Key; see each endpoint's request parameters.
+Asset-configuration endpoints read Broker settings and do not require a user wallet. User, deposit, and withdrawal endpoints require `X-User-Wallet-Address`. Some endpoints also require x-perp-device-type or Idempotency-Key; see each endpoint's request parameters.
 
 ## Responses and errors
 

@@ -15,11 +15,11 @@ https://api.dexbuilder.com
 
 | 产品与接口类型 | 路径前缀 | 认证要求 |
 | --- | --- | --- |
-| DexBuilder 平台 API | `/api/v4/dexbuilder/...` | 使用 Broker API Key 签名；用户级接口还需提供 `sub_user_wallet_addr` |
+| DexBuilder 平台 API | `/api/v4/dexbuilder/...` | 使用 Broker API Key 签名；用户级接口还需提供 `X-User-Wallet-Address` |
 | 事件市场公开行情 | `/api/v4/prediction/...` | 无需 Broker API Key |
-| 事件市场 Broker 私有接口 | `/api/v4/broker/prediction/...` | Broker API Key 签名及 `sub_user_wallet_addr` |
+| 事件市场 Broker 私有接口 | `/api/v4/broker/prediction/...` | Broker API Key 签名及 `X-User-Wallet-Address` |
 | 事件合约公开行情 | `/api/v4/event_contracts/...` | 无需 Broker API Key |
-| 事件合约 Broker 私有接口 | `/api/v4/broker/event_contracts/...` | Broker API Key 签名及 `sub_user_wallet_addr` |
+| 事件合约 Broker 私有接口 | `/api/v4/broker/event_contracts/...` | Broker API Key 签名及 `X-User-Wallet-Address` |
 
 DexBuilder 平台的资产配置查询也使用 Broker API Key，但无需指定终端用户钱包。具体接口清单见[代表用户访问](/api-reference/common/sub-user-wallet)。
 

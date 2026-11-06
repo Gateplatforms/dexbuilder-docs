@@ -15,11 +15,11 @@ https://api.dexbuilder.com
 
 | API | Path prefix | Authentication |
 | --- | --- | --- |
-| DexBuilder Platform | /api/v4/dexbuilder/... | Broker API Key; user-level endpoints also require sub_user_wallet_addr |
+| DexBuilder Platform | /api/v4/dexbuilder/... | Broker API Key; user-level endpoints also require X-User-Wallet-Address |
 | Prediction Markets public data | /api/v4/prediction/... | No Broker API Key |
-| Prediction Markets private | /api/v4/broker/prediction/... | Broker API Key and sub_user_wallet_addr |
+| Prediction Markets private | /api/v4/broker/prediction/... | Broker API Key and X-User-Wallet-Address |
 | Event Contracts public data | /api/v4/event_contracts/... | No Broker API Key |
-| Event Contracts private | /api/v4/broker/event_contracts/... | Broker API Key and sub_user_wallet_addr |
+| Event Contracts private | /api/v4/broker/event_contracts/... | Broker API Key and X-User-Wallet-Address |
 
 DexBuilder asset-configuration queries require a Broker API Key but no user wallet. See [Access on behalf of a user](/en/api-reference/common/sub-user-wallet).
 

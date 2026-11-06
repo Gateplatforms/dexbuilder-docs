@@ -25,7 +25,7 @@ Broker API Key 的申请、变更与轮换流程由产品方提供。
 | `KEY` | Broker API Key，私有 REST 请求必传 |
 | `Timestamp` | Unix 秒级时间戳，私有 REST 请求必传；与服务端时间差不超过 60 秒 |
 | `SIGN` | 使用 Secret Key 计算的 HMAC-SHA512 十六进制签名，私有 REST 请求必传 |
-| `sub_user_wallet_addr` | 用户级接口必传；适用范围见[代表用户访问](/api-reference/common/sub-user-wallet) |
+| `X-User-Wallet-Address` | 用户级接口必传；适用范围见[代表用户访问](/api-reference/common/sub-user-wallet) |
 
 ## 签名原文
 
@@ -50,7 +50,7 @@ SIGN = HexEncode(HMAC_SHA512(Secret Key, 签名原文))
 - `QUERY_STRING` 与实际请求参数的顺序一致；签名时使用未 URL 编码的参数串。没有 Query 时使用空字符串。
 - `REQUEST_BODY` 使用实际发送的请求体原文。没有请求体时，对空字符串计算 SHA512。JSON 序列化后的字段顺序、空格和换行变化会改变摘要。
 - `TIMESTAMP` 必须与请求头 `Timestamp` 的值完全一致。
-- `sub_user_wallet_addr` 是单独的请求头，不拼入上述签名原文。
+- `X-User-Wallet-Address` 是单独的请求头，不拼入上述签名原文。
 
 签名时必须使用实际访问的外部路径：DexBuilder 平台为 `/api/v4/dexbuilder/...`，事件市场 Broker 私有接口为 `/api/v4/broker/prediction/...`，事件合约 Broker 私有接口为 `/api/v4/broker/event_contracts/...`。
 
@@ -78,7 +78,7 @@ print("Timestamp:", timestamp)
 print("SIGN:", sign)
 ```
 
-以下示例查询用户信息。先生成 `SIGN`，再发送请求；`sub_user_wallet_addr` 为目标用户的钱包地址。
+以下示例查询用户信息。先生成 `SIGN`，再发送请求；`X-User-Wallet-Address` 为目标用户的钱包地址。
 
 ```bash
 BASE_URL="https://api.dexbuilder.com"
@@ -88,7 +88,7 @@ curl -i --request GET "${BASE_URL}${API_PATH}" \
   --header "KEY: ${BROKER_API_KEY}" \
   --header "SIGN: ${SIGN}" \
   --header "Timestamp: ${TIMESTAMP}" \
-  --header "sub_user_wallet_addr: ${WALLET}" \
+  --header "X-User-Wallet-Address: ${WALLET}" \
   --header "Accept: application/json"
 ```
 

@@ -15,7 +15,7 @@ https://api.dexbuilder.com
 
 接口路径以 `/api/v4/dexbuilder` 开头，例如 `GET /api/v4/dexbuilder/assets`。
 
-使用 Broker API Key 调用。签名规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)；用户级接口须按[代表用户访问](/api-reference/common/sub-user-wallet)提供 `sub_user_wallet_addr`。平台权限和各类接口的钱包要求见[平台 API 认证](/api-reference/dexbuilder/authentication)。
+使用 Broker API Key 调用。签名规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)；用户级接口须按[代表用户访问](/api-reference/common/sub-user-wallet)提供 `X-User-Wallet-Address`。平台权限和各类接口的钱包要求见[平台 API 认证](/api-reference/dexbuilder/authentication)。
 
 ## 接口分类
 
@@ -26,7 +26,7 @@ https://api.dexbuilder.com
 | 充值 | 估算手续费、获取签名数据、查询状态与历史 |
 | 提现 | 获取签名数据、提交提现、查询状态与历史、处理 Solana ATA |
 
-资产配置接口不需要终端用户钱包；其余用户、充值和提现接口需要 `sub_user_wallet_addr`。部分接口还需要 `x-perp-device-type` 或 `Idempotency-Key`，以对应接口的参数表为准。
+资产配置接口不需要终端用户钱包；其余用户、充值和提现接口需要 `X-User-Wallet-Address`。部分接口还需要 `x-perp-device-type` 或 `Idempotency-Key`，以对应接口的参数表为准。
 
 ## 响应与错误
 

@@ -15,7 +15,7 @@ https://api.dexbuilder.com
 
 介面路徑以 `/api/v4/dexbuilder` 開頭，例如 `GET /api/v4/dexbuilder/assets`。
 
-使用 Broker API Key 呼叫。簽名規則及使用者級介面的 `sub_user_wallet_addr` 要求見[Broker API 認證與簽名](/zh-TW/api-reference/common/broker-authentication)；平台權限和各類介面的錢包要求見[平台 API 認證](/zh-TW/api-reference/dexbuilder/authentication)。
+使用 Broker API Key 呼叫。簽名規則及使用者級介面的 `X-User-Wallet-Address` 要求見[Broker API 認證與簽名](/zh-TW/api-reference/common/broker-authentication)；平台權限和各類介面的錢包要求見[平台 API 認證](/zh-TW/api-reference/dexbuilder/authentication)。
 
 ## 介面分類
 
@@ -26,7 +26,7 @@ https://api.dexbuilder.com
 | 充值 | 估算手續費、獲取簽名資料、查詢狀態與歷史 |
 | 提現 | 獲取簽名資料、提交提現、查詢狀態與歷史、處理 Solana ATA |
 
-資產配置介面不需要終端使用者錢包；其餘使用者、充值和提現介面需要 `sub_user_wallet_addr`。部分介面還需要 `x-perp-device-type` 或 `Idempotency-Key`，以對應介面的參數表為準。
+資產配置介面不需要終端使用者錢包；其餘使用者、充值和提現介面需要 `X-User-Wallet-Address`。部分介面還需要 `x-perp-device-type` 或 `Idempotency-Key`，以對應介面的參數表為準。
 
 ## 回應與錯誤
 

@@ -7,7 +7,7 @@ openapi: "/openapi/dexbuilder.yaml GET /api/v4/dexbuilder/fund_stats"
 查询终端用户按链累计的充值和提现金额。
 
 <Note>
-  使用 Broker API Key 调用，并在请求头提供 `sub_user_wallet_addr`。网关会校验钱包与 Broker 的归属关系。 认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
+  使用 Broker API Key 调用，并在请求头提供 `X-User-Wallet-Address`。网关会校验钱包与 Broker 的归属关系。 认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
 </Note>
 
 ## 使用说明
