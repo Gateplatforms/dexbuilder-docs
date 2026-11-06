@@ -3,7 +3,7 @@
   "info": {
     "title": "DexBuilder 平台 Broker API",
     "version": "1.0.0",
-    "description": "DexBuilder 平台的 19 个 Broker 业务接口。认证和用户钱包校验见本站统一网关说明。"
+    "description": "DexBuilder 平台 Broker API，涵盖资产配置、用户、充值与提现能力。认证和用户钱包校验见本站统一网关说明。"
   },
   "servers": [
     {
@@ -31,24 +31,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -71,6 +57,9 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/AssetQuery"
+          },
+          {
+            "$ref": "#/components/parameters/DeviceType"
           }
         ],
         "responses": {
@@ -85,24 +74,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -142,24 +117,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -196,24 +157,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -236,6 +183,15 @@
         "parameters": [
           {
             "$ref": "#/components/parameters/DeviceType"
+          },
+          {
+            "name": "network",
+            "in": "query",
+            "required": false,
+            "description": "网络标识，例如 ethereum、solana、arbitrum、bsc 或 base。提供后返回对应网络的最小提现额。",
+            "schema": {
+              "$ref": "#/components/schemas/OpenAPIChainId"
+            }
           }
         ],
         "responses": {
@@ -250,24 +206,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -314,24 +256,10 @@
             }
           },
           "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "401": {
-            "description": "Broker API Key 或签名无效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           }
         },
         "security": [
@@ -368,24 +296,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -435,24 +349,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -502,24 +402,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -575,24 +461,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -628,19 +500,7 @@
             "$ref": "#/components/parameters/SubUserWalletAddr"
           },
           {
-            "name": "x-perp-device-type",
-            "in": "header",
-            "required": false,
-            "description": "设备类型（1/2/3/4），风控使用，建议填写",
-            "schema": {
-              "type": "string",
-              "enum": [
-                "1",
-                "2",
-                "3",
-                "4"
-              ]
-            }
+            "$ref": "#/components/parameters/DeviceType"
           }
         ],
         "requestBody": {
@@ -665,104 +525,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/OpenAPIBadRequest",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "BrokerAPIKey": [],
-            "Timestamp": [],
-            "Signature": []
-          }
-        ]
-      }
-    },
-    "/api/v4/dexbuilder/deposit/submit": {
-      "post": {
-        "tags": [
-          "充值"
-        ],
-        "summary": "提交充值回执",
-        "description": "链上交易完成后上报 tx_hash；支持 Idempotency-Key 幂等。",
-        "operationId": "dexBuilderDepositSubmit",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SubUserWalletAddr"
-          },
-          {
-            "$ref": "#/components/parameters/IdempotencyKey"
-          },
-          {
-            "$ref": "#/components/parameters/DeviceType"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PerpDepositPostProcessRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "受理成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EnvelopeDepositSubmit"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Broker API Key 或签名无效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -817,24 +583,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -887,24 +639,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -961,24 +699,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -1042,24 +766,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -1115,24 +825,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -1185,24 +881,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -1260,24 +942,10 @@
             }
           },
           "401": {
-            "description": "Broker API Key 或签名无效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/GatewayUnauthorized"
           },
           "403": {
-            "description": "Broker 权限不足，或目标钱包未通过归属校验",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
+            "$ref": "#/components/responses/ProjectAccessDenied"
           },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
@@ -1335,12 +1003,12 @@
       "NetworkQuery": {
         "name": "network",
         "in": "query",
-        "required": false,
+        "required": true,
         "schema": {
           "type": "string"
         },
         "example": "ethereum",
-        "description": "网络标识，如 ethereum"
+        "description": "网络标识，例如 ethereum、solana、arbitrum、bsc 或 base。查询充提开关时必填。"
       },
       "Page": {
         "name": "page",
@@ -1376,16 +1044,16 @@
         "name": "x-perp-device-type",
         "in": "header",
         "required": true,
-        "description": "设备类型：1 Android、2 iOS、3 WEB、4 H5。仅在标明必填的接口中要求传递。",
+        "description": "DexBuilder 平台 API 设备类型：1 Android、2 iOS、3 WEB。缺失或取值无效时返回 INVALID_DEVICE_TYPE。仅适用于列明此请求头的平台接口。",
         "schema": {
           "type": "string",
           "enum": [
             "1",
             "2",
-            "3",
-            "4"
+            "3"
           ]
-        }
+        },
+        "example": "3"
       },
       "IdempotencyKey": {
         "name": "Idempotency-Key",
@@ -1664,21 +1332,6 @@
           }
         ]
       },
-      "EnvelopeDepositSubmit": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/EnvelopeBase"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "data": {
-                "$ref": "#/components/schemas/PerpDepositPostProcessResponse"
-              }
-            }
-          }
-        ]
-      },
       "EnvelopeDepositStatus": {
         "allOf": [
           {
@@ -1808,7 +1461,7 @@
           },
           "network": {
             "type": "string",
-            "description": "网络标识，与 chain 参数一致（如 ethereum、bsc、solana）"
+            "description": "网络标识，与 chain 参数一致（如 ethereum、bsc、solana、arbitrum、base）"
           },
           "chain_id": {
             "type": "string",
@@ -1844,11 +1497,11 @@
           },
           "min_deposit": {
             "type": "string",
-            "description": "最小充值数量，十进制字符串，单位为 token 最小展示单位"
+            "description": "最小充值数量（静态配置），十进制字符串"
           },
           "min_withdraw": {
             "type": "string",
-            "description": "最小提现数量，十进制字符串，单位为 token 最小展示单位"
+            "description": "最小提现数量（Perp withdraw-min-limit），十进制字符串；Perp 无数据时省略"
           }
         }
       },
@@ -1905,9 +1558,9 @@
             "type": "string",
             "description": "钱包记录 ID"
           },
-          "chain": {
+          "vm": {
             "type": "string",
-            "description": "链标识"
+            "description": "钱包虚拟机类型，evm 或 solana（非具体 L1 网络名）"
           },
           "address": {
             "type": "string",
@@ -1965,8 +1618,7 @@
             "description": "发起充值的用户钱包，须为已绑定钱包；EVM 0x hex 或 Solana base58"
           },
           "chain": {
-            "type": "string",
-            "description": "链标识，须与 token 所在网络一致"
+            "$ref": "#/components/schemas/OpenAPIChainId"
           },
           "token_address": {
             "type": "string",
@@ -1997,8 +1649,7 @@
             "description": "用户钱包，须已绑定；与 sub_user_wallet_addr 一致"
           },
           "chain": {
-            "type": "string",
-            "description": "链标识"
+            "$ref": "#/components/schemas/OpenAPIChainId"
           },
           "token_address": {
             "type": "string",
@@ -2053,47 +1704,6 @@
           }
         }
       },
-      "PerpDepositPostProcessRequest": {
-        "type": "object",
-        "required": [
-          "chain",
-          "address",
-          "token_address",
-          "txn_hash",
-          "token_amount"
-        ],
-        "properties": {
-          "chain": {
-            "type": "string",
-            "description": "链标识"
-          },
-          "address": {
-            "type": "string",
-            "description": "充值发起钱包，须已绑定"
-          },
-          "token_address": {
-            "type": "string",
-            "description": "代币合约"
-          },
-          "txn_hash": {
-            "type": "string",
-            "description": "链上充值交易哈希"
-          },
-          "token_amount": {
-            "type": "string",
-            "description": "充值数量，须与 sign_data 一致"
-          }
-        }
-      },
-      "PerpDepositPostProcessResponse": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean",
-            "description": "是否受理成功（非链上最终态，最终态查 /deposit/status）"
-          }
-        }
-      },
       "PerpDepositFeeResponse": {
         "type": "object",
         "properties": {
@@ -2112,7 +1722,7 @@
           },
           "fee_source": {
             "type": "integer",
-            "description": "费用来源标识；0 表示默认。"
+            "description": "费用来源：0 表示实时计算，1 表示使用备用报价。"
           }
         }
       },
@@ -2133,8 +1743,7 @@
         "type": "object",
         "properties": {
           "chain": {
-            "type": "string",
-            "description": "链标识"
+            "$ref": "#/components/schemas/OpenAPIChainId"
           },
           "token_symbol": {
             "type": "string",
@@ -2146,15 +1755,15 @@
           },
           "token_amount": {
             "type": "string",
-            "description": "提现数量，十进制字符串"
+            "description": "提现数量，十进制字符串（EIP-712 message.amount 按 token 链上 decimals 编码，如 ETH 主网 USDT 1 → 1000000）"
           },
           "to_address": {
             "type": "string",
-            "description": "到账地址，可为第三方地址；EVM/Solana 格式须匹配 chain"
+            "description": "可选；省略时等于 `address`。OpenAPI 仅允许提到已绑定钱包，若填写须与 `address` 一致（EVM 大小写不敏感）"
           },
           "address": {
             "type": "string",
-            "description": "用户已绑定钱包（签名主体），须与 sub_user_wallet_addr 一致"
+            "description": "用户已绑定钱包（签名主体且为到账地址），须与 sub_user_wallet_addr 一致"
           }
         },
         "required": [
@@ -2162,7 +1771,6 @@
           "token_symbol",
           "token_address",
           "token_amount",
-          "to_address",
           "address"
         ]
       },
@@ -2171,16 +1779,16 @@
         "properties": {
           "data": {
             "type": "string",
-            "description": "待用户 EIP-712 / 链约定格式签名的 payload（0x hex）"
+            "description": "EVM 为完整 EIP-712 TypedData JSON 的 UTF-8 hex（0x 前缀；`domain.verifyingContract` 为 Ledger）。 钱包对 TypedData 做 EIP-712 哈希并签名，**不是**链上交易 input；勿 cast send / 勿发往 Vault。"
           },
           "contract_address": {
             "type": "string",
-            "description": "Vault 合约"
+            "description": "该链 Vault 地址（展示/对账用）；与 `data` 内 EIP-712 domain 的 Ledger 地址不同，均不可作为用户广播 calldata 目标"
           },
           "timestamp": {
             "type": "integer",
             "format": "int64",
-            "description": "签名时间戳（秒），提交 withdraw/submit 时必须原样带回"
+            "description": "签名时间戳（毫秒，与 sign_data 响应一致），提交 withdraw/submit 时必须原样带回"
           }
         }
       },
@@ -2200,8 +1808,7 @@
             "description": "签名 s（0x hex）"
           },
           "chain": {
-            "type": "string",
-            "description": "链标识"
+            "$ref": "#/components/schemas/OpenAPIChainId"
           },
           "token_address": {
             "type": "string",
@@ -2217,7 +1824,7 @@
           },
           "to_address": {
             "type": "string",
-            "description": "到账地址，须与 sign_data 请求一致"
+            "description": "可选；省略时等于 `address`。OpenAPI 须与 sign_data 一致且仅支持已绑定钱包"
           },
           "timestamp": {
             "type": "integer",
@@ -2238,7 +1845,6 @@
           "token_address",
           "address",
           "token_amount",
-          "to_address",
           "token_symbol"
         ]
       },
@@ -2305,9 +1911,9 @@
       "UserInfoWallet": {
         "type": "object",
         "properties": {
-          "chain": {
+          "vm": {
             "type": "string",
-            "description": "链标识"
+            "description": "钱包虚拟机类型，evm 或 solana（非具体 L1 网络名）"
           },
           "address": {
             "type": "string",
@@ -2322,9 +1928,9 @@
       "PerpQueryFeeItem": {
         "type": "object",
         "properties": {
-          "chain": {
+          "network": {
             "type": "string",
-            "description": "链标识"
+            "description": "网络标识，与 GET /networks 一致（小写 bsc、ethereum、solana 等）"
           },
           "deposit_fee": {
             "type": "string",
@@ -2377,6 +1983,11 @@
             "type": "string",
             "description": "自然日累计提现上限，USDT 计价十进制字符串",
             "example": "100000"
+          },
+          "min_withdraw": {
+            "type": "string",
+            "description": "指定 `network` query 时由 Perp withdraw-min-limit 返回的最小提现额（USDT 十进制字符串）",
+            "example": "20"
           }
         }
       },
@@ -2423,9 +2034,9 @@
       "PerpQueryFundStatItem": {
         "type": "object",
         "properties": {
-          "chain": {
+          "network": {
             "type": "string",
-            "description": "链标识"
+            "description": "网络标识，与 GET /networks 一致（小写 bsc、ethereum、solana 等）"
           },
           "deposit": {
             "type": "string",
@@ -2564,6 +2175,18 @@
             "description": "符合条件的总记录数（非仅当前页）"
           }
         }
+      },
+      "OpenAPIChainId": {
+        "type": "string",
+        "enum": [
+          "base",
+          "bsc",
+          "ethereum",
+          "solana",
+          "arbitrum"
+        ],
+        "description": "链标识，与 GET /networks 的 `network` 一致。仅接受上述 canonical 值；\n不接受简写别名 `eth`、`sol`、`arb`（请求将返回 INVALID_ARGUMENT）。\n",
+        "example": "ethereum"
       }
     }
   }

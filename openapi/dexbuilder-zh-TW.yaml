@@ -3,7 +3,7 @@
   "info": {
     "title": "DexBuilder 平台 Broker API",
     "version": "1.0.0",
-    "description": "DexBuilder 平台的 19 個 Broker 業務介面。認證和使用者錢包校驗見本站統一網關說明。"
+    "description": "DexBuilder 平台 Broker API，涵蓋資產配置、使用者、充值與提現能力。認證和使用者錢包校驗見本站統一網關說明。"
   },
   "servers": [
     {
@@ -660,86 +660,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/EnvelopeDepositSignData"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Broker API Key 或簽名無效",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Broker 權限不足，或目標錢包未通過歸屬校驗",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/OpenAPIBadRequest",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "BrokerAPIKey": [],
-            "Timestamp": [],
-            "Signature": []
-          }
-        ]
-      }
-    },
-    "/api/v4/dexbuilder/deposit/submit": {
-      "post": {
-        "tags": [
-          "充值"
-        ],
-        "summary": "提交充值回執",
-        "description": "鏈上交易完成後上報 tx_hash；支持 Idempotency-Key 冪等。",
-        "operationId": "dexBuilderDepositSubmit",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SubUserWalletAddr"
-          },
-          {
-            "$ref": "#/components/parameters/IdempotencyKey"
-          },
-          {
-            "$ref": "#/components/parameters/DeviceType"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PerpDepositPostProcessRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "受理成功",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EnvelopeDepositSubmit"
                 }
               }
             }
@@ -1664,21 +1584,6 @@
           }
         ]
       },
-      "EnvelopeDepositSubmit": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/EnvelopeBase"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "data": {
-                "$ref": "#/components/schemas/PerpDepositPostProcessResponse"
-              }
-            }
-          }
-        ]
-      },
       "EnvelopeDepositStatus": {
         "allOf": [
           {
@@ -2050,47 +1955,6 @@
           "data": {
             "type": "string",
             "description": "ABI calldata（0x hex）"
-          }
-        }
-      },
-      "PerpDepositPostProcessRequest": {
-        "type": "object",
-        "required": [
-          "chain",
-          "address",
-          "token_address",
-          "txn_hash",
-          "token_amount"
-        ],
-        "properties": {
-          "chain": {
-            "type": "string",
-            "description": "鏈標識"
-          },
-          "address": {
-            "type": "string",
-            "description": "充值發起錢包，須已綁定"
-          },
-          "token_address": {
-            "type": "string",
-            "description": "代幣合約"
-          },
-          "txn_hash": {
-            "type": "string",
-            "description": "鏈上充值交易哈希"
-          },
-          "token_amount": {
-            "type": "string",
-            "description": "充值數量，須與 sign_data 一致"
-          }
-        }
-      },
-      "PerpDepositPostProcessResponse": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean",
-            "description": "是否受理成功（非鏈上最終態，最終態查 /deposit/status）"
           }
         }
       },

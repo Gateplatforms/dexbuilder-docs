@@ -3,7 +3,7 @@
   "info": {
     "title": "DexBuilder Platform Broker API",
     "version": "1.0.0",
-    "description": "19 Broker business endpoints for DexBuilder. See the shared gateway documentation for authentication and user wallet verification."
+    "description": "DexBuilder Platform Broker API for asset configuration, user queries, deposits, and withdrawals. See the shared gateway documentation for authentication and wallet verification."
   },
   "servers": [
     {
@@ -660,86 +660,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/EnvelopeDepositSignData"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Invalid Broker API Key or signature",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Insufficient Broker permissions, or the target wallet failed the ownership check",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          },
-          "400": {
-            "$ref": "#/components/responses/OpenAPIBadRequest",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorEnvelope"
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "BrokerAPIKey": [],
-            "Timestamp": [],
-            "Signature": []
-          }
-        ]
-      }
-    },
-    "/api/v4/dexbuilder/deposit/submit": {
-      "post": {
-        "tags": [
-          "Deposit"
-        ],
-        "summary": "Submit a deposit transaction",
-        "description": "Report the transaction hash after broadcasting an onchain deposit. Supports Idempotency-Key.",
-        "operationId": "dexBuilderDepositSubmit",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/SubUserWalletAddr"
-          },
-          {
-            "$ref": "#/components/parameters/IdempotencyKey"
-          },
-          {
-            "$ref": "#/components/parameters/DeviceType"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/PerpDepositPostProcessRequest"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Accepted",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EnvelopeDepositSubmit"
                 }
               }
             }
@@ -1664,21 +1584,6 @@
           }
         ]
       },
-      "EnvelopeDepositSubmit": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/EnvelopeBase"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "data": {
-                "$ref": "#/components/schemas/PerpDepositPostProcessResponse"
-              }
-            }
-          }
-        ]
-      },
       "EnvelopeDepositStatus": {
         "allOf": [
           {
@@ -2050,47 +1955,6 @@
           "data": {
             "type": "string",
             "description": "ABI calldata（0x hex）"
-          }
-        }
-      },
-      "PerpDepositPostProcessRequest": {
-        "type": "object",
-        "required": [
-          "chain",
-          "address",
-          "token_address",
-          "txn_hash",
-          "token_amount"
-        ],
-        "properties": {
-          "chain": {
-            "type": "string",
-            "description": "Chain identifier"
-          },
-          "address": {
-            "type": "string",
-            "description": "Bound wallet initiating the deposit"
-          },
-          "token_address": {
-            "type": "string",
-            "description": "Token contract"
-          },
-          "txn_hash": {
-            "type": "string",
-            "description": "Onchain deposit transaction hash"
-          },
-          "token_amount": {
-            "type": "string",
-            "description": "Deposit amount; must match sign_data"
-          }
-        }
-      },
-      "PerpDepositPostProcessResponse": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean",
-            "description": "Whether the request was accepted; check /deposit/status for the final onchain state"
           }
         }
       },
