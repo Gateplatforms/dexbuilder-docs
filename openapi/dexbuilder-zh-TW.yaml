@@ -327,7 +327,7 @@
           "使用者"
         ],
         "summary": "查詢 Vault 餘額",
-        "description": "查詢使用者在 PerpDEX Vault 中的餘額。",
+        "description": "使用者交易前須將 USDT 充值至個人合約金庫（Vault）。每位使用者擁有獨立的 Vault，交易產生的資金變動將直接計入該 Vault。此介面用於查詢終端使用者 Vault 中的可用餘額。",
         "operationId": "getDexBuilderUserVaultBalance",
         "parameters": [
           {

@@ -327,7 +327,7 @@
           "User"
         ],
         "summary": "Get Vault balance",
-        "description": "Return the user's available balance in the PerpDEX Vault.",
+        "description": "Before trading, users must deposit USDT into their personal contract Vault. Each user has a separate Vault, and balance changes resulting from trades are recorded directly in that Vault. This endpoint returns the available balance in the end user's Vault.",
         "operationId": "getDexBuilderUserVaultBalance",
         "parameters": [
           {
