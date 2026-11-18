@@ -3,7 +3,7 @@ title: "DexBuilder 平台 API 概览"
 description: "面向 Broker 的 DexBuilder 平台 REST API，涵盖资产配置、用户、充值与提现能力。"
 ---
 
-DexBuilder 平台 API 提供资产配置、终端用户查询、Vault 余额，以及链上充值与提现能力。入驻申请接口不在本节范围内。
+DexBuilder 平台 API 提供资产配置、终端用户开户与查询、Perp 绑定、Vault 余额，以及链上充值与提现能力。入驻申请接口不在本节范围内。
 
 ## 接入地址
 
@@ -22,11 +22,16 @@ https://api.dexbuilder.com
 | 分类 | 能力 |
 | --- | --- |
 | 资产配置 | 查询资产、网络、充提开关、固定手续费和提现限额 |
+| 用户管理 | 获取开户待签名文案、注册并绑定 Perp、按钱包查询开户状态、分页查询用户 |
 | 用户 | 查询用户信息、已绑定钱包、Vault 可用余额和资金统计 |
 | 充值 | 估算手续费、获取签名数据、查询状态与历史 |
 | 提现 | 获取签名数据、提交提现、查询状态与历史、处理 Solana ATA |
 
-资产配置接口不需要终端用户钱包；其余用户、充值和提现接口需要 `X-User-Wallet-Address`。部分接口还需要 `x-perp-device-type` 或 `Idempotency-Key`，以对应接口的参数表为准。
+资产配置和 `/users` 用户管理接口使用项目方 Broker API Key。用户管理接口通过 Query 或 Body 中的 `chain`、`address` 指定钱包。现有用户查询、充值和提现接口需要 `X-User-Wallet-Address`。部分接口还需要 `x-perp-device-type` 或 `Idempotency-Key`，以对应接口的参数表为准。
+
+## 用户开户
+
+先[获取开户待签名文案](/api-reference/dexbuilder/users-sign-message)，使用目标钱包签署原文后[注册用户并绑定 Perp](/api-reference/dexbuilder/users-register)。注册需要 `dex_builder` 读写权限和 `Idempotency-Key`。成功后保存 `user_id`、`broker_uid`，并通过[查询钱包开户状态](/api-reference/dexbuilder/users-resolve)核对结果。已有用户可通过[分页列表](/api-reference/dexbuilder/users-list)查询。
 
 ## 响应与错误
 

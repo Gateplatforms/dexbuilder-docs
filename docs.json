@@ -528,6 +528,10 @@
                       {
                         "group": "用户",
                         "pages": [
+                          "api-reference/dexbuilder/users-sign-message",
+                          "api-reference/dexbuilder/users-register",
+                          "api-reference/dexbuilder/users-resolve",
+                          "api-reference/dexbuilder/users-list",
                           "api-reference/dexbuilder/query-user-info",
                           "api-reference/dexbuilder/query-wallet-list",
                           "api-reference/dexbuilder/query-user-balance",

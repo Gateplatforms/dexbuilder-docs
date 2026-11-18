@@ -1,0 +1,90 @@
+---
+title: "注册用户并绑定 Perp"
+description: "使用钱包签名完成用户开户和 Perp 绑定。"
+openapi: "/openapi/dexbuilder.yaml POST /api/v4/dexbuilder/users/register"
+---
+
+使用钱包签名完成当前 Broker 下的用户开户和 Perp 绑定，成功后保存返回的 `user_id` 和 `broker_uid`。
+
+需要项目方 Broker API Key 的 `dex_builder` 读写权限，并提供非空的 `Idempotency-Key` 请求头。认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
+
+## 注册步骤
+
+1. 调用[获取开户待签名文案](/api-reference/dexbuilder/users-sign-message)，取得 `message` 和 `timestamp`。
+2. 使用 `address` 对应的钱包签署完整的 `message` 原文。
+3. 提交 `chain`、`address`、钱包签名 `sign` 和原文对应的 `timestamp`。
+4. 检查响应的 `code`、`bound` 和 `broker_uid`，并使用[查询钱包开户状态](/api-reference/dexbuilder/users-resolve)回查。
+
+Solana 已验证的签名格式为带 `0x` 前缀的 Ed25519 签名十六进制字符串。对 UTF-8 编码的签名原文进行签名。
+
+## 幂等与已有用户
+
+为一次注册操作生成一个幂等键，重试该操作时沿用原来的 `Idempotency-Key`。幂等范围为当前 Broker 下的用户注册操作。
+
+对于已经存在的钱包地址，注册会走用户更新路径，并继续处理尚未完成的 Perp 绑定。首次成功开户时 `created` 为 `true`，Perp 绑定完成时 `bound` 为 `true`。
+
+## 请求体示例
+
+```json
+{
+  "chain": "solana",
+  "address": "<USER_WALLET_ADDRESS>",
+  "sign": "0x<ED25519_SIGNATURE_HEX>",
+  "timestamp": 1700000000
+}
+```
+
+将示例中的钱包地址、签名和时间戳替换为本次开户取得的实际值。请求体的 `timestamp` 使用签名文案返回的值，请求头 `Timestamp` 使用本次 API v4 请求的时间戳。
+
+以下示例从环境变量读取已取得的钱包签名和文案时间戳，对最终发送的 JSON 字节计算 API v4 签名。超时重试时保持 `REGISTER_IDEMPOTENCY_KEY` 与请求体一致。
+
+```python
+import hashlib
+import hmac
+import json
+import os
+import time
+from urllib.request import Request, urlopen
+
+path = "/api/v4/dexbuilder/users/register"
+body = json.dumps({
+    "chain": os.environ["USER_WALLET_CHAIN"],
+    "address": os.environ["USER_WALLET_ADDRESS"],
+    "sign": os.environ["USER_WALLET_SIGNATURE"],
+    "timestamp": int(os.environ["SIGN_MESSAGE_TIMESTAMP"]),
+}, separators=(",", ":")).encode()
+timestamp = str(int(time.time()))
+signing_text = "\n".join([
+    "POST", path, "", hashlib.sha512(body).hexdigest(), timestamp,
+])
+signature = hmac.new(
+    os.environ["BROKER_API_SECRET"].encode(),
+    signing_text.encode(),
+    hashlib.sha512,
+).hexdigest()
+request = Request(
+    "https://api.dexbuilder.com" + path,
+    data=body,
+    method="POST",
+    headers={
+        "KEY": os.environ["BROKER_API_KEY"],
+        "Timestamp": timestamp,
+        "SIGN": signature,
+        "Content-Type": "application/json",
+        "Idempotency-Key": os.environ["REGISTER_IDEMPOTENCY_KEY"],
+    },
+)
+with urlopen(request, timeout=15) as response:
+    print(json.dumps(json.load(response), ensure_ascii=False, indent=2))
+```
+
+## 权限错误
+
+若返回以下响应，请确认当前 Key 的 `dex_builder` 已开通读写权限。`prediction` 和 `event_contracts` 各自具有独立权限。
+
+```json
+{
+  "label": "FORBIDDEN",
+  "message": "Request API key does not have dex_builder write permission"
+}
+```

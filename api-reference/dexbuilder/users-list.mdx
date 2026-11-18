@@ -1,0 +1,27 @@
+---
+title: "查询 Broker 用户列表"
+description: "分页查询当前 Broker 下按用户标识去重的用户列表。"
+openapi: "/openapi/dexbuilder.yaml GET /api/v4/dexbuilder/users"
+---
+
+分页查询当前 Broker 下的用户列表，同一 `user_id` 在列表中去重。
+
+需要项目方 Broker API Key 的 `dex_builder` 只读或读写权限，认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
+
+## 分页与返回字段
+
+使用 `page` 指定页码，使用 `page_size` 指定每页条数。响应的 `data` 包含 `items`、`page`、`page_size` 和 `total`。
+
+每个用户包含 `user_id`、`broker_uid`、`primary_address`、`status` 和 `created_at`。`created_at` 为 Unix 毫秒时间戳。
+
+## 调用示例
+
+```http
+GET /api/v4/dexbuilder/users?page=1&page_size=1 HTTP/1.1
+Host: api.dexbuilder.com
+KEY: <BROKER_API_KEY>
+Timestamp: <UNIX_SECONDS>
+SIGN: <SIGN>
+```
+
+签名原文中的 Query 参数串为 `page=1&page_size=1`。按响应的 `total`、`page` 和 `page_size` 继续查询后续页面。

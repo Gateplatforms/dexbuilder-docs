@@ -1,0 +1,27 @@
+---
+title: "查询钱包开户状态"
+description: "按链类型和钱包地址查询当前 Broker 下的开户结果。"
+openapi: "/openapi/dexbuilder.yaml GET /api/v4/dexbuilder/users/resolve"
+---
+
+按 `chain` 和 `address` 查询该钱包是否已在当前 Broker 开户，已开户时返回对应的 `user_id` 和 `broker_uid`。
+
+需要项目方 Broker API Key 的 `dex_builder` 只读或读写权限。钱包通过 Query 参数指定，认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
+
+## 使用说明
+
+- 开户前使用 `registered` 判断该地址的开户状态。
+- [注册并绑定 Perp](/api-reference/dexbuilder/users-register)后，使用同一组 `chain` 和 `address` 回查，并核对用户标识。
+- `registered=false` 时，`user_id` 和 `broker_uid` 可省略。
+
+## 调用示例
+
+```http
+GET /api/v4/dexbuilder/users/resolve?chain=solana&address=<USER_WALLET_ADDRESS> HTTP/1.1
+Host: api.dexbuilder.com
+KEY: <BROKER_API_KEY>
+Timestamp: <UNIX_SECONDS>
+SIGN: <SIGN>
+```
+
+按实际外部路径和 Query 参数生成 `SIGN`。可参考[获取开户待签名文案](/api-reference/dexbuilder/users-sign-message)的 Python 示例，将路径改为 `/api/v4/dexbuilder/users/resolve`。
