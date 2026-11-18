@@ -21,7 +21,9 @@ The product team provides the process for requesting, changing, and rotating Bro
 | KEY | Broker API Key on every private REST request |
 | Timestamp | Unix seconds, within 60 seconds of server time |
 | SIGN | Hexadecimal HMAC-SHA512 signature generated with the Secret Key |
-| X-User-Wallet-Address | Required on user-level endpoints; see [Access on behalf of a user](/en/api-reference/common/sub-user-wallet) |
+| X-User-Wallet-Address | Required when accessing an existing user by wallet. See [Access on behalf of a user](/en/api-reference/common/sub-user-wallet) |
+
+The /api/v4/dexbuilder/users management endpoints use the project Broker API Key. Registration and wallet resolution identify a wallet through chain and address in query parameters or the body. Registration requires dex_builder read-write permission and Idempotency-Key. See [Platform API authentication](/en/api-reference/dexbuilder/authentication).
 
 ## Signature string
 

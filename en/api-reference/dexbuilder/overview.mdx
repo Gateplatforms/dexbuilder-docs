@@ -3,7 +3,7 @@ title: "DexBuilder Platform API overview"
 description: "Use the DexBuilder Platform REST API for Broker asset configuration, user queries, deposits, and withdrawals."
 ---
 
-The DexBuilder Platform API lets Brokers query asset settings and user balances and support onchain deposits and withdrawals.
+The DexBuilder Platform API lets Brokers register users, bind Perp accounts, query asset settings and user balances, and support onchain deposits and withdrawals.
 
 ## Base URL
 
@@ -15,18 +15,23 @@ https://api.dexbuilder.com
 
 Endpoint paths begin with `/api/v4/dexbuilder`. For example, `GET /api/v4/dexbuilder/assets` lists supported assets.
 
-Every endpoint requires a Broker API Key. See [Broker API Key and signing](/en/api-reference/common/broker-authentication). User-level endpoints also require X-User-Wallet-Address; see [Access on behalf of a user](/en/api-reference/common/sub-user-wallet).
+Every endpoint requires a Broker API Key. See [Broker API Key and signing](/en/api-reference/common/broker-authentication). Endpoints that access an existing user by wallet require X-User-Wallet-Address. The /users management endpoints identify wallets through query parameters or the request body. See [Access on behalf of a user](/en/api-reference/common/sub-user-wallet).
 
 ## Endpoint groups
 
 | Group | Capabilities |
 | --- | --- |
 | Asset configuration | Assets, networks, availability, fixed fees, and withdrawal limits |
+| User management | Registration signing messages, user registration and Perp binding, wallet resolution, and paginated users |
 | User | User information, bound wallets, Vault balance, and fund statistics |
 | Deposit | Fee estimate, signing data, status, and history |
 | Withdrawal | Signing data, submission, status, history, and Solana ATA creation |
 
-Asset-configuration endpoints read Broker settings and do not require a user wallet. User, deposit, and withdrawal endpoints require `X-User-Wallet-Address`. Some endpoints also require x-perp-device-type or Idempotency-Key; see each endpoint's request parameters.
+Asset-configuration and /users management endpoints use the project Broker API Key. User management identifies a wallet through chain and address in query parameters or the body. Existing user queries, deposits, and withdrawals require X-User-Wallet-Address. Some endpoints also require x-perp-device-type or Idempotency-Key; see each endpoint's request parameters.
+
+## User registration
+
+[Get a registration signing message](/en/api-reference/dexbuilder/users-sign-message), sign it with the target wallet, then [register the user and bind Perp](/en/api-reference/dexbuilder/users-register). Registration requires dex_builder read-write permission and Idempotency-Key. Save user_id and broker_uid, then [resolve the wallet](/en/api-reference/dexbuilder/users-resolve) to verify the result. Use [List Broker users](/en/api-reference/dexbuilder/users-list) to query registered users.
 
 ## Responses and errors
 

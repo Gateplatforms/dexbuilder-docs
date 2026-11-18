@@ -1,0 +1,90 @@
+---
+title: "Register a user and bind Perp"
+description: "Verify wallet ownership, register the user, and complete Perp binding."
+openapi: "/openapi/dexbuilder-en.yaml POST /api/v4/dexbuilder/users/register"
+---
+
+Register a user under the current Broker using a wallet signature and complete Perp binding. Save the returned user_id and broker_uid after success.
+
+Requires a project Broker API Key with dex_builder read-write permission and a nonempty Idempotency-Key header. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
+
+## Registration steps
+
+1. [Get a registration signing message](/en/api-reference/dexbuilder/users-sign-message) and preserve message and timestamp.
+2. Use the wallet corresponding to address to sign the complete original message.
+3. Submit chain, address, the wallet signature sign, and the timestamp returned with the message.
+4. Check code, bound, and broker_uid, then [resolve the wallet registration](/en/api-reference/dexbuilder/users-resolve) to verify the result.
+
+The verified Solana signature format is a hexadecimal Ed25519 signature with a 0x prefix. Sign the UTF-8 bytes of the original message.
+
+## Idempotency and existing users
+
+Generate one idempotency key per registration operation and reuse the original Idempotency-Key when retrying that operation. Idempotency is scoped to user registration under the current Broker.
+
+For an existing wallet address, registration updates the user record and continues any incomplete Perp binding. A newly created user returns created=true. Completed Perp binding returns bound=true.
+
+## Example body
+
+```json
+{
+  "chain": "solana",
+  "address": "<USER_WALLET_ADDRESS>",
+  "sign": "0x<ED25519_SIGNATURE_HEX>",
+  "timestamp": 1700000000
+}
+```
+
+Replace the example wallet address, signature, and timestamp with the values for this registration. The body timestamp comes from the wallet signing message. The Timestamp header is the timestamp for the current API v4 request.
+
+This example reads the wallet signature and message timestamp from environment variables and signs the exact JSON bytes it sends. Keep REGISTER_IDEMPOTENCY_KEY and the request body unchanged when retrying after a timeout.
+
+```python
+import hashlib
+import hmac
+import json
+import os
+import time
+from urllib.request import Request, urlopen
+
+path = "/api/v4/dexbuilder/users/register"
+body = json.dumps({
+    "chain": os.environ["USER_WALLET_CHAIN"],
+    "address": os.environ["USER_WALLET_ADDRESS"],
+    "sign": os.environ["USER_WALLET_SIGNATURE"],
+    "timestamp": int(os.environ["SIGN_MESSAGE_TIMESTAMP"]),
+}, separators=(",", ":")).encode()
+timestamp = str(int(time.time()))
+signing_text = "\n".join([
+    "POST", path, "", hashlib.sha512(body).hexdigest(), timestamp,
+])
+signature = hmac.new(
+    os.environ["BROKER_API_SECRET"].encode(),
+    signing_text.encode(),
+    hashlib.sha512,
+).hexdigest()
+request = Request(
+    "https://api.dexbuilder.com" + path,
+    data=body,
+    method="POST",
+    headers={
+        "KEY": os.environ["BROKER_API_KEY"],
+        "Timestamp": timestamp,
+        "SIGN": signature,
+        "Content-Type": "application/json",
+        "Idempotency-Key": os.environ["REGISTER_IDEMPOTENCY_KEY"],
+    },
+)
+with urlopen(request, timeout=15) as response:
+    print(json.dumps(json.load(response), ensure_ascii=False, indent=2))
+```
+
+## Permission errors
+
+For this response, enable dex_builder read-write permission on the current Key. The prediction and event_contracts products each have their own permissions.
+
+```json
+{
+  "label": "FORBIDDEN",
+  "message": "Request API key does not have dex_builder write permission"
+}
+```

@@ -1,0 +1,90 @@
+---
+title: "註冊使用者並綁定 Perp"
+description: "使用錢包簽名完成使用者開戶和 Perp 綁定。"
+openapi: "/openapi/dexbuilder-zh-TW.yaml POST /api/v4/dexbuilder/users/register"
+---
+
+使用錢包簽名完成當前 Broker 下的使用者開戶和 Perp 綁定，成功後儲存返回的 `user_id` 和 `broker_uid`。
+
+需要專案方 Broker API Key 的 `dex_builder` 讀寫權限，並提供非空的 `Idempotency-Key` 請求頭。認證規則見[Broker API Key 與簽名](/zh-TW/api-reference/common/broker-authentication)。
+
+## 註冊步驟
+
+1. 呼叫[獲取開戶待簽名文案](/zh-TW/api-reference/dexbuilder/users-sign-message)，取得 `message` 和 `timestamp`。
+2. 使用 `address` 對應的錢包簽署完整的 `message` 原文。
+3. 提交 `chain`、`address`、錢包簽名 `sign` 和原文對應的 `timestamp`。
+4. 檢查回應的 `code`、`bound` 和 `broker_uid`，並使用[查詢錢包開戶狀態](/zh-TW/api-reference/dexbuilder/users-resolve)回查。
+
+Solana 已驗證的簽名格式為帶 `0x` 字首的 Ed25519 簽名十六進位制字串。對 UTF-8 編碼的簽名原文進行簽名。
+
+## 冪等與已有使用者
+
+為一次註冊操作生成一個冪等鍵，重試該操作時沿用原來的 `Idempotency-Key`。冪等範圍為當前 Broker 下的使用者註冊操作。
+
+對於已經存在的錢包地址，註冊會走使用者更新路徑，並繼續處理尚未完成的 Perp 綁定。首次成功開戶時 `created` 為 `true`，Perp 綁定完成時 `bound` 為 `true`。
+
+## 請求體示例
+
+```json
+{
+  "chain": "solana",
+  "address": "<USER_WALLET_ADDRESS>",
+  "sign": "0x<ED25519_SIGNATURE_HEX>",
+  "timestamp": 1700000000
+}
+```
+
+將示例中的錢包地址、簽名和時間戳替換為本次開戶取得的實際值。請求體的 `timestamp` 使用簽名文案返回的值，請求頭 `Timestamp` 使用本次 API v4 請求的時間戳。
+
+以下示例從環境變數讀取已取得的錢包簽名和文案時間戳，對最終傳送的 JSON 位元組計算 API v4 簽名。超時重試時保持 `REGISTER_IDEMPOTENCY_KEY` 與請求體一致。
+
+```python
+import hashlib
+import hmac
+import json
+import os
+import time
+from urllib.request import Request, urlopen
+
+path = "/api/v4/dexbuilder/users/register"
+body = json.dumps({
+    "chain": os.environ["USER_WALLET_CHAIN"],
+    "address": os.environ["USER_WALLET_ADDRESS"],
+    "sign": os.environ["USER_WALLET_SIGNATURE"],
+    "timestamp": int(os.environ["SIGN_MESSAGE_TIMESTAMP"]),
+}, separators=(",", ":")).encode()
+timestamp = str(int(time.time()))
+signing_text = "\n".join([
+    "POST", path, "", hashlib.sha512(body).hexdigest(), timestamp,
+])
+signature = hmac.new(
+    os.environ["BROKER_API_SECRET"].encode(),
+    signing_text.encode(),
+    hashlib.sha512,
+).hexdigest()
+request = Request(
+    "https://api.dexbuilder.com" + path,
+    data=body,
+    method="POST",
+    headers={
+        "KEY": os.environ["BROKER_API_KEY"],
+        "Timestamp": timestamp,
+        "SIGN": signature,
+        "Content-Type": "application/json",
+        "Idempotency-Key": os.environ["REGISTER_IDEMPOTENCY_KEY"],
+    },
+)
+with urlopen(request, timeout=15) as response:
+    print(json.dumps(json.load(response), ensure_ascii=False, indent=2))
+```
+
+## 權限錯誤
+
+若返回以下回應，請確認當前 Key 的 `dex_builder` 已開通讀寫權限。`prediction` 和 `event_contracts` 各自具有獨立權限。
+
+```json
+{
+  "label": "FORBIDDEN",
+  "message": "Request API key does not have dex_builder write permission"
+}
+```

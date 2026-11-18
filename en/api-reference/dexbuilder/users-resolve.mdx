@@ -1,0 +1,27 @@
+---
+title: "Resolve wallet registration"
+description: "Check whether a wallet is registered under the current Broker."
+openapi: "/openapi/dexbuilder-en.yaml GET /api/v4/dexbuilder/users/resolve"
+---
+
+Query a wallet by chain and address to check whether it is registered under the current Broker. A registered wallet returns its user_id and broker_uid.
+
+Requires a project Broker API Key with dex_builder read or read-write permission. Identify the wallet in the query parameters. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
+
+## Usage
+
+- Before registration, check registered for the wallet's registration state.
+- After [registering and binding Perp](/en/api-reference/dexbuilder/users-register), query the same chain and address and compare the user identifiers.
+- When registered=false, user_id and broker_uid may be omitted.
+
+## Example request
+
+```http
+GET /api/v4/dexbuilder/users/resolve?chain=solana&address=<USER_WALLET_ADDRESS> HTTP/1.1
+Host: api.dexbuilder.com
+KEY: <BROKER_API_KEY>
+Timestamp: <UNIX_SECONDS>
+SIGN: <SIGN>
+```
+
+Generate SIGN using the actual external path and query parameters. Reuse the Python example in [Get a registration signing message](/en/api-reference/dexbuilder/users-sign-message), changing the path to /api/v4/dexbuilder/users/resolve.

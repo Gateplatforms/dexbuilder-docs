@@ -1030,6 +1030,10 @@
                       {
                         "group": "User",
                         "pages": [
+                          "en/api-reference/dexbuilder/users-register",
+                          "en/api-reference/dexbuilder/users-sign-message",
+                          "en/api-reference/dexbuilder/users-list",
+                          "en/api-reference/dexbuilder/users-resolve",
                           "en/api-reference/dexbuilder/query-user-info",
                           "en/api-reference/dexbuilder/query-wallet-list",
                           "en/api-reference/dexbuilder/query-user-balance",
@@ -1525,6 +1529,7 @@
                       {
                         "group": "使用者",
                         "pages": [
+                          "zh-TW/api-reference/dexbuilder/users-register",
                           "zh-TW/api-reference/dexbuilder/query-user-info",
                           "zh-TW/api-reference/dexbuilder/query-wallet-list",
                           "zh-TW/api-reference/dexbuilder/query-user-balance",

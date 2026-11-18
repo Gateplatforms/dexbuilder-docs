@@ -1,0 +1,27 @@
+---
+title: "List Broker users"
+description: "Query paginated users under the current Broker, deduplicated by user identifier."
+openapi: "/openapi/dexbuilder-en.yaml GET /api/v4/dexbuilder/users"
+---
+
+List users under the current Broker with pagination. The list is deduplicated by user_id.
+
+Requires a project Broker API Key with dex_builder read or read-write permission. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
+
+## Pagination and response fields
+
+Pass page for the page number and page_size for the number of users per page. The response data contains items, page, page_size, and total.
+
+Each user contains user_id, broker_uid, primary_address, status, and created_at. The created_at field is a Unix timestamp in milliseconds.
+
+## Example request
+
+```http
+GET /api/v4/dexbuilder/users?page=1&page_size=1 HTTP/1.1
+Host: api.dexbuilder.com
+KEY: <BROKER_API_KEY>
+Timestamp: <UNIX_SECONDS>
+SIGN: <SIGN>
+```
+
+Use page=1&page_size=1 as the query string in the signature input. Use the returned total, page, and page_size to request subsequent pages.
