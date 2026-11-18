@@ -1532,6 +1532,7 @@
                           "zh-TW/api-reference/dexbuilder/users-register",
                           "zh-TW/api-reference/dexbuilder/users-sign-message",
                           "zh-TW/api-reference/dexbuilder/query-user-info",
+                          "zh-TW/api-reference/dexbuilder/users-list",
                           "zh-TW/api-reference/dexbuilder/users-resolve",
                           "zh-TW/api-reference/dexbuilder/query-wallet-list",
                           "zh-TW/api-reference/dexbuilder/query-user-balance",
