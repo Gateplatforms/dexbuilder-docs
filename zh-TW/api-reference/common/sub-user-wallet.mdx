@@ -10,7 +10,8 @@ Broker 代旗下使用者存取私有介面時，使用 Broker API Key 證明 Br
 | 介面範圍 | `X-User-Wallet-Address` |
 | --- | --- |
 | DexBuilder 平台的資產配置查詢 | 不需要 |
-| DexBuilder 平台的使用者、充值與提現介面 | 必需 |
+| DexBuilder 平台的 `/users` 使用者管理介面 | 透過 Query 或 Body 指定錢包 |
+| DexBuilder 平台現有使用者查詢、充值與提現介面 | 必需 |
 | 事件市場的 Broker 私有 REST 介面 | 必需 |
 | 事件合約的 Broker 私有 REST 介面 | 必需 |
 | 事件市場和事件合約的公開行情介面 | 不需要 |
@@ -24,11 +25,12 @@ Broker 代旗下使用者存取私有介面時，使用 Broker API Key 證明 Br
 | 類別 | 錢包地址 | 介面路徑 |
 | --- | --- | --- |
 | 資產配置 | 不需要 | `GET /assets`、`GET /networks`、`GET /dw_status`、`GET /fee`、`GET /withdraw_limit` |
+| 使用者管理 | 透過 Query 或 Body 指定 | `GET /users/sign-message`、`POST /users/register`、`GET /users/resolve`、`GET /users` |
 | 使用者 | 必需 | `GET /user/info`、`GET /wallet/list`、`GET /user/balance`、`GET /fund_stats` |
 | 充值 | 必需 | `POST /deposit/fee`、`POST /deposit/sign_data`、`GET /deposit/status`、`GET /deposit/history` |
 | 提現 | 必需 | `POST /withdraw/sign_data`、`POST /withdraw/submit`、`POST /withdraw/ata/check-and-build`、`GET /withdraw/status`、`GET /withdraw/history` |
 
-資產配置介面查詢當前 Broker 的配置，不指定終端使用者；使用者、充值和提現介面需要錢包地址。部分介面還有額外請求頭或冪等鍵要求，詳見對應介面頁。
+資產配置介面查詢當前 Broker 的配置。`/users` 使用者管理介面使用專案方 Broker API Key，開戶與地址解析透過 `chain`、`address` 指定錢包，使用者列表按當前 Broker 查詢。現有使用者查詢、充值和提現介面需要錢包地址。部分介面還有額外請求頭或冪等鍵要求，詳見對應介面頁。
 
 ## 發送請求
 

@@ -25,7 +25,9 @@ Broker API Key 的申請、變更與輪換流程由產品方提供。
 | `KEY` | Broker API Key，私有 REST 請求必傳 |
 | `Timestamp` | Unix 秒級時間戳，私有 REST 請求必傳；與服務端時間差不超過 60 秒 |
 | `SIGN` | 使用 Secret Key 計算的 HMAC-SHA512 十六進制簽名，私有 REST 請求必傳 |
-| `X-User-Wallet-Address` | 使用者級介面必傳；適用範圍見[代表使用者存取](/zh-TW/api-reference/common/sub-user-wallet) |
+| `X-User-Wallet-Address` | 按錢包存取已有使用者的介面必傳，適用範圍見[代表使用者存取](/zh-TW/api-reference/common/sub-user-wallet) |
+
+`/api/v4/dexbuilder/users` 下的使用者管理介面使用專案方 Broker API Key。開戶與地址解析透過 Query 或 Body 中的 `chain`、`address` 指定錢包，註冊需要 `dex_builder` 讀寫權限及 `Idempotency-Key`。詳見[平台 API 認證](/zh-TW/api-reference/dexbuilder/authentication)。
 
 ## 簽名原文
 
