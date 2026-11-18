@@ -11,6 +11,361 @@
     }
   ],
   "paths": {
+    "/api/v4/dexbuilder/users/sign-message": {
+      "get": {
+        "tags": [
+          "使用者管理"
+        ],
+        "summary": "獲取開戶待簽名文案",
+        "operationId": "getDexBuilderUserSignMessage",
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "業務成功時 code 為 0。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeUsersSignMessage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "引數、錢包證明或必填請求頭無效。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "description": "Broker Key 校驗失敗或 dex_builder 權限不足。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                },
+                "examples": {
+                  "brokerAuthentication": {
+                    "summary": "Broker Key 校驗失敗",
+                    "value": {
+                      "label": "FORBIDDEN",
+                      "message": "Broker API authentication failed"
+                    }
+                  },
+                  "keyPermission": {
+                    "summary": "缺少平台權限",
+                    "value": {
+                      "label": "FORBIDDEN",
+                      "message": "Request API key does not have dex_builder permission"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "chain",
+            "in": "query",
+            "required": true,
+            "description": "錢包鏈型別，例如 evm 或 solana。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "address",
+            "in": "query",
+            "required": true,
+            "description": "終端使用者錢包地址，與註冊請求中的地址一致。",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "description": "使用專案方 Broker API Key 的 dex_builder 查詢權限呼叫，錢包透過 chain 和 address 查詢引數指定。"
+      }
+    },
+    "/api/v4/dexbuilder/users/register": {
+      "post": {
+        "tags": [
+          "使用者管理"
+        ],
+        "summary": "開戶並綁定 Perp",
+        "operationId": "registerDexBuilderUser",
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "業務成功時 code 為 0。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeUsersRegisterResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "引數、錢包證明或必填請求頭無效。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "description": "Broker Key 校驗失敗或 dex_builder 權限不足。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                },
+                "examples": {
+                  "brokerAuthentication": {
+                    "summary": "Broker Key 校驗失敗",
+                    "value": {
+                      "label": "FORBIDDEN",
+                      "message": "Broker API authentication failed"
+                    }
+                  },
+                  "keyPermission": {
+                    "summary": "缺少平台寫權限",
+                    "value": {
+                      "label": "FORBIDDEN",
+                      "message": "Request API key does not have dex_builder write permission"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "使用專案方 Broker API Key 的 dex_builder 讀寫權限完成錢包證明、使用者開戶和 Perp 綁定。提供非空 Idempotency-Key，冪等範圍為當前 Broker 的使用者註冊操作。",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "description": "本次註冊操作的冪等鍵，建議使用 UUID。同一次操作重試時沿用原 Key。",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsersRegisterRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v4/dexbuilder/users/resolve": {
+      "get": {
+        "tags": [
+          "使用者管理"
+        ],
+        "summary": "查詢地址開戶狀態",
+        "operationId": "resolveDexBuilderUser",
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "業務成功時 code 為 0。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeUsersResolveResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "引數、錢包證明或必填請求頭無效。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "description": "Broker Key 校驗失敗或 dex_builder 權限不足。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                },
+                "examples": {
+                  "brokerAuthentication": {
+                    "summary": "Broker Key 校驗失敗",
+                    "value": {
+                      "label": "FORBIDDEN",
+                      "message": "Broker API authentication failed"
+                    }
+                  },
+                  "keyPermission": {
+                    "summary": "缺少平台權限",
+                    "value": {
+                      "label": "FORBIDDEN",
+                      "message": "Request API key does not have dex_builder permission"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "chain",
+            "in": "query",
+            "required": true,
+            "description": "錢包鏈型別，例如 evm 或 solana。",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "address",
+            "in": "query",
+            "required": true,
+            "description": "終端使用者錢包地址，與註冊請求中的地址一致。",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "description": "使用專案方 Broker API Key 的 dex_builder 查詢權限呼叫，錢包透過 chain 和 address 查詢引數指定。"
+      }
+    },
+    "/api/v4/dexbuilder/users": {
+      "get": {
+        "tags": [
+          "使用者管理"
+        ],
+        "summary": "分頁查詢 Broker 使用者",
+        "operationId": "listDexBuilderUsers",
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "業務成功時 code 為 0。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeUsersListResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "引數、錢包證明或必填請求頭無效。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "description": "Broker Key 校驗失敗或 dex_builder 權限不足。",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                },
+                "examples": {
+                  "brokerAuthentication": {
+                    "summary": "Broker Key 校驗失敗",
+                    "value": {
+                      "label": "FORBIDDEN",
+                      "message": "Broker API authentication failed"
+                    }
+                  },
+                  "keyPermission": {
+                    "summary": "缺少平台權限",
+                    "value": {
+                      "label": "FORBIDDEN",
+                      "message": "Request API key does not have dex_builder permission"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "返回當前 Broker 的分頁使用者列表，同一 user_id 在列表中去重。需要 dex_builder 查詢權限。",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "頁碼。",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "description": "每頁條數。",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ]
+      }
+    },
     "/api/v4/dexbuilder/assets": {
       "get": {
         "tags": [
@@ -1167,6 +1522,211 @@
       }
     },
     "schemas": {
+      "UsersSignMessage": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "錢包需要簽署的完整原文。請按 UTF-8 編碼簽名並保留原文。"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "description": "本次錢包簽名文案對應的 Unix 秒級時間戳。註冊時原樣提交。"
+          }
+        }
+      },
+      "UsersRegisterRequest": {
+        "type": "object",
+        "required": [
+          "chain",
+          "address",
+          "sign",
+          "timestamp"
+        ],
+        "properties": {
+          "chain": {
+            "type": "string",
+            "description": "錢包鏈型別，例如 evm 或 solana。"
+          },
+          "address": {
+            "type": "string",
+            "description": "簽署待簽名文案的錢包地址。"
+          },
+          "sign": {
+            "type": "string",
+            "description": "錢包對 sign-message 返回的 message 原文生成的簽名。Solana 已驗證的呼叫格式為帶 0x 字首的 Ed25519 簽名十六進位制字串。"
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "description": "sign-message 回應中的 timestamp。請求頭 Timestamp 用於本次 API v4 請求的簽名。"
+          }
+        }
+      },
+      "UsersRegisterResult": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "DexBuilder 使用者標識。"
+          },
+          "broker_uid": {
+            "type": "integer",
+            "format": "int64",
+            "description": "綁定後的 Perp 使用者 UID。"
+          },
+          "created": {
+            "type": "boolean",
+            "description": "是否為本次新建的使用者。"
+          },
+          "bound": {
+            "type": "boolean",
+            "description": "是否已完成 Perp 綁定。"
+          },
+          "wallets": {
+            "type": "array",
+            "description": "使用者關聯的錢包及綁定狀態。",
+            "items": {
+              "$ref": "#/components/schemas/UserInfoWallet"
+            }
+          }
+        }
+      },
+      "UsersResolveResult": {
+        "type": "object",
+        "properties": {
+          "registered": {
+            "type": "boolean",
+            "description": "該地址是否已在當前 Broker 開戶。"
+          },
+          "broker_id": {
+            "type": "string",
+            "description": "當前 Broker 的標識。"
+          },
+          "user_id": {
+            "type": "string",
+            "description": "已開戶使用者的 DexBuilder 使用者標識。未開戶時可省略。"
+          },
+          "broker_uid": {
+            "type": "integer",
+            "format": "int64",
+            "description": "已開戶使用者的 Perp 使用者 UID。未開戶時可省略。"
+          }
+        }
+      },
+      "UsersListItem": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "DexBuilder 使用者標識。"
+          },
+          "broker_uid": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Perp 使用者 UID。"
+          },
+          "primary_address": {
+            "type": "string",
+            "description": "使用者主錢包地址。"
+          },
+          "status": {
+            "type": "string",
+            "description": "使用者狀態。"
+          },
+          "created_at": {
+            "type": "integer",
+            "format": "int64",
+            "description": "使用者建立時間，Unix 毫秒時間戳。"
+          }
+        }
+      },
+      "UsersListResult": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UsersListItem"
+            },
+            "description": "按 user_id 去重的當前頁使用者列表。"
+          },
+          "page": {
+            "type": "integer",
+            "description": "當前頁碼。"
+          },
+          "page_size": {
+            "type": "integer",
+            "description": "本頁分頁大小。"
+          },
+          "total": {
+            "type": "integer",
+            "format": "int64",
+            "description": "當前 Broker 的使用者總數。"
+          }
+        }
+      },
+      "EnvelopeUsersSignMessage": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/UsersSignMessage"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeUsersRegisterResult": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/UsersRegisterResult"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeUsersResolveResult": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/UsersResolveResult"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeUsersListResult": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/UsersListResult"
+              }
+            }
+          }
+        ]
+      },
       "ErrorEnvelope": {
         "allOf": [
           {
