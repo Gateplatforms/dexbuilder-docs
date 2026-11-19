@@ -27,7 +27,7 @@ EVM 使用 `personal_sign`（EIP-191），提交帶 `0x` 前綴的簽名。
 
 同一地址再次註冊會更新使用者記錄，並在尚未綁定時補綁。成功時 `created` 可為 `true`，包括同一地址再次註冊。`bound` 僅在本次新完成 Perp 綁定時為 `true`，已有 `broker_uid` 時為 `false`。
 
-回應中的 `project_id` 是本次使用的專案綁定 ID，`bound_at` 為回應產生時的 Unix 毫秒時間戳。`broker_uid` 可用於核對綁定結果，公開請求使用各介面說明的請求頭。 `X-Gate-User-Id` 由網關在認證後注入後端，客戶端依各介面要求提供 `X-User-Wallet-Address`。
+回應中的 `project_id` 是本次使用的專案綁定 ID，`bound_at` 為回應產生時的 Unix 毫秒時間戳。`broker_uid` 可用於核對綁定結果，公開請求使用各介面說明的請求頭。
 
 ## 請求體示例
 
