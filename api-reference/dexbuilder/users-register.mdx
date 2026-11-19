@@ -8,6 +8,8 @@ openapi: "/openapi/dexbuilder.yaml POST /api/v4/dexbuilder/users/register"
 
 需要项目方 Broker API Key 的 `dex_builder` 读写权限，并提供非空的 `Idempotency-Key` 请求头。认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
 
+可选请求头 `X-Project-ID` 须匹配当前 Broker 的有效项目绑定。省略时使用当前有效绑定。
+
 ## 注册步骤
 
 1. 调用[获取开户待签名文案](/api-reference/dexbuilder/users-sign-message)，取得 `message` 和 `timestamp`。
@@ -17,11 +19,15 @@ openapi: "/openapi/dexbuilder.yaml POST /api/v4/dexbuilder/users/register"
 
 Solana 已验证的签名格式为带 `0x` 前缀的 Ed25519 签名十六进制字符串。对 UTF-8 编码的签名原文进行签名。
 
+EVM 使用 `personal_sign`（EIP-191），提交带 `0x` 前缀的签名。
+
 ## 幂等与已有用户
 
-为一次注册操作生成一个幂等键，重试该操作时沿用原来的 `Idempotency-Key`。幂等范围为当前 Broker 下的用户注册操作。
+注册请求必须携带非空的 `Idempotency-Key`。
 
-对于已经存在的钱包地址，注册会走用户更新路径，并继续处理尚未完成的 Perp 绑定。首次成功开户时 `created` 为 `true`，Perp 绑定完成时 `bound` 为 `true`。
+同一地址再次注册会更新用户记录，并在尚未绑定时补绑。成功时 `created` 可为 `true`，包括同一地址再次注册。`bound` 仅在本次新完成 Perp 绑定时为 `true`，已有 `broker_uid` 时为 `false`。
+
+响应中的 `project_id` 是本次使用的项目绑定 ID，`bound_at` 为响应生成时的 Unix 毫秒时间戳。`broker_uid` 可用于核对绑定结果，公开请求使用各接口声明的请求头。 `X-Gate-User-Id` 由网关在鉴权后注入后端，客户端按具体接口要求提供 `X-User-Wallet-Address`。
 
 ## 请求体示例
 
@@ -36,7 +42,7 @@ Solana 已验证的签名格式为带 `0x` 前缀的 Ed25519 签名十六进制�
 
 将示例中的钱包地址、签名和时间戳替换为本次开户取得的实际值。请求体的 `timestamp` 使用签名文案返回的值，请求头 `Timestamp` 使用本次 API v4 请求的时间戳。
 
-以下示例从环境变量读取已取得的钱包签名和文案时间戳，对最终发送的 JSON 字节计算 API v4 签名。超时重试时保持 `REGISTER_IDEMPOTENCY_KEY` 与请求体一致。
+以下示例从环境变量读取已取得的钱包签名和文案时间戳，对最终发送的 JSON 字节计算 API v4 签名。
 
 ```python
 import hashlib

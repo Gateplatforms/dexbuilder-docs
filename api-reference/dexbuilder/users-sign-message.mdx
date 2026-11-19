@@ -8,6 +8,8 @@ openapi: "/openapi/dexbuilder.yaml GET /api/v4/dexbuilder/users/sign-message"
 
 使用项目方的 Broker API Key 调用，需要 `dex_builder` 只读或读写权限。钱包由 Query 中的 `chain` 和 `address` 指定，认证方法见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
 
+`chain` 仅接受 `evm` 或 `solana`，表示钱包虚拟机类型。EVM 地址大小写不敏感。
+
 ## 钱包签名
 
 1. 传入 `chain` 和 `address`，例如 `solana` 与对应钱包地址。

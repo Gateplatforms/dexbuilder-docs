@@ -4,15 +4,15 @@ description: "Query paginated users under the current Broker, deduplicated by us
 openapi: "/openapi/dexbuilder-en.yaml GET /api/v4/dexbuilder/users"
 ---
 
-List users under the current Broker with pagination. The list is deduplicated by user_id.
+Lists users with a bound Perp account under the current Broker, deduplicated by `broker_uid`. The default list includes active users only.
 
 Requires a project Broker API Key with dex_builder read or read-write permission. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
 
 ## Pagination and response fields
 
-Pass page for the page number and page_size for the number of users per page. The response data contains items, page, page_size, and total.
+`page` starts at 1 and defaults to 1. `page_size` ranges from 1 to 100 and defaults to 20. Optional `include_suspended` accepts `1`, `true`, `0`, or `false`. Set it to `1` or `true` to include suspended users. `data` contains `items`, `page`, `page_size`, and `total`, where `total` counts users matching the filter.
 
-Each user contains user_id, broker_uid, primary_address, status, and created_at. The created_at field is a Unix timestamp in milliseconds.
+Items include `broker_uid`, `primary_address`, `status` (`active` or `suspended`), and `created_at` in Unix milliseconds. `user_id` may be omitted. EVM primary addresses are returned in lowercase.
 
 ## Example request
 

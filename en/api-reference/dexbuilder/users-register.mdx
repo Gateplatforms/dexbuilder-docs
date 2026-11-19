@@ -8,6 +8,8 @@ Register a user under the current Broker using a wallet signature and complete P
 
 Requires a project Broker API Key with dex_builder read-write permission and a nonempty Idempotency-Key header. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
 
+The optional `X-Project-ID` header must match the current Broker’s active project binding. Omit it to use that binding.
+
 ## Registration steps
 
 1. [Get a registration signing message](/en/api-reference/dexbuilder/users-sign-message) and preserve message and timestamp.
@@ -17,11 +19,15 @@ Requires a project Broker API Key with dex_builder read-write permission and a n
 
 The verified Solana signature format is a hexadecimal Ed25519 signature with a 0x prefix. Sign the UTF-8 bytes of the original message.
 
+Use `personal_sign` (EIP-191) for EVM and submit the signature with a `0x` prefix.
+
 ## Idempotency and existing users
 
-Generate one idempotency key per registration operation and reuse the original Idempotency-Key when retrying that operation. Idempotency is scoped to user registration under the current Broker.
+Include a nonempty `Idempotency-Key` header on each registration request.
 
-For an existing wallet address, registration updates the user record and continues any incomplete Perp binding. A newly created user returns created=true. Completed Perp binding returns bound=true.
+Registering the same address again updates the user and completes any pending binding. `created` can be `true` on success, including repeat registration. `bound` is `true` only when this request completes a new Perp binding and is `false` for an existing `broker_uid`.
+
+`project_id` identifies the project binding used. `bound_at` is the response generation time in Unix milliseconds. Use `broker_uid` to verify the binding, and follow each public endpoint’s documented headers. The gateway injects `X-Gate-User-Id` when forwarding authenticated user requests. Supply `X-User-Wallet-Address` where the endpoint requires it.
 
 ## Example body
 
@@ -36,7 +42,7 @@ For an existing wallet address, registration updates the user record and continu
 
 Replace the example wallet address, signature, and timestamp with the values for this registration. The body timestamp comes from the wallet signing message. The Timestamp header is the timestamp for the current API v4 request.
 
-This example reads the wallet signature and message timestamp from environment variables and signs the exact JSON bytes it sends. Keep REGISTER_IDEMPOTENCY_KEY and the request body unchanged when retrying after a timeout.
+This example reads the wallet signature and message timestamp from environment variables and signs the exact JSON bytes it sends.
 
 ```python
 import hashlib

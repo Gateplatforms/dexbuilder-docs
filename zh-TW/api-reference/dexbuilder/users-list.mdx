@@ -4,15 +4,15 @@ description: "分頁查詢當前 Broker 下按使用者標識去重的使用者�
 openapi: "/openapi/dexbuilder-zh-TW.yaml GET /api/v4/dexbuilder/users"
 ---
 
-分頁查詢當前 Broker 下的使用者列表，同一 `user_id` 在列表中去重。
+按 `broker_uid` 去重，分頁回傳目前 Broker 下已綁定 Perp 子帳號的使用者。預設只回傳啟用的使用者。
 
 需要專案方 Broker API Key 的 `dex_builder` 唯讀或讀寫權限，認證規則見[Broker API Key 與簽名](/zh-TW/api-reference/common/broker-authentication)。
 
 ## 分頁與返回欄位
 
-使用 `page` 指定頁碼，使用 `page_size` 指定每頁條數。回應的 `data` 包含 `items`、`page`、`page_size` 和 `total`。
+`page` 從 1 開始，預設為 1。`page_size` 範圍為 1 到 100，預設為 20。選填的 `include_suspended` 接受 `1`、`true`、`0`、`false`，傳入 `1` 或 `true` 時一併回傳停用的使用者。`data` 包含 `items`、`page`、`page_size` 和 `total`，其中 `total` 為符合篩選條件的使用者數。
 
-每個使用者包含 `user_id`、`broker_uid`、`primary_address`、`status` 和 `created_at`。`created_at` 為 Unix 毫秒時間戳。
+列表項目包含 `broker_uid`、`primary_address`、`status`（`active` 或 `suspended`）和 Unix 毫秒時間戳 `created_at`。`user_id` 可能省略，EVM 主錢包地址以小寫回傳。
 
 ## 呼叫示例
 

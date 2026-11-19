@@ -8,11 +8,13 @@ openapi: "/openapi/dexbuilder.yaml GET /api/v4/dexbuilder/users/resolve"
 
 需要项目方 Broker API Key 的 `dex_builder` 只读或读写权限。钱包通过 Query 参数指定，认证规则见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
 
+`chain` 仅接受 `evm` 或 `solana`，表示钱包虚拟机类型。EVM 地址大小写不敏感。
+
 ## 使用说明
 
 - 开户前使用 `registered` 判断该地址的开户状态。
 - [注册并绑定 Perp](/api-reference/dexbuilder/users-register)后，使用同一组 `chain` 和 `address` 回查，并核对用户标识。
-- `registered=false` 时，`user_id` 和 `broker_uid` 可省略。
+- 未开户时返回 HTTP 200，`data` 仅包含 `registered: false` 和 `broker_id`。已开户时还返回 `user_id`、`broker_uid` 和表示钱包是否激活的布尔字段 `activite`。
 
 ## 调用示例
 

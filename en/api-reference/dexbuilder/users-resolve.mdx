@@ -8,11 +8,13 @@ Query a wallet by chain and address to check whether it is registered under the 
 
 Requires a project Broker API Key with dex_builder read or read-write permission. Identify the wallet in the query parameters. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
 
+`chain` accepts `evm` or `solana` and identifies the wallet virtual machine. EVM addresses are case-insensitive.
+
 ## Usage
 
 - Before registration, check registered for the wallet's registration state.
 - After [registering and binding Perp](/en/api-reference/dexbuilder/users-register), query the same chain and address and compare the user identifiers.
-- When registered=false, user_id and broker_uid may be omitted.
+- An unregistered wallet returns HTTP 200 with `registered: false` and `broker_id` in `data`. A registered wallet also returns `user_id`, `broker_uid`, and the boolean `activite` indicating whether the wallet is active.
 
 ## Example request
 

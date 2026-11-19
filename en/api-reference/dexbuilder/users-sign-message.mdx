@@ -8,6 +8,8 @@ Get the wallet signing message and timestamp needed to [register a user and bind
 
 Call from your project server with a Broker API Key that has dex_builder read or read-write permission. Identify the wallet with the chain and address query parameters. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
 
+`chain` accepts `evm` or `solana` and identifies the wallet virtual machine. EVM addresses are case-insensitive.
+
 ## Sign the message
 
 1. Pass chain and address, such as solana and the corresponding wallet address.
