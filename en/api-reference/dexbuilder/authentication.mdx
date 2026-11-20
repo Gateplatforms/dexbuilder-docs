@@ -7,15 +7,26 @@ Call DexBuilder Platform API endpoints at https://api.dexbuilder.com using the /
 
 Your Broker API Key needs the dex_builder product permission. Read operations require read or read-write access; submission operations require read-write access. An end user's personal API Key cannot replace a Broker API Key.
 
+## User management permissions
+
+| Method and path | dex_builder permission |
+| --- | --- |
+| GET /users/sign-message | Read or read-write |
+| POST /users/register | Read-write |
+| GET /users/resolve | Read or read-write |
+| GET /users | Read or read-write |
+
+All paths use the /api/v4/dexbuilder prefix. Permission value 1 means read-only and 2 means read-write. Registration also requires a nonempty Idempotency-Key. See [Register a user and bind Perp](/en/api-reference/dexbuilder/users-register).
+
 ## User wallet
 
-Asset-configuration endpoints do not require `X-User-Wallet-Address`. User, deposit, and withdrawal endpoints require the target user's wallet address in this header. The gateway verifies that the wallet belongs to your Broker. See [Access on behalf of a user](/en/api-reference/common/sub-user-wallet) for the full list.
+Asset-configuration and /users management endpoints use the project Broker API Key. User management identifies a wallet through chain and address in query parameters or the body. Existing user queries, deposits, and withdrawals require the target user's wallet address in X-User-Wallet-Address. The gateway verifies that the wallet belongs to your Broker. See [Access on behalf of a user](/en/api-reference/common/sub-user-wallet) for the full list.
 
 ## Device type
 
 Some platform endpoints require the `x-perp-device-type` header. Supported values are `1` (Android), `2` (iOS), and `3` (WEB). `4` (H5) is not accepted by these DexBuilder Platform endpoints. Follow each endpoint's required parameters.
 
-Withdrawal submission also requires Idempotency-Key. Other headers are specified on the relevant endpoint pages.
+User registration and withdrawal submission also require Idempotency-Key. Other headers are specified on the relevant endpoint pages.
 
 ## Example request
 

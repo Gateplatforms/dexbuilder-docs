@@ -3,7 +3,7 @@ title: "DexBuilder 平台 API 概覽"
 description: "面向 Broker 的 DexBuilder 平台 REST API，涵蓋資產配置、使用者、充值與提現能力。"
 ---
 
-DexBuilder 平台 API 提供資產配置、終端使用者查詢、Vault 餘額，以及鏈上充值與提現能力。
+DexBuilder 平台 API 提供資產配置、終端使用者開戶與查詢、Perp 綁定、Vault 餘額，以及鏈上充值與提現能力。
 
 ## 接入地址
 
@@ -15,18 +15,23 @@ https://api.dexbuilder.com
 
 介面路徑以 `/api/v4/dexbuilder` 開頭，例如 `GET /api/v4/dexbuilder/assets`。
 
-使用 Broker API Key 呼叫。簽名規則及使用者級介面的 `X-User-Wallet-Address` 要求見[Broker API 認證與簽名](/zh-TW/api-reference/common/broker-authentication)；平台權限和各類介面的錢包要求見[平台 API 認證](/zh-TW/api-reference/dexbuilder/authentication)。
+使用 Broker API Key 呼叫。簽名規則及按錢包存取現有使用者的介面所需的 `X-User-Wallet-Address` 要求見[Broker API 認證與簽名](/zh-TW/api-reference/common/broker-authentication)；平台權限和各類介面的錢包要求見[平台 API 認證](/zh-TW/api-reference/dexbuilder/authentication)。
 
 ## 介面分類
 
 | 分類 | 能力 |
 | --- | --- |
 | 資產配置 | 查詢資產、網路、充提開關、固定手續費和提現限額 |
+| 使用者管理 | 獲取開戶待簽名文案、註冊並綁定 Perp、按錢包查詢開戶狀態、分頁查詢使用者 |
 | 使用者 | 查詢使用者資訊、已綁定錢包、Vault 可用餘額和資金統計 |
 | 充值 | 估算手續費、獲取簽名資料、查詢狀態與歷史 |
 | 提現 | 獲取簽名資料、提交提現、查詢狀態與歷史、處理 Solana ATA |
 
-資產配置介面不需要終端使用者錢包；其餘使用者、充值和提現介面需要 `X-User-Wallet-Address`。部分介面還需要 `x-perp-device-type` 或 `Idempotency-Key`，以對應介面的參數表為準。
+資產配置和 `/users` 使用者管理介面使用專案方 Broker API Key。使用者管理介面透過 Query 或 Body 中的 `chain`、`address` 指定錢包。現有使用者查詢、充值和提現介面需要 `X-User-Wallet-Address`。部分介面還需要 `x-perp-device-type` 或 `Idempotency-Key`，以對應介面的參數表為準。
+
+## 使用者開戶
+
+先[獲取開戶待簽名文案](/zh-TW/api-reference/dexbuilder/users-sign-message)，使用目標錢包簽署原文後[註冊使用者並綁定 Perp](/zh-TW/api-reference/dexbuilder/users-register)。註冊需要 `dex_builder` 讀寫權限和 `Idempotency-Key`。成功後儲存 `user_id`、`broker_uid`，並透過[查詢錢包開戶狀態](/zh-TW/api-reference/dexbuilder/users-resolve)核對結果。已有使用者可透過[分頁列表](/zh-TW/api-reference/dexbuilder/users-list)查詢。
 
 ## 回應與錯誤
 

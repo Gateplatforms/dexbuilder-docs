@@ -7,15 +7,26 @@ DexBuilder 平台 API 的 Base URL 為 `https://api.dexbuilder.com`，路徑以 
 
 Broker API Key 須具備 `dex_builder` 產品權限。查詢介面需要唯讀或讀寫權限；提交介面需要讀寫權限。終端使用者的個人 API Key 不可代替 Broker API Key。
 
+## 使用者管理介面權限
+
+| 方法與路徑 | dex_builder 權限 |
+| --- | --- |
+| GET /users/sign-message | 唯讀或讀寫 |
+| POST /users/register | 讀寫 |
+| GET /users/resolve | 唯讀或讀寫 |
+| GET /users | 唯讀或讀寫 |
+
+以上路徑均以 /api/v4/dexbuilder 為前綴。權限值 1 表示唯讀，2 表示讀寫。註冊還需要非空的 Idempotency-Key，詳見[註冊使用者並綁定 Perp](/zh-TW/api-reference/dexbuilder/users-register)。
+
 ## 使用者錢包地址
 
-資產配置介面不需要 `X-User-Wallet-Address`。使用者、充值和提現介面須在此請求頭提供目標使用者的錢包地址。網關會驗證該錢包所屬使用者是否屬於目前的 Broker。完整清單見[代表使用者存取](/zh-TW/api-reference/common/sub-user-wallet)。
+資產配置和 /users 使用者管理介面使用專案方 Broker API Key。使用者管理透過 Query 或 Body 中的 chain、address 指定錢包。現有使用者查詢、充值和提現介面須在 X-User-Wallet-Address 請求頭提供目標使用者的錢包地址。網關會驗證該錢包所屬使用者是否屬於目前的 Broker。完整清單見[代表使用者存取](/zh-TW/api-reference/common/sub-user-wallet)。
 
 ## 設備類型
 
 部分平台介面要求 `x-perp-device-type` 請求頭。可用值為 `1`（Android）、`2`（iOS）及 `3`（WEB）。`4`（H5）不適用於這些 DexBuilder 平台介面；請以各介面的必填參數為準。
 
-提交提現時還需要 `Idempotency-Key`。其他請求頭以各介面的參數說明為準。
+註冊使用者和提交提現時還需要 `Idempotency-Key`。其他請求頭以各介面的參數說明為準。
 
 ## 請求示例
 

@@ -528,6 +528,10 @@
                       {
                         "group": "用户",
                         "pages": [
+                          "api-reference/dexbuilder/users-sign-message",
+                          "api-reference/dexbuilder/users-register",
+                          "api-reference/dexbuilder/users-resolve",
+                          "api-reference/dexbuilder/users-list",
                           "api-reference/dexbuilder/query-user-info",
                           "api-reference/dexbuilder/query-wallet-list",
                           "api-reference/dexbuilder/query-user-balance",
@@ -1026,6 +1030,10 @@
                       {
                         "group": "User",
                         "pages": [
+                          "en/api-reference/dexbuilder/users-register",
+                          "en/api-reference/dexbuilder/users-sign-message",
+                          "en/api-reference/dexbuilder/users-list",
+                          "en/api-reference/dexbuilder/users-resolve",
                           "en/api-reference/dexbuilder/query-user-info",
                           "en/api-reference/dexbuilder/query-wallet-list",
                           "en/api-reference/dexbuilder/query-user-balance",
@@ -1521,7 +1529,11 @@
                       {
                         "group": "使用者",
                         "pages": [
+                          "zh-TW/api-reference/dexbuilder/users-register",
+                          "zh-TW/api-reference/dexbuilder/users-sign-message",
                           "zh-TW/api-reference/dexbuilder/query-user-info",
+                          "zh-TW/api-reference/dexbuilder/users-list",
+                          "zh-TW/api-reference/dexbuilder/users-resolve",
                           "zh-TW/api-reference/dexbuilder/query-wallet-list",
                           "zh-TW/api-reference/dexbuilder/query-user-balance",
                           "zh-TW/api-reference/dexbuilder/query-fund-stats"

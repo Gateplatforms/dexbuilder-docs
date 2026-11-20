@@ -10,7 +10,8 @@ Broker 代旗下用户访问私有接口时，使用 Broker API Key 证明 Broke
 | 接口范围 | `X-User-Wallet-Address` |
 | --- | --- |
 | DexBuilder 平台的资产配置查询 | 不需要 |
-| DexBuilder 平台的用户、充值与提现接口 | 必需 |
+| DexBuilder 平台的 `/users` 用户管理接口 | 通过 Query 或 Body 指定钱包 |
+| DexBuilder 平台现有用户查询、充值与提现接口 | 必需 |
 | 事件市场的 Broker 私有 REST 接口 | 必需 |
 | 事件合约的 Broker 私有 REST 接口 | 必需 |
 | 事件市场和事件合约的公开行情接口 | 不需要 |
@@ -24,11 +25,12 @@ Broker 代旗下用户访问私有接口时，使用 Broker API Key 证明 Broke
 | 类别 | 钱包地址 | 接口路径 |
 | --- | --- | --- |
 | 资产配置 | 不需要 | `GET /assets`、`GET /networks`、`GET /dw_status`、`GET /fee`、`GET /withdraw_limit` |
+| 用户管理 | 通过 Query 或 Body 指定 | `GET /users/sign-message`、`POST /users/register`、`GET /users/resolve`、`GET /users` |
 | 用户 | 必需 | `GET /user/info`、`GET /wallet/list`、`GET /user/balance`、`GET /fund_stats` |
 | 充值 | 必需 | `POST /deposit/fee`、`POST /deposit/sign_data`、`GET /deposit/status`、`GET /deposit/history` |
 | 提现 | 必需 | `POST /withdraw/sign_data`、`POST /withdraw/submit`、`POST /withdraw/ata/check-and-build`、`GET /withdraw/status`、`GET /withdraw/history` |
 
-资产配置接口查询当前 Broker 的配置，不指定终端用户；用户、充值和提现接口需要钱包地址。部分接口还有额外请求头或幂等键要求，详见对应接口页。
+资产配置接口查询当前 Broker 的配置。`/users` 用户管理接口使用项目方 Broker API Key，开户与地址解析通过 `chain`、`address` 指定钱包，用户列表按当前 Broker 查询。现有用户查询、充值和提现接口需要钱包地址。部分接口还有额外请求头或幂等键要求，详见对应接口页。
 
 ## 发送请求
 

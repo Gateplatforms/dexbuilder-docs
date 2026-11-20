@@ -1,0 +1,58 @@
+---
+title: "获取开户待签名文案"
+description: "获取用户钱包开户所需的签名原文和时间戳。"
+openapi: "/openapi/dexbuilder.yaml GET /api/v4/dexbuilder/users/sign-message"
+---
+
+获取指定钱包开户所需的签名原文和时间戳，供后续[注册用户并绑定 Perp](/api-reference/dexbuilder/users-register)使用。
+
+使用项目方的 Broker API Key 调用，需要 `dex_builder` 只读或读写权限。钱包由 Query 中的 `chain` 和 `address` 指定，认证方法见[Broker API Key 与签名](/api-reference/common/broker-authentication)。
+
+`chain` 仅接受 `evm` 或 `solana`，表示钱包虚拟机类型。EVM 地址大小写不敏感。
+
+## 钱包签名
+
+1. 传入 `chain` 和 `address`，例如 `solana` 与对应钱包地址。
+2. 保存响应中的 `message` 和 `timestamp`，使用该钱包签署完整的 `message` 原文。
+3. 将钱包签名作为注册请求的 `sign`，并将本次响应的 `timestamp` 原样提交。
+
+`SIGN` 请求头是 Broker 服务端生成的 API v4 请求签名。注册请求中的 `sign` 由终端用户钱包生成。
+
+## 调用示例
+
+下面的 Python 示例从服务端环境变量读取 Broker 凭据和钱包信息，生成签名后立即发送同一请求。
+
+```python
+import hashlib
+import hmac
+import json
+import os
+import time
+from urllib.parse import urlencode, unquote
+from urllib.request import Request, urlopen
+
+path = "/api/v4/dexbuilder/users/sign-message"
+query = urlencode({
+    "chain": os.environ["USER_WALLET_CHAIN"],
+    "address": os.environ["USER_WALLET_ADDRESS"],
+})
+timestamp = str(int(time.time()))
+signing_text = "\n".join([
+    "GET", path, unquote(query), hashlib.sha512(b"").hexdigest(), timestamp,
+])
+signature = hmac.new(
+    os.environ["BROKER_API_SECRET"].encode(),
+    signing_text.encode(),
+    hashlib.sha512,
+).hexdigest()
+request = Request(
+    "https://api.dexbuilder.com" + path + "?" + query,
+    headers={
+        "KEY": os.environ["BROKER_API_KEY"],
+        "Timestamp": timestamp,
+        "SIGN": signature,
+    },
+)
+with urlopen(request, timeout=15) as response:
+    print(json.dumps(json.load(response), ensure_ascii=False, indent=2))
+```

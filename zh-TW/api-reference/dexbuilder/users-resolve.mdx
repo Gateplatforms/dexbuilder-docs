@@ -1,0 +1,29 @@
+---
+title: "查詢錢包開戶狀態"
+description: "按鏈型別和錢包地址查詢當前 Broker 下的開戶結果。"
+openapi: "/openapi/dexbuilder-zh-TW.yaml GET /api/v4/dexbuilder/users/resolve"
+---
+
+按 `chain` 和 `address` 查詢該錢包是否已在當前 Broker 開戶，已開戶時返回對應的 `user_id` 和 `broker_uid`。
+
+需要專案方 Broker API Key 的 `dex_builder` 唯讀或讀寫權限。錢包透過 Query 引數指定，認證規則見[Broker API Key 與簽名](/zh-TW/api-reference/common/broker-authentication)。
+
+`chain` 僅接受 `evm` 或 `solana`，表示錢包虛擬機類型。EVM 地址不區分大小寫。
+
+## 使用說明
+
+- 開戶前使用 `registered` 判斷該地址的開戶狀態。
+- [註冊並綁定 Perp](/zh-TW/api-reference/dexbuilder/users-register)後，使用同一組 `chain` 和 `address` 回查，並核對使用者標識。
+- 未開戶時回傳 HTTP 200，`data` 僅包含 `registered: false` 和 `broker_id`。已開戶時還回傳 `user_id`、`broker_uid`，以及表示錢包是否啟用的布林欄位 `activite`。
+
+## 呼叫示例
+
+```http
+GET /api/v4/dexbuilder/users/resolve?chain=solana&address=<USER_WALLET_ADDRESS> HTTP/1.1
+Host: api.dexbuilder.com
+KEY: <BROKER_API_KEY>
+Timestamp: <UNIX_SECONDS>
+SIGN: <SIGN>
+```
+
+按實際外部路徑和 Query 引數生成 `SIGN`。可參考[獲取開戶待簽名文案](/zh-TW/api-reference/dexbuilder/users-sign-message)的 Python 示例，將路徑改為 `/api/v4/dexbuilder/users/resolve`。

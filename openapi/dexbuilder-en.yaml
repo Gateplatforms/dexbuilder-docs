@@ -11,6 +11,438 @@
     }
   ],
   "paths": {
+    "/api/v4/dexbuilder/users/sign-message": {
+      "get": {
+        "tags": [
+          "User management"
+        ],
+        "summary": "Get a registration signing message",
+        "operationId": "getDexBuilderUserSignMessage",
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A code of 0 indicates business success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeUsersSignMessage"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters, wallet proof, or required request headers.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "description": "Broker Key authentication failed or the Key lacks the required dex_builder permission.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                },
+                "examples": {
+                  "brokerAuthentication": {
+                    "summary": "Broker Key authentication failed",
+                    "value": {
+                      "label": "FORBIDDEN",
+                      "message": "Broker API authentication failed"
+                    }
+                  },
+                  "keyPermission": {
+                    "summary": "Missing platform permission",
+                    "value": {
+                      "label": "FORBIDDEN",
+                      "message": "Request API key does not have dex_builder permission"
+                    }
+                  },
+                  "projectAccessDenied": {
+                    "summary": "Project access denied",
+                    "value": {
+                      "code": 40300801,
+                      "reason": "P_DEX_BUILDER_IN_PROJECT_ACCESS_DENIED",
+                      "label": "PROJECT_ACCESS_DENIED",
+                      "message": "project access denied",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "chain",
+            "in": "query",
+            "required": true,
+            "description": "`chain` accepts `evm` or `solana` and identifies the wallet virtual machine. EVM addresses are case-insensitive.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "evm",
+                "solana"
+              ]
+            }
+          },
+          {
+            "name": "address",
+            "in": "query",
+            "required": true,
+            "description": "End-user wallet address, matching the address in the registration request.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "description": "Requires the project Broker API Key with dex_builder read permission. Identify the wallet with the chain and address query parameters."
+      }
+    },
+    "/api/v4/dexbuilder/users/register": {
+      "post": {
+        "tags": [
+          "User management"
+        ],
+        "summary": "Register a user and bind Perp",
+        "operationId": "registerDexBuilderUser",
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A code of 0 indicates business success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeUsersRegisterResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters, wallet proof, or required request headers.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "description": "Broker Key authentication failed or the Key lacks the required dex_builder permission.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                },
+                "examples": {
+                  "brokerAuthentication": {
+                    "summary": "Broker Key authentication failed",
+                    "value": {
+                      "label": "FORBIDDEN",
+                      "message": "Broker API authentication failed"
+                    }
+                  },
+                  "keyPermission": {
+                    "summary": "Missing platform write permission",
+                    "value": {
+                      "label": "FORBIDDEN",
+                      "message": "Request API key does not have dex_builder write permission"
+                    }
+                  },
+                  "projectAccessDenied": {
+                    "summary": "Project access denied",
+                    "value": {
+                      "code": 40300801,
+                      "reason": "P_DEX_BUILDER_IN_PROJECT_ACCESS_DENIED",
+                      "label": "PROJECT_ACCESS_DENIED",
+                      "message": "project access denied",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Requires the project Broker API Key with dex_builder read-write permission to verify wallet ownership, register the user, and bind Perp. Supply a nonempty Idempotency-Key. The optional `X-Project-ID` header must match the current Broker’s active project binding. Omit it to use that binding.",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "description": "Include a nonempty `Idempotency-Key` header on each registration request.",
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "\\S"
+            }
+          },
+          {
+            "name": "X-Project-ID",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "The optional `X-Project-ID` header must match the current Broker’s active project binding. Omit it to use that binding."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UsersRegisterRequest"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v4/dexbuilder/users/resolve": {
+      "get": {
+        "tags": [
+          "User management"
+        ],
+        "summary": "Resolve wallet registration",
+        "operationId": "resolveDexBuilderUser",
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A code of 0 indicates business success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeUsersResolveResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters, wallet proof, or required request headers.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "description": "Broker Key authentication failed or the Key lacks the required dex_builder permission.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                },
+                "examples": {
+                  "brokerAuthentication": {
+                    "summary": "Broker Key authentication failed",
+                    "value": {
+                      "label": "FORBIDDEN",
+                      "message": "Broker API authentication failed"
+                    }
+                  },
+                  "keyPermission": {
+                    "summary": "Missing platform permission",
+                    "value": {
+                      "label": "FORBIDDEN",
+                      "message": "Request API key does not have dex_builder permission"
+                    }
+                  },
+                  "projectAccessDenied": {
+                    "summary": "Project access denied",
+                    "value": {
+                      "code": 40300801,
+                      "reason": "P_DEX_BUILDER_IN_PROJECT_ACCESS_DENIED",
+                      "label": "PROJECT_ACCESS_DENIED",
+                      "message": "project access denied",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "chain",
+            "in": "query",
+            "required": true,
+            "description": "`chain` accepts `evm` or `solana` and identifies the wallet virtual machine. EVM addresses are case-insensitive.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "evm",
+                "solana"
+              ]
+            }
+          },
+          {
+            "name": "address",
+            "in": "query",
+            "required": true,
+            "description": "End-user wallet address, matching the address in the registration request.",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "description": "Requires the project Broker API Key with dex_builder read permission. Identify the wallet with the chain and address query parameters. An unregistered wallet returns HTTP 200 with `registered: false` and `broker_id` in `data`. A registered wallet also returns `user_id`, `broker_uid`, and the boolean `activite` indicating whether the wallet is active."
+      }
+    },
+    "/api/v4/dexbuilder/users": {
+      "get": {
+        "tags": [
+          "User management"
+        ],
+        "summary": "List Broker users",
+        "operationId": "listDexBuilderUsers",
+        "security": [
+          {
+            "BrokerAPIKey": [],
+            "Timestamp": [],
+            "Signature": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A code of 0 indicates business success.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EnvelopeUsersListResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters, wallet proof, or required request headers.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "description": "Broker Key authentication failed or the Key lacks the required dex_builder permission.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorEnvelope"
+                },
+                "examples": {
+                  "brokerAuthentication": {
+                    "summary": "Broker Key authentication failed",
+                    "value": {
+                      "label": "FORBIDDEN",
+                      "message": "Broker API authentication failed"
+                    }
+                  },
+                  "keyPermission": {
+                    "summary": "Missing platform permission",
+                    "value": {
+                      "label": "FORBIDDEN",
+                      "message": "Request API key does not have dex_builder permission"
+                    }
+                  },
+                  "projectAccessDenied": {
+                    "summary": "Project access denied",
+                    "value": {
+                      "code": 40300801,
+                      "reason": "P_DEX_BUILDER_IN_PROJECT_ACCESS_DENIED",
+                      "label": "PROJECT_ACCESS_DENIED",
+                      "message": "project access denied",
+                      "data": null
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "description": "Lists users with a bound Perp account under the current Broker, deduplicated by `broker_uid`. The default list includes active users only. Requires dex_builder read permission.",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "description": "Page number.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "required": false,
+            "description": "Number of users per page.",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            }
+          },
+          {
+            "name": "include_suspended",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true",
+                "0",
+                "false"
+              ]
+            },
+            "description": "Set to 1 or true to include suspended users."
+          }
+        ]
+      }
+    },
     "/api/v4/dexbuilder/assets": {
       "get": {
         "tags": [
@@ -255,11 +687,11 @@
               }
             }
           },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "401": {
             "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -295,12 +727,6 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/GatewayUnauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
             "content": {
@@ -310,6 +736,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -348,12 +780,6 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/GatewayUnauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
             "content": {
@@ -363,6 +789,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -401,12 +833,6 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/GatewayUnauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
             "content": {
@@ -416,6 +842,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -460,12 +892,6 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/GatewayUnauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
             "content": {
@@ -475,6 +901,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -524,12 +956,6 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/GatewayUnauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
             "content": {
@@ -539,6 +965,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -582,12 +1014,6 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/GatewayUnauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
             "content": {
@@ -597,6 +1023,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -638,12 +1070,6 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/GatewayUnauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
             "content": {
@@ -653,6 +1079,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -698,12 +1130,6 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/GatewayUnauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
             "content": {
@@ -713,6 +1139,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -765,12 +1197,6 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/GatewayUnauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
             "content": {
@@ -780,6 +1206,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -824,12 +1256,6 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/GatewayUnauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
             "content": {
@@ -839,6 +1265,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -880,12 +1312,6 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/GatewayUnauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
             "content": {
@@ -895,6 +1321,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -941,12 +1373,6 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/GatewayUnauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
             "content": {
@@ -956,6 +1382,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -1167,6 +1599,232 @@
       }
     },
     "schemas": {
+      "UsersSignMessage": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Complete original message for the wallet to sign. Sign its UTF-8 bytes and preserve the message."
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Unix timestamp in seconds associated with this wallet signing message. Submit it unchanged during registration."
+          }
+        }
+      },
+      "UsersRegisterRequest": {
+        "type": "object",
+        "required": [
+          "chain",
+          "address",
+          "sign",
+          "timestamp"
+        ],
+        "properties": {
+          "chain": {
+            "type": "string",
+            "description": "Wallet chain type, such as evm or solana.",
+            "enum": [
+              "evm",
+              "solana"
+            ]
+          },
+          "address": {
+            "type": "string",
+            "description": "Address of the wallet that signed the message."
+          },
+          "sign": {
+            "type": "string",
+            "description": "Wallet signature over the original message returned by sign-message. The verified Solana format is a hexadecimal Ed25519 signature with a 0x prefix. Use `personal_sign` (EIP-191) for EVM and submit the signature with a `0x` prefix."
+          },
+          "timestamp": {
+            "type": "integer",
+            "format": "int64",
+            "description": "The timestamp returned by sign-message. The Timestamp request header is used to sign the current API v4 request."
+          }
+        }
+      },
+      "UsersRegisterResult": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "DexBuilder user identifier."
+          },
+          "broker_uid": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Perp user UID after binding."
+          },
+          "created": {
+            "type": "boolean",
+            "description": "Registering the same address again updates the user and completes any pending binding. `created` can be `true` on success, including repeat registration. `bound` is `true` only when this request completes a new Perp binding and is `false` for an existing `broker_uid`."
+          },
+          "bound": {
+            "type": "boolean",
+            "description": "Whether this request completed a new Perp binding. False for an existing broker_uid."
+          },
+          "wallets": {
+            "type": "array",
+            "description": "Wallets associated with the user and their binding status.",
+            "items": {
+              "$ref": "#/components/schemas/UserInfoWallet"
+            }
+          },
+          "project_id": {
+            "type": "string",
+            "description": "The project binding ID used for registration."
+          },
+          "bound_at": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Response generation time in Unix milliseconds."
+          }
+        }
+      },
+      "UsersResolveResult": {
+        "type": "object",
+        "properties": {
+          "registered": {
+            "type": "boolean",
+            "description": "Whether the wallet is registered under the current Broker."
+          },
+          "broker_id": {
+            "type": "string",
+            "description": "Identifier of the current Broker."
+          },
+          "user_id": {
+            "type": "string",
+            "description": "DexBuilder user identifier for a registered wallet. May be omitted when the wallet is unregistered."
+          },
+          "broker_uid": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Perp user UID for a registered wallet. May be omitted when the wallet is unregistered."
+          },
+          "activite": {
+            "type": "boolean",
+            "description": "Whether the wallet is active. Returned for registered wallets."
+          }
+        }
+      },
+      "UsersListItem": {
+        "type": "object",
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "description": "DexBuilder user identifier. May be omitted."
+          },
+          "broker_uid": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Perp user UID."
+          },
+          "primary_address": {
+            "type": "string",
+            "description": "Primary wallet address of the user. EVM addresses are returned in lowercase."
+          },
+          "status": {
+            "type": "string",
+            "description": "User status.",
+            "enum": [
+              "active",
+              "suspended"
+            ]
+          },
+          "created_at": {
+            "type": "integer",
+            "format": "int64",
+            "description": "User creation time as a Unix timestamp in milliseconds."
+          }
+        }
+      },
+      "UsersListResult": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UsersListItem"
+            },
+            "description": "Lists users with a bound Perp account under the current Broker, deduplicated by `broker_uid`. The default list includes active users only."
+          },
+          "page": {
+            "type": "integer",
+            "description": "Current page number."
+          },
+          "page_size": {
+            "type": "integer",
+            "description": "Page size for this response."
+          },
+          "total": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Number of users matching the filter."
+          }
+        }
+      },
+      "EnvelopeUsersSignMessage": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/UsersSignMessage"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeUsersRegisterResult": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/UsersRegisterResult"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeUsersResolveResult": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/UsersResolveResult"
+              }
+            }
+          }
+        ]
+      },
+      "EnvelopeUsersListResult": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/EnvelopeBase"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "$ref": "#/components/schemas/UsersListResult"
+              }
+            }
+          }
+        ]
+      },
       "ErrorEnvelope": {
         "allOf": [
           {

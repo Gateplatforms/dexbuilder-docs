@@ -1,0 +1,27 @@
+---
+title: "List Broker users"
+description: "Query paginated users under the current Broker, deduplicated by user identifier."
+openapi: "/openapi/dexbuilder-en.yaml GET /api/v4/dexbuilder/users"
+---
+
+Lists users with a bound Perp account under the current Broker, deduplicated by `broker_uid`. The default list includes active users only.
+
+Requires a project Broker API Key with dex_builder read or read-write permission. See [Broker API Key and signing](/en/api-reference/common/broker-authentication).
+
+## Pagination and response fields
+
+`page` starts at 1 and defaults to 1. `page_size` ranges from 1 to 100 and defaults to 20. Optional `include_suspended` accepts `1`, `true`, `0`, or `false`. Set it to `1` or `true` to include suspended users. `data` contains `items`, `page`, `page_size`, and `total`, where `total` counts users matching the filter.
+
+Items include `broker_uid`, `primary_address`, `status` (`active` or `suspended`), and `created_at` in Unix milliseconds. `user_id` may be omitted. EVM primary addresses are returned in lowercase.
+
+## Example request
+
+```http
+GET /api/v4/dexbuilder/users?page=1&page_size=1 HTTP/1.1
+Host: api.dexbuilder.com
+KEY: <BROKER_API_KEY>
+Timestamp: <UNIX_SECONDS>
+SIGN: <SIGN>
+```
+
+Use page=1&page_size=1 as the query string in the signature input. Use the returned total, page, and page_size to request subsequent pages.

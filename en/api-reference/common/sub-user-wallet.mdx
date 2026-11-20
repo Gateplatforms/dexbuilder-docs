@@ -10,7 +10,8 @@ When your Broker calls a private endpoint on behalf of a user, authenticate with
 | Endpoint scope | X-User-Wallet-Address |
 | --- | --- |
 | DexBuilder asset-configuration queries | Not required |
-| DexBuilder user, deposit, and withdrawal endpoints | Required |
+| DexBuilder /users management endpoints | Wallet specified in query parameters or the body |
+| Existing DexBuilder user queries, deposits, and withdrawals | Required |
 | Prediction Markets and Event Contracts private REST endpoints | Required |
 | Prediction Markets and Event Contracts public market data | Not required |
 
@@ -23,11 +24,12 @@ All paths below begin with /api/v4/dexbuilder. All require a Broker API Key and 
 | Group | Wallet | Endpoints |
 | --- | --- | --- |
 | Asset configuration | Not required | GET /assets, /networks, /dw_status, /fee, /withdraw_limit |
+| User management | Query parameters or body | GET /users/sign-message, POST /users/register, GET /users/resolve, GET /users |
 | User | Required | GET /user/info, /wallet/list, /user/balance, /fund_stats |
 | Deposit | Required | POST /deposit/fee, /deposit/sign_data; GET /deposit/status, /deposit/history |
 | Withdrawal | Required | POST /withdraw/sign_data, /withdraw/submit, /withdraw/ata/check-and-build; GET /withdraw/status, /withdraw/history |
 
-Some endpoints require additional headers or Idempotency-Key; follow each endpoint page.
+The /users management endpoints use the project Broker API Key. Registration and wallet resolution identify a wallet with chain and address. The user list is scoped to the current Broker. Some endpoints require additional headers or Idempotency-Key. Follow each endpoint page.
 
 ## Example
 
