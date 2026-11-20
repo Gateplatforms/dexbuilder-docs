@@ -70,6 +70,16 @@
                       "label": "FORBIDDEN",
                       "message": "Request API key does not have dex_builder permission"
                     }
+                  },
+                  "projectAccessDenied": {
+                    "summary": "项目访问被拒绝",
+                    "value": {
+                      "code": 40300801,
+                      "reason": "P_DEX_BUILDER_IN_PROJECT_ACCESS_DENIED",
+                      "label": "PROJECT_ACCESS_DENIED",
+                      "message": "project access denied",
+                      "data": null
+                    }
                   }
                 }
               }
@@ -81,9 +91,13 @@
             "name": "chain",
             "in": "query",
             "required": true,
-            "description": "钱包链类型，例如 evm 或 solana。",
+            "description": "`chain` 仅接受 `evm` 或 `solana`，表示钱包虚拟机类型。EVM 地址大小写不敏感。",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "evm",
+                "solana"
+              ]
             }
           },
           {
@@ -158,24 +172,43 @@
                       "label": "FORBIDDEN",
                       "message": "Request API key does not have dex_builder write permission"
                     }
+                  },
+                  "projectAccessDenied": {
+                    "summary": "项目访问被拒绝",
+                    "value": {
+                      "code": 40300801,
+                      "reason": "P_DEX_BUILDER_IN_PROJECT_ACCESS_DENIED",
+                      "label": "PROJECT_ACCESS_DENIED",
+                      "message": "project access denied",
+                      "data": null
+                    }
                   }
                 }
               }
             }
           }
         },
-        "description": "使用项目方 Broker API Key 的 dex_builder 读写权限完成钱包证明、用户开户和 Perp 绑定。提供非空 Idempotency-Key，幂等范围为当前 Broker 的用户注册操作。",
+        "description": "使用项目方 Broker API Key 的 dex_builder 读写权限完成钱包证明、用户开户和 Perp 绑定。提供非空 Idempotency-Key。 可选请求头 `X-Project-ID` 须匹配当前 Broker 的有效项目绑定。省略时使用当前有效绑定。",
         "parameters": [
           {
             "name": "Idempotency-Key",
             "in": "header",
             "required": true,
-            "description": "本次注册操作的幂等键，建议使用 UUID。同一次操作重试时沿用原 Key。",
+            "description": "注册请求必须携带非空的 `Idempotency-Key`。",
             "schema": {
               "type": "string",
               "minLength": 1,
               "pattern": "\\S"
             }
+          },
+          {
+            "name": "X-Project-ID",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "可选请求头 `X-Project-ID` 须匹配当前 Broker 的有效项目绑定。省略时使用当前有效绑定。"
           }
         ],
         "requestBody": {
@@ -249,6 +282,16 @@
                       "label": "FORBIDDEN",
                       "message": "Request API key does not have dex_builder permission"
                     }
+                  },
+                  "projectAccessDenied": {
+                    "summary": "项目访问被拒绝",
+                    "value": {
+                      "code": 40300801,
+                      "reason": "P_DEX_BUILDER_IN_PROJECT_ACCESS_DENIED",
+                      "label": "PROJECT_ACCESS_DENIED",
+                      "message": "project access denied",
+                      "data": null
+                    }
                   }
                 }
               }
@@ -260,9 +303,13 @@
             "name": "chain",
             "in": "query",
             "required": true,
-            "description": "钱包链类型，例如 evm 或 solana。",
+            "description": "`chain` 仅接受 `evm` 或 `solana`，表示钱包虚拟机类型。EVM 地址大小写不敏感。",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "evm",
+                "solana"
+              ]
             }
           },
           {
@@ -275,7 +322,7 @@
             }
           }
         ],
-        "description": "使用项目方 Broker API Key 的 dex_builder 查询权限调用，钱包通过 chain 和 address 查询参数指定。"
+        "description": "使用项目方 Broker API Key 的 dex_builder 查询权限调用，钱包通过 chain 和 address 查询参数指定。 未开户时返回 HTTP 200，`data` 仅包含 `registered: false` 和 `broker_id`。已开户时还返回 `user_id`、`broker_uid` 和表示钱包是否激活的布尔字段 `activite`。"
       }
     },
     "/api/v4/dexbuilder/users": {
@@ -337,13 +384,23 @@
                       "label": "FORBIDDEN",
                       "message": "Request API key does not have dex_builder permission"
                     }
+                  },
+                  "projectAccessDenied": {
+                    "summary": "项目访问被拒绝",
+                    "value": {
+                      "code": 40300801,
+                      "reason": "P_DEX_BUILDER_IN_PROJECT_ACCESS_DENIED",
+                      "label": "PROJECT_ACCESS_DENIED",
+                      "message": "project access denied",
+                      "data": null
+                    }
                   }
                 }
               }
             }
           }
         },
-        "description": "返回当前 Broker 的分页用户列表，同一 user_id 在列表中去重。需要 dex_builder 查询权限。",
+        "description": "按 `broker_uid` 去重，分页返回当前 Broker 下已绑定 Perp 子账号的用户。默认只返回激活用户。 需要 dex_builder 查询权限。",
         "parameters": [
           {
             "name": "page",
@@ -351,7 +408,9 @@
             "required": false,
             "description": "页码。",
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
             }
           },
           {
@@ -360,8 +419,26 @@
             "required": false,
             "description": "每页条数。",
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
             }
+          },
+          {
+            "name": "include_suspended",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "1",
+                "true",
+                "0",
+                "false"
+              ]
+            },
+            "description": "为 1 或 true 时包含停用用户。"
           }
         ]
       }
@@ -610,11 +687,11 @@
               }
             }
           },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "401": {
             "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -650,12 +727,6 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/GatewayUnauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
             "content": {
@@ -665,6 +736,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -703,12 +780,6 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/GatewayUnauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
             "content": {
@@ -718,6 +789,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -756,12 +833,6 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/GatewayUnauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
             "content": {
@@ -771,6 +842,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -815,12 +892,6 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/GatewayUnauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
             "content": {
@@ -830,6 +901,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -879,12 +956,6 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/GatewayUnauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
             "content": {
@@ -894,6 +965,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -937,12 +1014,6 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/GatewayUnauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
             "content": {
@@ -952,6 +1023,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -993,12 +1070,6 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/GatewayUnauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
             "content": {
@@ -1008,6 +1079,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -1053,12 +1130,6 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/GatewayUnauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
             "content": {
@@ -1068,6 +1139,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -1120,12 +1197,6 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/GatewayUnauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
             "content": {
@@ -1135,6 +1206,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -1179,12 +1256,6 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/GatewayUnauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
             "content": {
@@ -1194,6 +1265,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -1235,12 +1312,6 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/GatewayUnauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
             "content": {
@@ -1250,6 +1321,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -1296,12 +1373,6 @@
               }
             }
           },
-          "401": {
-            "$ref": "#/components/responses/GatewayUnauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/ProjectAccessDenied"
-          },
           "400": {
             "$ref": "#/components/responses/OpenAPIBadRequest",
             "content": {
@@ -1311,6 +1382,12 @@
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/GatewayUnauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/ProjectAccessDenied"
           }
         },
         "security": [
@@ -1547,7 +1624,11 @@
         "properties": {
           "chain": {
             "type": "string",
-            "description": "钱包链类型，例如 evm 或 solana。"
+            "description": "钱包链类型，例如 evm 或 solana。",
+            "enum": [
+              "evm",
+              "solana"
+            ]
           },
           "address": {
             "type": "string",
@@ -1555,7 +1636,7 @@
           },
           "sign": {
             "type": "string",
-            "description": "钱包对 sign-message 返回的 message 原文生成的签名。Solana 已验证的调用格式为带 0x 前缀的 Ed25519 签名十六进制字符串。"
+            "description": "钱包对 sign-message 返回的 message 原文生成的签名。Solana 已验证的调用格式为带 0x 前缀的 Ed25519 签名十六进制字符串。 EVM 使用 `personal_sign`（EIP-191），提交带 `0x` 前缀的签名。"
           },
           "timestamp": {
             "type": "integer",
@@ -1578,11 +1659,11 @@
           },
           "created": {
             "type": "boolean",
-            "description": "是否为本次新建的用户。"
+            "description": "同一地址再次注册会更新用户记录，并在尚未绑定时补绑。成功时 `created` 可为 `true`，包括同一地址再次注册。`bound` 仅在本次新完成 Perp 绑定时为 `true`，已有 `broker_uid` 时为 `false`。"
           },
           "bound": {
             "type": "boolean",
-            "description": "是否已完成 Perp 绑定。"
+            "description": "本次是否新完成 Perp 绑定。已有 broker_uid 时为 false。"
           },
           "wallets": {
             "type": "array",
@@ -1590,6 +1671,15 @@
             "items": {
               "$ref": "#/components/schemas/UserInfoWallet"
             }
+          },
+          "project_id": {
+            "type": "string",
+            "description": "本次使用的项目绑定 ID。"
+          },
+          "bound_at": {
+            "type": "integer",
+            "format": "int64",
+            "description": "响应生成时间，Unix 毫秒。"
           }
         }
       },
@@ -1612,6 +1702,10 @@
             "type": "integer",
             "format": "int64",
             "description": "已开户用户的 Perp 用户 UID。未开户时可省略。"
+          },
+          "activite": {
+            "type": "boolean",
+            "description": "钱包是否激活。已开户时返回。"
           }
         }
       },
@@ -1620,7 +1714,7 @@
         "properties": {
           "user_id": {
             "type": "string",
-            "description": "DexBuilder 用户标识。"
+            "description": "DexBuilder 用户标识。 可能省略。"
           },
           "broker_uid": {
             "type": "integer",
@@ -1629,11 +1723,15 @@
           },
           "primary_address": {
             "type": "string",
-            "description": "用户主钱包地址。"
+            "description": "用户主钱包地址。 EVM 地址以小写返回。"
           },
           "status": {
             "type": "string",
-            "description": "用户状态。"
+            "description": "用户状态。",
+            "enum": [
+              "active",
+              "suspended"
+            ]
           },
           "created_at": {
             "type": "integer",
@@ -1650,7 +1748,7 @@
             "items": {
               "$ref": "#/components/schemas/UsersListItem"
             },
-            "description": "按 user_id 去重的当前页用户列表。"
+            "description": "按 `broker_uid` 去重，分页返回当前 Broker 下已绑定 Perp 子账号的用户。默认只返回激活用户。"
           },
           "page": {
             "type": "integer",
@@ -1663,7 +1761,7 @@
           "total": {
             "type": "integer",
             "format": "int64",
-            "description": "当前 Broker 的用户总数。"
+            "description": "符合筛选条件的用户数。"
           }
         }
       },
